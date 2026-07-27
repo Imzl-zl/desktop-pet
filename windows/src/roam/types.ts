@@ -1,5 +1,7 @@
 // Shared types and constants for the roam subsystem.
 
+import { getCurrentWindow } from "@tauri-apps/api/window";
+
 export type RoamMode = "stay" | "wander" | "cursor" | "climb";
 
 export type Point = { x: number; y: number };
@@ -62,8 +64,23 @@ export const SLEEP_ROW_DEFAULT = 5;
 
 export const VALID_MODES: RoamMode[] = ["stay", "wander", "cursor", "climb"];
 
+/// Per-window override key. Each pet window (main, project, extra) can have
+/// its own roam mode / size, stored under `ap_win_<label>_<key>`. Falls back
+/// to the global key if the per-window override is absent.
+function winOverride(key: string): string | null {
+  try {
+    const label = getCurrentWindow().label;
+    if (!label) return null;
+    return localStorage.getItem(`ap_win_${label}_${key}`);
+  } catch {
+    return null;
+  }
+}
+
 export function loadConfig(): Config {
-  const stored = localStorage.getItem(ROAM_MODE_KEY) as RoamMode | null;
+  // Per-window roam mode override wins over the global setting, so individual
+  // extra pets can wander / stay / follow cursor independently.
+  const stored = (winOverride(ROAM_MODE_KEY) || localStorage.getItem(ROAM_MODE_KEY)) as RoamMode | null;
   const mode: RoamMode = stored && VALID_MODES.includes(stored) ? stored : "wander";
   return {
     enabled: localStorage.getItem(ROAM_KEY) !== "0",

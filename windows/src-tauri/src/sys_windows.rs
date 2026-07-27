@@ -3,6 +3,18 @@
 //
 // We use the `windows` crate (microsoft/windows-rs) with Win32
 // EnumWindows + IsWindowVisible + GetWindowRect + GetWindowTextW.
+//
+// A short-lived TTL cache sits in front of the enumeration: the roam engine
+// ticks every 30ms per pet window, and without the cache N pets would fire
+// N×33 EnumWindows calls per second. The cache returns the previous snapshot
+// for 150ms, capping the real enumeration at ~7 calls/sec regardless of how
+// many pets are roaming.
+
+use std::sync::Mutex;
+use std::time::{Duration, Instant};
+
+const WIN_CACHE_TTL: Duration = Duration::from_millis(150);
+static WIN_CACHE: Mutex<Option<(Instant, Vec<serde_json::Value>)>> = Mutex::new(None);
 
 #[cfg(windows)]
 mod win {
@@ -82,11 +94,21 @@ mod win {
 }
 
 /// Tauri command: returns visible application windows (physical pixels).
-/// On non-Windows platforms, returns an empty list.
+/// On non-Windows platforms, returns an empty list. A 150ms TTL cache caps the
+/// real enumeration rate so multi-pet roaming doesn't flood Win32 EnumWindows.
 #[tauri::command]
 pub fn list_system_windows() -> Vec<serde_json::Value> {
+    // Fast path: return the cached snapshot if it's still fresh.
+    if let Ok(guard) = WIN_CACHE.lock() {
+        if let Some((ts, ref data)) = *guard {
+            if ts.elapsed() < WIN_CACHE_TTL {
+                return data.clone();
+            }
+        }
+    }
+
     #[cfg(windows)]
-    {
+    let fresh: Vec<serde_json::Value> = {
         win::enumerate()
             .into_iter()
             .map(|w| serde_json::json!({
@@ -97,9 +119,14 @@ pub fn list_system_windows() -> Vec<serde_json::Value> {
                 "height": w.height,
             }))
             .collect()
-    }
+    };
     #[cfg(not(windows))]
-    {
-        Vec::new()
+    let fresh: Vec<serde_json::Value> = Vec::new();
+
+    // Update the cache for the next caller. A poisoned lock (panic in another
+    // thread) just skips caching; the command still returns fresh data.
+    if let Ok(mut guard) = WIN_CACHE.lock() {
+        *guard = Some((Instant::now(), fresh.clone()));
     }
+    fresh
 }

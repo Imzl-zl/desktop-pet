@@ -22,13 +22,25 @@ struct TrayItems {
 /// The pet's opaque region in physical pixels, relative to the window's top-left.
 /// The frontend reports this (canvas + visible bubble) so the background thread
 /// can make the transparent rest of the window click-through.
-#[derive(Default)]
+#[derive(Default, Clone)]
 #[cfg_attr(not(windows), allow(dead_code))]
 struct HitRect {
     x: f64,
     y: f64,
     w: f64,
     h: f64,
+}
+
+/// Per-window hit rects: each pet window (pet, pet-*, pet-extra-*) reports its
+/// own opaque rect so the click-through loop can handle them independently.
+/// Keyed by Tauri window label.
+type HitRectMap = std::collections::HashMap<String, HitRect>;
+
+/// True for labels that are pet overlay windows (need click-through handling).
+/// Covers `pet`, `pet-<projectId>`, `pet-extra-<slug>-<n>`. Excludes
+/// `settings` and `popover`.
+fn is_pet_window(label: &str) -> bool {
+    label == "pet" || label.starts_with("pet-")
 }
 
 /// Append a line to %APPDATA%/AgentPet/debug.log , lightweight field
@@ -73,13 +85,15 @@ fn write_pos(x: i32, y: i32) {
     }
 }
 
-/// Report the pet's opaque rectangle (physical px, window-relative) so empty
-/// transparent areas of the overlay let clicks pass through to apps below.
+/// Report a pet window's opaque rectangle (physical px, window-relative) so
+/// empty transparent areas of that overlay let clicks pass through to apps
+/// below. Each pet window registers under its own label so multi-pet mode
+/// doesn't have one window overwrite another's click-through rect.
 #[tauri::command]
-fn set_hit_rect(app: tauri::AppHandle, x: f64, y: f64, w: f64, h: f64) {
-    if let Some(state) = app.try_state::<Mutex<HitRect>>() {
-        if let Ok(mut r) = state.lock() {
-            *r = HitRect { x, y, w, h };
+fn set_hit_rect(app: tauri::AppHandle, label: String, x: f64, y: f64, w: f64, h: f64) {
+    if let Some(state) = app.try_state::<Mutex<HitRectMap>>() {
+        if let Ok(mut m) = state.lock() {
+            m.insert(label, HitRect { x, y, w, h });
         }
     }
 }
@@ -145,7 +159,8 @@ fn open_settings_impl(app: tauri::AppHandle) {
         match WebviewWindowBuilder::new(&app, "settings", WebviewUrl::App("settings.html".into()))
             .title("AgentPet")
             .inner_size(640.0, 620.0)
-            .resizable(false)
+            .min_inner_size(560.0, 520.0)
+            .resizable(true)
             .build()
         {
             Ok(_) => dlog("open_settings: window created"),
@@ -158,6 +173,25 @@ fn open_settings_impl(app: tauri::AppHandle) {
 async fn open_settings(app: tauri::AppHandle) {
     dlog("open_settings called");
     open_settings_impl(app);
+}
+
+/// Logical size of the primary monitor's work area (DPI-divided). Returns a
+/// safe fallback (1920×1080) if the monitor can't be read , spawns must never
+/// land off-screen on display hotplug / headless CI.
+fn primary_work_area(app: &tauri::AppHandle) -> (f64, f64) {
+    app.primary_monitor()
+        .ok()
+        .flatten()
+        .and_then(|m| {
+            let s = m.size();
+            let sf = m.scale_factor();
+            if s.width > 0 && s.height > 0 {
+                Some((s.width as f64 / sf, s.height as f64 / sf))
+            } else {
+                None
+            }
+        })
+        .unwrap_or((1920.0, 1080.0))
 }
 
 /// Open an external link in the default browser (About tab buttons).
@@ -247,10 +281,15 @@ fn sync_project_windows(app: tauri::AppHandle, projects: Vec<String>) {
             continue;
         }
         let url = format!("index.html?project={id}");
+        // Cascade project windows near the right edge of the primary screen,
+        // clamped so they never spawn off-screen on small displays.
+        let (sw, sh) = primary_work_area(&app);
+        let x = (sw - 280.0 - (i as f64 + 1.0) * 60.0).max(20.0);
+        let y = (sh - 380.0).max(20.0);
         let _ = WebviewWindowBuilder::new(&app, &label, WebviewUrl::App(url.into()))
             .title("AgentPet")
             .inner_size(260.0, 320.0)
-            .position(1200.0 - (i as f64 + 1.0) * 60.0, 600.0)
+            .position(x, y)
             .transparent(true)
             .decorations(false)
             .always_on_top(true)
@@ -275,10 +314,15 @@ async fn spawn_extra_pet(app: tauri::AppHandle, slug: String) -> Result<String, 
     }
     let (label, n) = next_extra_label(&app, &slug);
     let url = format!("index.html?extra={slug}");
+    // Cascade extra pets from top-left, clamped to the primary screen so they
+    // never land off-screen on small / HiDPI displays.
+    let (sw, sh) = primary_work_area(&app);
+    let x = (120.0 + (n as f64) * 40.0).min(sw - 280.0).max(20.0);
+    let y = (120.0 + (n as f64) * 40.0).min(sh - 360.0).max(20.0);
     WebviewWindowBuilder::new(&app, &label, WebviewUrl::App(url.into()))
         .title("AgentPet")
         .inner_size(260.0, 320.0)
-        .position(200.0 + (n as f64) * 40.0, 200.0 + (n as f64) * 40.0)
+        .position(x, y)
         .transparent(true)
         .decorations(false)
         .always_on_top(true)
@@ -488,7 +532,7 @@ pub fn run() {
         ])
         .setup(|app| {
             server::start(app.handle().clone());
-            app.manage(Mutex::new(HitRect::default()));
+            app.manage(Mutex::new(HitRectMap::new()));
 
             // Restore where the user last dragged the pet. First run (no saved
             // position) parks it near the bottom-right of the primary screen;
@@ -519,69 +563,94 @@ pub fn run() {
                 }
             }
 
-            // Background loop: (1) make transparent areas of the overlay
+            // Background loop: (1) make transparent areas of EACH pet overlay
             // click-through by toggling cursor-event capture based on whether the
-            // cursor is over the pet's opaque rect (cross-platform via tao), and
-            // (2) persist the pet's position so it survives a restart.
+            // cursor is over that window's opaque rect, and (2) persist the main
+            // pet's position so it survives a restart. Iterates all pet windows
+            // (pet, pet-<project>, pet-extra-<slug>-<n>) so multi-pet mode
+            // doesn't leave dead click-blocking zones around extra pets.
             let handle = app.handle().clone();
             std::thread::spawn(move || {
-                let mut last_ignore: Option<bool> = None;
+                let mut last_ignore: std::collections::HashMap<String, bool> = std::collections::HashMap::new();
                 let mut flip_logs: u32 = 0;
                 let mut last_saved = read_pos();
                 let mut tick: u32 = 0;
                 loop {
                     std::thread::sleep(Duration::from_millis(30));
-                    let Some(win) = handle.get_webview_window("pet") else {
-                        continue;
-                    };
 
-                    // Cross-platform (tao): cursor + window in physical px.
-                    // Fail-safe: while the hit rect is unknown (webview still
-                    // booting) or the cursor can't be read, keep the window
-                    // INTERACTIVE , a clickable pet beats an untouchable one.
-                    match (handle.cursor_position(), win.outer_position()) {
-                        (Ok(cur), Ok(wp)) => {
-                            let rect = handle
-                                .try_state::<Mutex<HitRect>>()
-                                .and_then(|s| s.lock().ok().map(|r| (r.x, r.y, r.w, r.h)));
-                            let inside = match rect {
-                                Some((x, y, w, h)) if w > 0.0 => {
-                                    let rx = cur.x - wp.x as f64;
-                                    let ry = cur.y - wp.y as f64;
-                                    rx >= x && rx <= x + w && ry >= y && ry <= y + h
-                                }
-                                _ => true, // no rect yet , stay interactive
-                            };
-                            // ignore_cursor_events = true -> clicks pass through.
-                            let ignore = !inside;
-                            if Some(ignore) != last_ignore {
-                                let _ = win.set_ignore_cursor_events(ignore);
-                                last_ignore = Some(ignore);
-                                if flip_logs < 30 {
-                                    flip_logs += 1;
-                                    dlog(&format!(
-                                        "hit flip: ignore={ignore} cur=({:.0},{:.0}) win=({},{}) rect={:?}",
-                                        cur.x, cur.y, wp.x, wp.y, rect
-                                    ));
+                    // Single cursor read per tick (shared across all pet windows).
+                    let cur = handle.cursor_position();
+
+                    // Iterate a snapshot of pet windows so spawns/closes during
+                    // the loop don't corrupt the iterator.
+                    let wins: Vec<(String, tauri::WebviewWindow)> = handle
+                        .webview_windows()
+                        .into_iter()
+                        .filter(|(label, _)| is_pet_window(label))
+                        .collect();
+
+                    for (label, win) in &wins {
+                        let Ok(wp) = win.outer_position() else { continue };
+                        // Fail-safe: no rect yet (webview still booting) or
+                        // cursor unreadable → keep INTERACTIVE.
+                        let inside = match &cur {
+                            Ok(cur) => {
+                                // Hold the lock only for the lookup: the guard
+                                // borrows the State, so it can't escape this
+                                // closure. `.cloned()` returns an owned HitRect.
+                                let rect = handle.try_state::<Mutex<HitRectMap>>().and_then(|s| {
+                                    s.lock().ok().and_then(|m| m.get(label).cloned())
+                                });
+                                match rect {
+                                    Some(r) if r.w > 0.0 => {
+                                        let rx = cur.x - wp.x as f64;
+                                        let ry = cur.y - wp.y as f64;
+                                        rx >= r.x && rx <= r.x + r.w && ry >= r.y && ry <= r.y + r.h
+                                    }
+                                    _ => true, // no rect yet → stay interactive
                                 }
                             }
+                            Err(_) => true,
+                        };
+                        // ignore_cursor_events = true → clicks pass through.
+                        let ignore = !inside;
+                        if last_ignore.get(label) != Some(&ignore) {
+                            let _ = win.set_ignore_cursor_events(ignore);
+                            last_ignore.insert(label.clone(), ignore);
+                            if flip_logs < 30 {
+                                flip_logs += 1;
+                                dlog(&format!(
+                                    "hit flip: label={label} ignore={ignore} cur=({:.0},{:.0}) win=({},{})",
+                                    cur.as_ref().map(|c| c.x).unwrap_or(0.0),
+                                    cur.as_ref().map(|c| c.y).unwrap_or(0.0),
+                                    wp.x, wp.y
+                                ));
+                            }
                         }
-                        (Err(e), _) => {
-                            if last_ignore != Some(false) {
-                                dlog(&format!("cursor_position error: {e} , forcing interactive"));
+                    }
+                    // If cursor_position failed, force all pet windows interactive.
+                    if let Err(e) = &cur {
+                        for (label, win) in &wins {
+                            if last_ignore.get(label) != Some(&false) {
                                 let _ = win.set_ignore_cursor_events(false);
-                                last_ignore = Some(false);
+                                last_ignore.insert(label.clone(), false);
                             }
                         }
-                        _ => {}
+                        if flip_logs < 30 {
+                            flip_logs += 1;
+                            dlog(&format!("cursor_position error: {e} , forcing all pets interactive"));
+                        }
                     }
 
+                    // Position saving: main pet only (extra pets are ephemeral).
                     tick = tick.wrapping_add(1);
                     if tick % 33 == 0 {
-                        if let Ok(p) = win.outer_position() {
-                            if last_saved != Some((p.x, p.y)) {
-                                write_pos(p.x, p.y);
-                                last_saved = Some((p.x, p.y));
+                        if let Some(win) = handle.get_webview_window("pet") {
+                            if let Ok(p) = win.outer_position() {
+                                if last_saved != Some((p.x, p.y)) {
+                                    write_pos(p.x, p.y);
+                                    last_saved = Some((p.x, p.y));
+                                }
                             }
                         }
                     }

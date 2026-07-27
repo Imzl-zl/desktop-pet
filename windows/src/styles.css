@@ -170,6 +170,51 @@ body.overlay, body.overlay * {
 }
 .bubble .cmp-fold:hover { opacity: 0.8; }
 
+/* Right-click context menu for extra pets (close / roam mode / size). */
+.ctx-menu {
+  position: fixed;
+  z-index: 9999;
+  min-width: 156px;
+  padding: 6px;
+  border-radius: 10px;
+  background: var(--bubble-bg, rgba(22, 24, 38, 0.94));
+  color: var(--bubble-fg, #fff);
+  border: 1px solid var(--bubble-border, rgba(255, 255, 255, 0.10));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(12px);
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 12px;
+  user-select: none;
+}
+.ctx-menu .ctx-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.ctx-menu .ctx-item:hover { background: rgba(127, 127, 127, 0.22); }
+.ctx-menu .ctx-item.sel { color: #6cb6ff; font-weight: 600; }
+.ctx-menu .ctx-close { color: #ff6b6b; }
+.ctx-menu .ctx-sep {
+  height: 1px;
+  margin: 5px 4px;
+  background: var(--bubble-border, rgba(255, 255, 255, 0.10));
+}
+.ctx-menu .ctx-label {
+  padding: 4px 10px 2px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.5;
+}
+
 /* ---------------------------------------------------------------------------
    Settings window , a faithful clone of the macOS app's preferences UI:
    tab bar on top, grouped form cards, bottom live-preview bar. Dark.

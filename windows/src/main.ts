@@ -13,7 +13,7 @@ import * as usage from "./usage";
 import * as history from "./history";
 import * as reactive from "./reactive";
 import * as projectpets from "./projectpets";
-import { initRoam, setDragging, setMood } from "./roam";
+import { initRoam, setDragging, setMood, getRoamMode } from "./roam";
 
 // Which project THIS pet window represents. `null` = the main window (the
 // default single pet). Split-pet spawns extra windows with `?project=<id>`.
@@ -25,6 +25,10 @@ const IS_MAIN = MY_PROJECT === null;
 // it just floats and roams. Multiple may be open at once.
 const EXTRA_SLUG = new URLSearchParams(location.search).get("extra");
 const IS_EXTRA = EXTRA_SLUG !== null;
+
+// This window's Tauri label (pet, pet-<project>, pet-extra-<slug>-<n>). Used
+// for per-window hit-rect registration and per-window config overrides.
+const MY_LABEL = getCurrentWindow().label;
 
 // A project window sets this the moment its project is un-split, so it stops
 // feeding during the brief async gap before Rust closes it (else the main window
@@ -103,9 +107,12 @@ function applyBubble() {
 applyBubble();
 
 // Pet size + idle bob FX. Sized via layout (not transform) so the bubble
-// always sits above the sprite instead of being painted over by it.
+// always sits above the sprite instead of being painted over by it. Per-window
+// override (`ap_win_<label>_pet_size`) wins over the global setting, so each
+// extra pet can have its own size independently.
 function applyPet() {
-  const size = (parseInt(localStorage.getItem("ap_pet_size") || "100", 10) || 100) / 100;
+  const winSize = localStorage.getItem(`ap_win_${MY_LABEL}_pet_size`);
+  const size = (parseInt(winSize || localStorage.getItem("ap_pet_size") || "100", 10) || 100) / 100;
   canvas.style.width = `${Math.round(160 * size)}px`;
   canvas.style.height = `${Math.round(180 * size)}px`;
   canvas.classList.toggle("bob", localStorage.getItem("ap_fx") === "1");
@@ -466,24 +473,118 @@ bubbleEl.addEventListener("mousedown", async (e) => {
 });
 canvas.addEventListener("contextmenu", (e) => {
   e.preventDefault();
-  // Extra windows have no agent state to show in the popover , skip it.
-  if (!IS_EXTRA && pet.hitTest(e.offsetX, e.offsetY)) invoke("open_popover").catch(() => {});
+  if (!pet.hitTest(e.offsetX, e.offsetY)) return;
+  if (IS_EXTRA) showExtraCtxMenu(e.clientX, e.clientY);
+  else invoke("open_popover").catch(() => {});
 });
 bubbleEl.addEventListener("contextmenu", (e) => {
   e.preventDefault();
-  if (!IS_EXTRA) invoke("open_popover").catch(() => {});
+  if (IS_EXTRA) showExtraCtxMenu(e.clientX, e.clientY);
+  else invoke("open_popover").catch(() => {});
 });
+
+// --- extra-pet right-click context menu --------------------------------------
+// Extra pets have no popover (no agent state to show). Instead, right-click
+// gives quick per-pet controls: close, roam mode, size. Each setting is stored
+// per-window so one extra pet can wander while another stays, etc.
+let ctxMenu: HTMLDivElement | null = null;
+
+function hideCtxMenu(): void {
+  if (ctxMenu) { ctxMenu.remove(); ctxMenu = null; }
+}
+
+function showExtraCtxMenu(x: number, y: number): void {
+  hideCtxMenu();
+  const m = document.createElement("div");
+  m.className = "ctx-menu";
+
+  const closeBtn = document.createElement("button");
+  closeBtn.className = "ctx-item ctx-close";
+  closeBtn.textContent = "✕ Close";
+  closeBtn.onclick = () => { hideCtxMenu(); getCurrentWindow().close(); };
+  m.appendChild(closeBtn);
+
+  m.appendChild(sep());
+
+  const roamHead = document.createElement("div");
+  roamHead.className = "ctx-label";
+  roamHead.textContent = "Roam";
+  m.appendChild(roamHead);
+  const currentMode = getRoamMode();
+  for (const [mode, label] of [
+    ["stay", "Stay"], ["wander", "Wander"], ["cursor", "Follow cursor"], ["climb", "Climb"],
+  ] as const) {
+    const btn = document.createElement("button");
+    btn.className = "ctx-item";
+    if (mode === currentMode) btn.classList.add("sel");
+    btn.textContent = label;
+    btn.onclick = () => {
+      localStorage.setItem(`ap_win_${MY_LABEL}_roam_mode`, mode);
+      hideCtxMenu();
+    };
+    m.appendChild(btn);
+  }
+
+  m.appendChild(sep());
+
+  const sizeHead = document.createElement("div");
+  sizeHead.className = "ctx-label";
+  sizeHead.textContent = "Size";
+  m.appendChild(sizeHead);
+  const currentSize = parseInt(
+    localStorage.getItem(`ap_win_${MY_LABEL}_pet_size`) || localStorage.getItem("ap_pet_size") || "100",
+    10,
+  );
+  for (const [val, label] of [["80", "S"], ["100", "M"], ["125", "L"]] as const) {
+    const btn = document.createElement("button");
+    btn.className = "ctx-item";
+    if (parseInt(val) === currentSize) btn.classList.add("sel");
+    btn.textContent = label;
+    btn.onclick = () => {
+      localStorage.setItem(`ap_win_${MY_LABEL}_pet_size`, val);
+      applyPet();
+      reportHitRect();
+      hideCtxMenu();
+    };
+    m.appendChild(btn);
+  }
+
+  // Position at cursor, clamped so the menu never overflows the window.
+  m.style.left = `${Math.min(x, window.innerWidth - 180)}px`;
+  m.style.top = `${Math.min(y, window.innerHeight - 320)}px`;
+  document.body.appendChild(m);
+  ctxMenu = m;
+
+  // Dismiss on click outside or Escape. The setTimeout avoids the very
+  // contextmenu event that opened the menu from immediately closing it.
+  setTimeout(() => {
+    const onDown = (ev: MouseEvent) => {
+      if (!m.contains(ev.target as Node)) hideCtxMenu();
+      document.removeEventListener("mousedown", onDown);
+    };
+    document.addEventListener("mousedown", onDown);
+  }, 0);
+  const onKey = (ev: KeyboardEvent) => {
+    if (ev.key === "Escape") hideCtxMenu();
+    document.removeEventListener("keydown", onKey);
+  };
+  document.addEventListener("keydown", onKey);
+}
+
+function sep(): HTMLDivElement {
+  const d = document.createElement("div");
+  d.className = "ctx-sep";
+  return d;
+}
 
 // Report the interactive region (physical px) for Windows click-through: the
 // union of the SPRITE's true bounds and the visible bubble , not the whole
 // canvas, so the empty space beside the pet passes clicks to apps below.
+// Every pet window (main, project, extra) registers under its own label so
+// the Rust loop can manage click-through independently per window.
 const petRoot = document.getElementById("pet-root") as HTMLElement;
 let lastHitSig = "";
 function reportHitRect() {
-  // Extra windows share the global HitRect Mutex with the main window on the
-  // Rust side; writing here would overwrite the main pet's click-through rect.
-  // Skip it , extra windows stay fully interactive (no click-through).
-  if (IS_EXTRA) return;
   const d = window.devicePixelRatio || 1;
   const rects: { left: number; top: number; right: number; bottom: number }[] = [];
   if (!bubbleEl.hidden) {
@@ -511,7 +612,7 @@ function reportHitRect() {
   const sig = [left, top, right, bottom].map((v) => Math.round(v)).join(",");
   if (sig === lastHitSig) return;
   lastHitSig = sig;
-  invoke("set_hit_rect", { x: left * d, y: top * d, w: (right - left) * d, h: (bottom - top) * d })
+  invoke("set_hit_rect", { label: MY_LABEL, x: left * d, y: top * d, w: (right - left) * d, h: (bottom - top) * d })
     .catch((err) => invoke("log_debug", { msg: `set_hit_rect failed: ${err}` }).catch(() => {}));
 }
 new ResizeObserver(reportHitRect).observe(petRoot);
