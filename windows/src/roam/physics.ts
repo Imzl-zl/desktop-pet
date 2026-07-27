@@ -3,19 +3,18 @@
 // tested without a live Tauri window.
 
 import { invoke } from "@tauri-apps/api/core";
-import { getCurrentWindow } from "@tauri-apps/api/window";
-import { LogicalPosition } from "@tauri-apps/api/dpi";
 import type { Pet } from "../pet";
 import type { Point, Rect } from "./types";
 import {
+  DT_SEC,
   PHYSICS_FRICTION,
   PHYSICS_GRAVITY,
   PHYSICS_MIN_SPEED,
   SAMPLE_WINDOW_MS,
+  TICK_MS,
   sleep,
 } from "./types";
-
-const win = getCurrentWindow();
+import { currentLogicalPos, setLogical } from "./window";
 
 interface Sample { t: number; x: number; y: number }
 const samples: Sample[] = [];
@@ -46,10 +45,6 @@ let throwing = false;
 export function isThrowing(): boolean { return throwing; }
 export function cancelThrow(): void { throwing = false; }
 
-async function setLogical(pos: Point): Promise<void> {
-  await win.setPosition(new LogicalPosition(pos.x, pos.y));
-}
-
 /// Inertia after a drag release. Friction decays velocity each tick; hitting a
 /// screen edge reflects velocity at 50% to feel bouncy without escaping.
 export async function applyThrow(
@@ -69,8 +64,8 @@ export async function applyThrow(
     vx *= PHYSICS_FRICTION;
     vy *= PHYSICS_FRICTION;
 
-    let nx: number = pos.x + vx * 0.03;
-    let ny: number = pos.y + vy * 0.03;
+    let nx: number = pos.x + vx * DT_SEC;
+    let ny: number = pos.y + vy * DT_SEC;
     [vx, nx] = bounceX(vx, nx, bounds);
     [vy, ny] = bounceY(vy, ny, bounds);
 
@@ -79,7 +74,7 @@ export async function applyThrow(
     catch (e) { void invoke("log_debug", { msg: `roam: throw error: ${e}` }).catch(() => {}); break; }
 
     pet?.setRow(vx > 0 ? 1 : 2);
-    await sleep(30);
+    await sleep(TICK_MS);
   }
 
   throwing = false;
@@ -101,9 +96,9 @@ export async function applyFall(
 
   let vy = 0;
   while (!stop() && throwing) {
-    vy += PHYSICS_GRAVITY * 0.03;
-    const nx: number = pos.x + vx * 0.03;
-    let ny: number = pos.y + vy * 0.03;
+    vy += PHYSICS_GRAVITY * DT_SEC;
+    const nx: number = pos.x + vx * DT_SEC;
+    let ny: number = pos.y + vy * DT_SEC;
 
     const floorY = findFloor(pos.x, nx, bounds, surfaces);
     if (ny >= floorY) {
@@ -116,7 +111,7 @@ export async function applyFall(
     catch (e) { void invoke("log_debug", { msg: `roam: fall error: ${e}` }).catch(() => {}); break; }
 
     pet?.setRow(vx > 0 ? 1 : 2);
-    await sleep(30);
+    await sleep(TICK_MS);
   }
 
   throwing = false;
@@ -146,12 +141,4 @@ function findFloor(x1: number, x2: number, bounds: Rect, surfaces: Rect[]): numb
     if (s.top < floor && s.top >= bounds.top) floor = s.top;
   }
   return floor;
-}
-
-async function currentLogicalPos(): Promise<Point | null> {
-  try {
-    const sf = await win.scaleFactor();
-    const p = await win.outerPosition();
-    return { x: p.x / sf, y: p.y / sf };
-  } catch { return null; }
 }

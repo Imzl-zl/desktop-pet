@@ -47,6 +47,18 @@ export const PHYSICS_GRAVITY = 1800;
 export const SAMPLE_WINDOW_MS = 120;
 
 export const TICK_MS = 30;
+/// Fixed dt (seconds) used by physics integration. Derived from TICK_MS so the
+/// two can never drift apart. All `vx * 0.03` style computations use this.
+export const DT_SEC = TICK_MS / 1000;
+
+/// Below this drag-release speed (px/s), no throw is applied , the pet just stays.
+export const THROW_MIN_SPEED = 15;
+
+/// Pet falls asleep after this many ms idle with no movement (Oneko-style).
+export const SLEEP_AFTER_MS = 30_000;
+/// Default spritesheet row for the sleep pose. Row 5 ("Failed") is unused by any
+/// mood in STATE_ROW, so it's free. Override with localStorage `ap_bind_sleep`.
+export const SLEEP_ROW_DEFAULT = 5;
 
 export const VALID_MODES: RoamMode[] = ["stay", "wander", "cursor", "climb"];
 

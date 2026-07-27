@@ -6,6 +6,7 @@ import { cursorPosition } from "@tauri-apps/api/window";
 import type { Pet } from "../pet";
 import type { Environment, Point, Rect, RoamMode } from "./types";
 import {
+  DT_SEC,
   IDLE_MS_MAX,
   IDLE_MS_MIN,
   MARGIN,
@@ -90,7 +91,7 @@ async function climb(ctx: ModeContext): Promise<Point> {
   if (!surface) return pos;
 
   const dir = pickClimbDirection(pos, surface, env);
-  const step = pxPerSec(loadConfig().speed) * 0.03;
+  const step = pxPerSec(loadConfig().speed) * DT_SEC;
   const nextX = pos.x + dir * step;
   const onEdge = nextX < surface.rect.left - 2 || nextX > surface.rect.right + 2;
 
@@ -114,7 +115,7 @@ function moveToward(target: Point, pos: Point, bounds: Rect, pet: Pet | null): P
   const dist = Math.hypot(dx, dy);
   if (dist < 8) { pet?.clearRow(); return pos; }
   const speed = pxPerSec(loadConfig().speed);
-  const move = Math.min(dist, speed * 0.03);
+  const move = Math.min(dist, speed * DT_SEC);
   const next = clampToBounds(
     { x: pos.x + (dx / dist) * move, y: pos.y + (dy / dist) * move },
     bounds,

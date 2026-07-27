@@ -181,10 +181,12 @@ export class Pet {
     if (this.overrideRow !== null) { this.overrideRow = null; this.frame = 0; }
   }
 
-  /// The frames of the current row (clamped to what the sheet actually has).
-  private currentClip(): Rect[] | null {
+  /// The frames of the active row (override ?? mood), clamped to what the sheet
+  /// actually has. Previously this used `this.row` and the override only
+  /// affected `scaleW`, which meant roaming drew mood frames at walk-row width.
+  private currentClip(activeRow: number): Rect[] | null {
     if (!this.clips.length) return null;
-    return this.clips[Math.min(this.row, this.clips.length - 1)];
+    return this.clips[Math.min(activeRow, this.clips.length - 1)];
   }
 
   private loop(t: number) {
@@ -205,7 +207,7 @@ export class Pet {
 
     let r: Rect;
     let scaleW: number; // width used for the scale , per CLIP, not per frame
-    const clip = this.currentClip();
+    const clip = this.currentClip(activeRow);
     if (clip) {
       r = clip[this.frame % clip.length];
       scaleW = this.clipMaxW[Math.min(activeRow, this.clips.length - 1)] || r.w;

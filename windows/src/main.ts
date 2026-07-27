@@ -13,7 +13,7 @@ import * as usage from "./usage";
 import * as history from "./history";
 import * as reactive from "./reactive";
 import * as projectpets from "./projectpets";
-import { initRoam, setDragging } from "./roam";
+import { initRoam, setDragging, setMood } from "./roam";
 
 // Which project THIS pet window represents. `null` = the main window (the
 // default single pet). Split-pet spawns extra windows with `?project=<id>`.
@@ -220,6 +220,8 @@ function render() {
   wasCelebrating = celebrating;
   const mood = celebrating ? "celebrate" : resolved;
   pet.setState(mood);
+  // Keep the roam engine in sync: pause on waiting/celebrate, doze on idle.
+  setMood(mood);
 
   // A reactive comment briefly overrides the quiet single-line moods (not the
   // multi-agent working bubble, not the celebrate burst).

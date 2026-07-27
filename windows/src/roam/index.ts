@@ -4,7 +4,7 @@
 // directory.
 
 import type { Pet } from "../pet";
-import { destroyEngine, initEngine, setDragging } from "./engine";
+import { destroyEngine, initEngine, setDragging, setMood } from "./engine";
 import {
   ROAM_KEY,
   ROAM_MODE_KEY,
@@ -14,7 +14,7 @@ import {
 } from "./types";
 import type { RoamMode } from "./types";
 
-export { setDragging };
+export { setDragging, setMood };
 export { ROAM_KEY, ROAM_MODE_KEY, ROAM_SPEED_KEY };
 
 export function initRoam(pet: Pet): void {
