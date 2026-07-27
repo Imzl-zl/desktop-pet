@@ -4,7 +4,7 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import { Pet } from "./pet";
 import { SessionStore, aggregateMood, basename, type AgentEventPayload } from "./state";
 import { BubbleRenderer } from "./bubble";
-import { loadCatalog, savedSlug, saveSlug } from "./catalog";
+import { loadCatalog, savedSlug, saveSlug, getLibrary } from "./catalog";
 import { t, setLang, type Lang } from "./i18n";
 import { bubbleLines, PET_CHAT } from "./activity";
 import * as care from "./care";
@@ -19,6 +19,12 @@ import { initRoam, setDragging, setMood } from "./roam";
 // default single pet). Split-pet spawns extra windows with `?project=<id>`.
 const MY_PROJECT = new URLSearchParams(location.search).get("project");
 const IS_MAIN = MY_PROJECT === null;
+
+// Pure-decoration pet window: spawned by Settings → "Spawn extra pet". Such a
+// window loads `?extra=<slug>` and short-circuits ALL agent/care/tray logic ,
+// it just floats and roams. Multiple may be open at once.
+const EXTRA_SLUG = new URLSearchParams(location.search).get("extra");
+const IS_EXTRA = EXTRA_SLUG !== null;
 
 // A project window sets this the moment its project is un-split, so it stops
 // feeding during the brief async gap before Rust closes it (else the main window
@@ -135,6 +141,15 @@ function chime(event: "done" | "waiting") {
 
 // --- pick + load a pet sprite -------------------------------------------------
 (async () => {
+  // Pure-decoration window: load the slug the user picked in Settings. The
+  // library is in localStorage so it's available immediately.
+  if (IS_EXTRA && EXTRA_SLUG) {
+    const lib = getLibrary();
+    const p = lib.find((x) => x.slug === EXTRA_SLUG);
+    if (p?.url) { pet.load(p.url); return; }
+    // Library entry vanished (user removed it) , nothing to render.
+    return;
+  }
   // A project window raises its mapped pet; the main window the selected one.
   if (MY_PROJECT) {
     const slug = projectpets.petForProject(MY_PROJECT);
@@ -198,6 +213,7 @@ function pickMoodLine(mood: string) {
 }
 
 function render() {
+  if (IS_EXTRA) { renderExtra(); return; }
   const sessions = store.active().filter((s) => ownsProject(s.project));
   const resolved = aggregateMood(sessions);
 
@@ -257,6 +273,16 @@ function render() {
   // One global tray icon , the main window reports it, counting ALL sessions
   // (not just this window's owned subset).
   if (IS_MAIN) reportTrayStatus(store.active());
+}
+
+/// Pure-decoration window render: idle mood, no bubble, no tray report. The
+/// roam engine (initialized below) handles all movement independently.
+function renderExtra(): void {
+  pet.setState("idle");
+  setMood("idle");
+  bubble.hide();
+  snugBubble();
+  reportHitRect();
 }
 setInterval(render, 500);
 // Hunger decays over time, so evaluate it on a timer (not only after feeding,
@@ -330,6 +356,8 @@ function maybeNotify(e: AgentEventPayload) {
 }
 
 // --- agent events from the Rust listener -------------------------------------
+// Pure-decoration windows skip all of this , they don't track agents or feed.
+if (!IS_EXTRA) {
 listen<AgentEventPayload>("agent-event", (e) => {
   maybeNotify(e.payload);
   store.update(e.payload);
@@ -403,6 +431,7 @@ listen<{ slug: string; url: string }>("set-pet", (e) => {
   saveSlug(e.payload.slug);
   localStorage.setItem("ap_pet_url", e.payload.url);
 });
+} // end if (!IS_EXTRA)
 // Language changed from Settings , re-render the bubble in the new language.
 listen<Lang>("lang-changed", (e) => { setLang(e.payload); render(); });
 // Bubble theme / opacity / messages changed from Settings.
@@ -437,11 +466,12 @@ bubbleEl.addEventListener("mousedown", async (e) => {
 });
 canvas.addEventListener("contextmenu", (e) => {
   e.preventDefault();
-  if (pet.hitTest(e.offsetX, e.offsetY)) invoke("open_popover").catch(() => {});
+  // Extra windows have no agent state to show in the popover , skip it.
+  if (!IS_EXTRA && pet.hitTest(e.offsetX, e.offsetY)) invoke("open_popover").catch(() => {});
 });
 bubbleEl.addEventListener("contextmenu", (e) => {
   e.preventDefault();
-  invoke("open_popover").catch(() => {});
+  if (!IS_EXTRA) invoke("open_popover").catch(() => {});
 });
 
 // Report the interactive region (physical px) for Windows click-through: the
@@ -450,6 +480,10 @@ bubbleEl.addEventListener("contextmenu", (e) => {
 const petRoot = document.getElementById("pet-root") as HTMLElement;
 let lastHitSig = "";
 function reportHitRect() {
+  // Extra windows share the global HitRect Mutex with the main window on the
+  // Rust side; writing here would overwrite the main pet's click-through rect.
+  // Skip it , extra windows stay fully interactive (no click-through).
+  if (IS_EXTRA) return;
   const d = window.devicePixelRatio || 1;
   const rects: { left: number; top: number; right: number; bottom: number }[] = [];
   if (!bubbleEl.hidden) {

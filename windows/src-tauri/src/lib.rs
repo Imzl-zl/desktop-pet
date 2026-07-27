@@ -237,7 +237,7 @@ fn sync_project_windows(app: tauri::AppHandle, projects: Vec<String>) {
     use std::collections::HashSet;
     let want: HashSet<String> = projects.iter().map(|id| format!("pet-{id}")).collect();
     for (label, win) in app.webview_windows() {
-        if label.starts_with("pet-") && !want.contains(&label) {
+        if label.starts_with("pet-") && !label.starts_with("pet-extra-") && !want.contains(&label) {
             let _ = win.close();
         }
     }
@@ -260,6 +260,69 @@ fn sync_project_windows(app: tauri::AppHandle, projects: Vec<String>) {
             .focused(false)
             .build();
     }
+}
+
+/// Label prefix for pure-decoration pet windows (no agent/care/tray logic).
+const EXTRA_PREFIX: &str = "pet-extra-";
+
+/// Spawn a pure-decoration pet window that only roams. The frontend loads
+/// `index.html?extra=<slug>` and short-circuits all agent/care/tray wiring.
+/// Same slug may be spawned multiple times (each call opens a new window).
+#[tauri::command]
+async fn spawn_extra_pet(app: tauri::AppHandle, slug: String) -> Result<String, String> {
+    if slug.is_empty() {
+        return Err("empty slug".into());
+    }
+    let (label, n) = next_extra_label(&app, &slug);
+    let url = format!("index.html?extra={slug}");
+    WebviewWindowBuilder::new(&app, &label, WebviewUrl::App(url.into()))
+        .title("AgentPet")
+        .inner_size(260.0, 320.0)
+        .position(200.0 + (n as f64) * 40.0, 200.0 + (n as f64) * 40.0)
+        .transparent(true)
+        .decorations(false)
+        .always_on_top(true)
+        .skip_taskbar(true)
+        .resizable(false)
+        .shadow(false)
+        .focused(false)
+        .build()
+        .map_err(|e| e.to_string())?;
+    Ok(label)
+}
+
+/// Pick the next free label for an extra pet window. Returns (label, index n)
+/// so the caller can offset the spawn position by n*40px to avoid stacking.
+fn next_extra_label(app: &tauri::AppHandle, slug: &str) -> (String, usize) {
+    let mut n = 0;
+    loop {
+        let candidate = format!("{EXTRA_PREFIX}{slug}-{n}");
+        if app.get_webview_window(&candidate).is_none() {
+            return (candidate, n);
+        }
+        n += 1;
+    }
+}
+
+#[tauri::command]
+fn close_extra_pet(app: tauri::AppHandle, label: String) -> Result<(), String> {
+    if !label.starts_with(EXTRA_PREFIX) {
+        return Err("not an extra pet window".into());
+    }
+    if let Some(w) = app.get_webview_window(&label) {
+        w.close().map_err(|e| e.to_string())?;
+    }
+    Ok(())
+}
+
+/// Labels of all currently-open extra pet windows, for the Settings list.
+#[tauri::command]
+fn list_extra_pets(app: tauri::AppHandle) -> Vec<String> {
+    app.webview_windows()
+        .keys()
+        .filter(|l| l.starts_with(EXTRA_PREFIX))
+        .cloned()
+        .collect()
 }
 
 /// Persist the chosen language (for the tray on next launch) and re-label the
@@ -411,6 +474,9 @@ pub fn run() {
             focus_terminal,
             resolve_approval,
             sync_project_windows,
+            spawn_extra_pet,
+            close_extra_pet,
+            list_extra_pets,
             set_lang,
             set_tray_status,
             set_pet_visible,

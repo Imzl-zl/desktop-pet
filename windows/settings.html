@@ -141,6 +141,25 @@
           </div>
         </div>
 
+        <!-- Pure-decoration pets: spawn extra pet windows that just roam. -->
+        <div class="group">
+          <div class="ghead"><span id="t-extra">Extra pets on desktop</span></div>
+          <div class="gcard pad">
+            <div class="cap" id="t-extra-sub" style="padding: 6px 0">Pure decoration pets that just float and roam. They don't track agents or earn XP.</div>
+            <div class="extra-label" id="t-extra-pick">Tap a pet to spawn it on desktop</div>
+            <div id="extra-grid" class="pet-results"></div>
+            <div id="extra-empty" class="cap" style="padding: 8px 0" hidden><span id="t-extra-no">No pets in library yet. Use Browse or Create first.</span></div>
+            <div id="extra-cap-msg" class="cap" style="padding: 8px 0; color: var(--orange)" hidden><span id="t-extra-cap">Desktop limit reached. Close one to spawn more.</span></div>
+            <div id="extra-desktop-wrap" hidden>
+              <div class="extra-desktop-head">
+                <span><span id="t-extra-running">On desktop</span> <span id="extra-count" class="dim"></span></span>
+                <button class="mini" id="extra-close-all"><span id="t-extra-closeall">Close all</span></button>
+              </div>
+              <div id="extra-running" class="pet-results"></div>
+            </div>
+          </div>
+        </div>
+
         <div class="group">
           <div class="ghead" id="t-anims">Animations</div>
           <div class="gcard pad">

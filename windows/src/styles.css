@@ -372,6 +372,23 @@ input[type="range"]::-webkit-slider-thumb {
 .pg-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.25); cursor: pointer; }
 .pg-dot.sel { background: var(--accent); }
 
+/* ---- extra pets (pure-decoration spawn grid) ---- */
+.extra-label { font-size: 12px; color: var(--sec); margin: 10px 0 2px; }
+#extra-grid { max-height: 280px; overflow-y: auto; }
+.pet-item.spawn { position: relative; }
+.pet-item.spawn::after {
+  content: "+"; position: absolute; top: 3px; right: 7px;
+  font-size: 15px; font-weight: 600; color: var(--accent);
+  opacity: 0; transition: opacity 0.12s;
+}
+.pet-item.spawn:hover::after { opacity: 0.9; }
+.pet-item.spawn.disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+.pet-item.running { cursor: default; position: relative; }
+.extra-desktop-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin: 14px 0 2px; font-size: 12px; color: var(--sec);
+}
+
 /* ---- custom messages ---- */
 .msg-editor { margin-top: 8px; }
 .msg-label { font-size: 11.5px; color: var(--sec); margin-bottom: 3px; }

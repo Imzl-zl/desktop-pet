@@ -47,6 +47,7 @@ function initTabs() {
       });
       if (b.dataset.tab === "care") { renderCare(); renderSync(); }
       if (b.dataset.tab === "history") renderHistory();
+      if (b.dataset.tab === "pet") document.dispatchEvent(new CustomEvent("ap-pet-tab-shown"));
     };
   });
 }
@@ -615,6 +616,131 @@ function initCreate() {
     renderPage();
     showCurrent();
   };
+}
+
+// ----------------------------------------------------------- extra pets ----
+// Pure-decoration pet windows: spawn extra pets that just float and roam,
+// ignoring agents/care/tray. Multiple may be open at once; each is closed
+// from the grid below or by closing its window directly.
+const EXTRA_PREFIX = "pet-extra-";
+const MAX_EXTRA_PETS = 12;
+
+function slugFromExtraLabel(label: string): string {
+  const rest = label.slice(EXTRA_PREFIX.length);
+  const i = rest.lastIndexOf("-");
+  return i > 0 ? rest.slice(0, i) : rest;
+}
+
+function initExtraPets() {
+  const grid = document.getElementById("extra-grid") as HTMLDivElement;
+  const emptyMsg = document.getElementById("extra-empty") as HTMLElement;
+  const capMsg = document.getElementById("extra-cap-msg") as HTMLElement;
+  const desktopWrap = document.getElementById("extra-desktop-wrap") as HTMLElement;
+  const countEl = document.getElementById("extra-count") as HTMLElement;
+  const runningEl = document.getElementById("extra-running") as HTMLDivElement;
+  const closeAllBtn = document.getElementById("extra-close-all") as HTMLButtonElement;
+
+  // Build a thumbnail card for a library pet, used in the spawn grid.
+  const spawnCard = (p: LibPet): HTMLButtonElement => {
+    const item = document.createElement("button");
+    item.className = "pet-item spawn";
+    const cv = document.createElement("canvas");
+    cv.width = 48; cv.height = 48; cv.className = "pet-thumb";
+    drawThumb(cv, p.url);
+    const label = document.createElement("span");
+    label.textContent = p.name;
+    item.appendChild(cv);
+    item.appendChild(label);
+    item.onclick = async () => {
+      if (item.classList.contains("disabled")) return;
+      item.disabled = true;
+      try { await invoke("spawn_extra_pet", { slug: p.slug }); }
+      catch (e) { alert(String(e)); return; }
+      finally { setTimeout(() => { item.disabled = false; }, 350); }
+      void renderRunning();
+    };
+    return item;
+  };
+
+  // Build a thumbnail card for an already-spawned window, with a close ✕.
+  const runningCard = (label: string, p?: LibPet): HTMLDivElement => {
+    const item = document.createElement("div");
+    item.className = "pet-item running";
+    const del = document.createElement("span");
+    del.className = "pet-del";
+    del.textContent = "✕";
+    del.title = t("Close");
+    del.onclick = async (ev) => {
+      ev.stopPropagation();
+      try { await invoke("close_extra_pet", { label }); }
+      catch (e) { alert(String(e)); return; }
+      void renderRunning();
+    };
+    const cv = document.createElement("canvas");
+    cv.width = 48; cv.height = 48; cv.className = "pet-thumb";
+    if (p?.url) drawThumb(cv, p.url);
+    const name = document.createElement("span");
+    name.textContent = p?.name ?? slugFromExtraLabel(label);
+    item.appendChild(del);
+    item.appendChild(cv);
+    item.appendChild(name);
+    return item;
+  };
+
+  const renderGrid = () => {
+    const lib = getLibrary();
+    grid.innerHTML = "";
+    if (!lib.length) {
+      emptyMsg.hidden = false;
+      grid.style.display = "none";
+      return;
+    }
+    emptyMsg.hidden = true;
+    grid.style.display = "";
+    for (const p of lib) grid.appendChild(spawnCard(p));
+  };
+
+  const renderRunning = async () => {
+    let labels: string[] = [];
+    try { labels = await invoke<string[]>("list_extra_pets"); } catch { return; }
+    const count = labels.length;
+    countEl.textContent = count ? `(${count}/${MAX_EXTRA_PETS})` : "";
+    const atCap = count >= MAX_EXTRA_PETS;
+    capMsg.hidden = !atCap;
+    grid.querySelectorAll<HTMLButtonElement>(".pet-item.spawn").forEach((b) => {
+      b.classList.toggle("disabled", atCap);
+    });
+    if (!count) { desktopWrap.hidden = true; return; }
+    desktopWrap.hidden = false;
+    const lib = getLibrary();
+    runningEl.innerHTML = "";
+    for (const label of labels) {
+      const slug = slugFromExtraLabel(label);
+      runningEl.appendChild(runningCard(label, lib.find((x) => x.slug === slug)));
+    }
+  };
+
+  closeAllBtn.onclick = async () => {
+    let labels: string[] = [];
+    try { labels = await invoke<string[]>("list_extra_pets"); } catch { return; }
+    if (!labels.length) return;
+    closeAllBtn.disabled = true;
+    await Promise.all(labels.map((l) => invoke("close_extra_pet", { label: l }).catch(() => {})));
+    closeAllBtn.disabled = false;
+    void renderRunning();
+  };
+
+  renderGrid();
+  void renderRunning();
+  // Poll: extra windows can be closed via the OS, and the library may change
+  // from Browse/Create without a tab switch, so sync both every 2s.
+  let lastLibLen = -1;
+  setInterval(() => {
+    const len = getLibrary().length;
+    if (len !== lastLibLen) { lastLibLen = len; renderGrid(); }
+    void renderRunning();
+  }, 2000);
+  document.addEventListener("ap-pet-tab-shown", () => { renderGrid(); void renderRunning(); });
 }
 
 // ---------------------------------------------------------------- bubble ----
@@ -1231,6 +1357,13 @@ function applyStatic() {
   set("cr-create", "Create");
   set("cr-choose", "Choose image…");
   set("t-size", "Size on screen");
+  set("t-extra", "Extra pets on desktop");
+  set("t-extra-sub", "Pure decoration pets that just float and roam. They don't track agents or earn XP.");
+  set("t-extra-pick", "Tap a pet to spawn it on desktop");
+  set("t-extra-running", "On desktop");
+  set("t-extra-closeall", "Close all");
+  set("t-extra-no", "No pets in library yet. Use Browse or Create first.");
+  set("t-extra-cap", "Desktop limit reached. Close one to spawn more.");
   set("t-anims", "Animations");
   set("t-anim-hint", "Hover a clip to preview it.");
   set("am-idle", "Idle");
@@ -1401,4 +1534,5 @@ initAutostart();
 initSliders();
 initSegs();
 initMisc();
+initExtraPets();
 initDemo();
