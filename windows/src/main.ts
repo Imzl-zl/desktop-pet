@@ -557,15 +557,17 @@ function showExtraCtxMenu(x: number, y: number): void {
 
   // Dismiss on click outside or Escape. The setTimeout avoids the very
   // contextmenu event that opened the menu from immediately closing it.
+  // The `ctxMenu === m` guard prevents a stale listener (from a previous
+  // menu) from closing a newer menu that replaced it.
   setTimeout(() => {
     const onDown = (ev: MouseEvent) => {
-      if (!m.contains(ev.target as Node)) hideCtxMenu();
+      if (ctxMenu === m && !m.contains(ev.target as Node)) hideCtxMenu();
       document.removeEventListener("mousedown", onDown);
     };
     document.addEventListener("mousedown", onDown);
   }, 0);
   const onKey = (ev: KeyboardEvent) => {
-    if (ev.key === "Escape") hideCtxMenu();
+    if (ev.key === "Escape" && ctxMenu === m) hideCtxMenu();
     document.removeEventListener("keydown", onKey);
   };
   document.addEventListener("keydown", onKey);

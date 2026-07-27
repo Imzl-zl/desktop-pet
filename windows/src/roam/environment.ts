@@ -2,7 +2,7 @@
 // windows. All geometry is returned in logical pixels so the rest of the roam
 // subsystem can stay DPI-agnostic.
 
-import { currentMonitor } from "@tauri-apps/api/window";
+import { currentMonitor, type Monitor } from "@tauri-apps/api/window";
 import { invoke } from "@tauri-apps/api/core";
 import type { Environment, Rect, SystemWindow } from "./types";
 
@@ -28,17 +28,21 @@ function toLogicalRect(rect: RawSystemWindow, sf: number): SystemWindow {
   };
 }
 
-async function fetchMonitorWorkArea(sf: number): Promise<Rect | null> {
+// 500ms monitor cache: the monitor rarely changes (only when the user drags
+// the pet to another display), and currentMonitor() is an IPC call. Without
+// this, N roaming pets fire 2×N×33 IPC calls/sec just for monitor info.
+const MONITOR_CACHE_MS = 500;
+let monitorCache: { mon: Monitor | null; ts: number } | null = null;
+
+async function cachedMonitor(): Promise<Monitor | null> {
+  const now = Date.now();
+  if (monitorCache && now - monitorCache.ts < MONITOR_CACHE_MS) {
+    return monitorCache.mon;
+  }
   try {
     const m = await currentMonitor();
-    if (!m || !m.workArea) return null;
-    const wa = m.workArea;
-    return {
-      left: wa.position.x / sf,
-      top: wa.position.y / sf,
-      right: (wa.position.x + wa.size.width) / sf,
-      bottom: (wa.position.y + wa.size.height) / sf,
-    };
+    monitorCache = { mon: m, ts: now };
+    return m;
   } catch {
     return null;
   }
@@ -58,11 +62,17 @@ async function fetchSystemWindows(sf: number): Promise<SystemWindow[]> {
 
 export async function fetchEnvironment(): Promise<Environment | null> {
   try {
-    const m = await currentMonitor();
-    const sf = m?.scaleFactor || 1;
-
-    const workArea = await fetchMonitorWorkArea(sf);
-    if (!workArea) return null;
+    // Single currentMonitor() call (cached) instead of the previous two.
+    const m = await cachedMonitor();
+    if (!m || !m.workArea) return null;
+    const sf = m.scaleFactor || 1;
+    const wa = m.workArea;
+    const workArea: Rect = {
+      left: wa.position.x / sf,
+      top: wa.position.y / sf,
+      right: (wa.position.x + wa.size.width) / sf,
+      bottom: (wa.position.y + wa.size.height) / sf,
+    };
 
     const windows = await fetchSystemWindows(sf);
     return { workArea, windows };

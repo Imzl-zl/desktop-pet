@@ -581,35 +581,34 @@ pub fn run() {
                     // Single cursor read per tick (shared across all pet windows).
                     let cur = handle.cursor_position();
 
-                    // Iterate a snapshot of pet windows so spawns/closes during
-                    // the loop don't corrupt the iterator.
+                    // Snapshot all pet windows once per tick so spawns/closes
+                    // during the loop don't corrupt the iterator.
                     let wins: Vec<(String, tauri::WebviewWindow)> = handle
                         .webview_windows()
                         .into_iter()
                         .filter(|(label, _)| is_pet_window(label))
                         .collect();
 
+                    // Snapshot all hit rects in ONE lock acquisition (instead of
+                    // N locks per tick). The clone is ~12 entries × 32 bytes.
+                    let rects: HitRectMap = handle
+                        .try_state::<Mutex<HitRectMap>>()
+                        .and_then(|s| s.lock().ok().map(|m| m.clone()))
+                        .unwrap_or_default();
+
                     for (label, win) in &wins {
                         let Ok(wp) = win.outer_position() else { continue };
                         // Fail-safe: no rect yet (webview still booting) or
                         // cursor unreadable → keep INTERACTIVE.
                         let inside = match &cur {
-                            Ok(cur) => {
-                                // Hold the lock only for the lookup: the guard
-                                // borrows the State, so it can't escape this
-                                // closure. `.cloned()` returns an owned HitRect.
-                                let rect = handle.try_state::<Mutex<HitRectMap>>().and_then(|s| {
-                                    s.lock().ok().and_then(|m| m.get(label).cloned())
-                                });
-                                match rect {
-                                    Some(r) if r.w > 0.0 => {
-                                        let rx = cur.x - wp.x as f64;
-                                        let ry = cur.y - wp.y as f64;
-                                        rx >= r.x && rx <= r.x + r.w && ry >= r.y && ry <= r.y + r.h
-                                    }
-                                    _ => true, // no rect yet → stay interactive
+                            Ok(cur) => match rects.get(label) {
+                                Some(r) if r.w > 0.0 => {
+                                    let rx = cur.x - wp.x as f64;
+                                    let ry = cur.y - wp.y as f64;
+                                    rx >= r.x && rx <= r.x + r.w && ry >= r.y && ry <= r.y + r.h
                                 }
-                            }
+                                _ => true, // no rect yet → stay interactive
+                            },
                             Err(_) => true,
                         };
                         // ignore_cursor_events = true → clicks pass through.
@@ -617,34 +616,31 @@ pub fn run() {
                         if last_ignore.get(label) != Some(&ignore) {
                             let _ = win.set_ignore_cursor_events(ignore);
                             last_ignore.insert(label.clone(), ignore);
-                            if flip_logs < 30 {
+                            if flip_logs < 60 {
                                 flip_logs += 1;
+                                let cur_str = cur.as_ref().map_or("err".to_string(), |c| format!("({:.0},{:.0})", c.x, c.y));
                                 dlog(&format!(
-                                    "hit flip: label={label} ignore={ignore} cur=({:.0},{:.0}) win=({},{})",
-                                    cur.as_ref().map(|c| c.x).unwrap_or(0.0),
-                                    cur.as_ref().map(|c| c.y).unwrap_or(0.0),
+                                    "hit flip: label={label} ignore={ignore} cur={cur_str} win=({},{})",
                                     wp.x, wp.y
                                 ));
                             }
                         }
                     }
-                    // If cursor_position failed, force all pet windows interactive.
-                    if let Err(e) = &cur {
-                        for (label, win) in &wins {
-                            if last_ignore.get(label) != Some(&false) {
-                                let _ = win.set_ignore_cursor_events(false);
-                                last_ignore.insert(label.clone(), false);
-                            }
-                        }
-                        if flip_logs < 30 {
-                            flip_logs += 1;
-                            dlog(&format!("cursor_position error: {e} , forcing all pets interactive"));
-                        }
-                    }
 
-                    // Position saving: main pet only (extra pets are ephemeral).
+                    // Prune orphan entries for closed windows + save main pet
+                    // position, both throttled to ~1/sec to reduce overhead.
                     tick = tick.wrapping_add(1);
                     if tick % 33 == 0 {
+                        let active: std::collections::HashSet<&String> =
+                            wins.iter().map(|(l, _)| l).collect();
+                        if let Some(state) = handle.try_state::<Mutex<HitRectMap>>() {
+                            if let Ok(mut m) = state.lock() {
+                                m.retain(|k, _| active.contains(k));
+                            }
+                        }
+                        last_ignore.retain(|k, _| active.contains(k));
+
+                        // Position saving: main pet only (extra pets are ephemeral).
                         if let Some(win) = handle.get_webview_window("pet") {
                             if let Ok(p) = win.outer_position() {
                                 if last_saved != Some((p.x, p.y)) {
@@ -721,7 +717,10 @@ pub fn run() {
             let marker = dirs::config_dir().map(|d| d.join("AgentPet").join(".onboarded"));
             if let Some(m) = marker {
                 if !m.exists() {
-                    open_settings(app.handle().clone());
+                    // Call the sync impl directly: open_settings is an async fn
+                    // (Tauri command), so calling it without .await would create
+                    // a Future that's never polled and do nothing.
+                    open_settings_impl(app.handle().clone());
                     if let Some(parent) = m.parent() {
                         let _ = std::fs::create_dir_all(parent);
                     }

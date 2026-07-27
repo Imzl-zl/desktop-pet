@@ -67,14 +67,19 @@ export const VALID_MODES: RoamMode[] = ["stay", "wander", "cursor", "climb"];
 /// Per-window override key. Each pet window (main, project, extra) can have
 /// its own roam mode / size, stored under `ap_win_<label>_<key>`. Falls back
 /// to the global key if the per-window override is absent.
-function winOverride(key: string): string | null {
+// Cache the label once at module load: getCurrentWindow() allocates a new
+// WebviewWindow each call, and loadConfig() runs every 30ms tick.
+const WIN_LABEL: string = (() => {
   try {
-    const label = getCurrentWindow().label;
-    if (!label) return null;
-    return localStorage.getItem(`ap_win_${label}_${key}`);
+    return getCurrentWindow().label;
   } catch {
-    return null;
+    return "";
   }
+})();
+
+function winOverride(key: string): string | null {
+  if (!WIN_LABEL) return null;
+  return localStorage.getItem(`ap_win_${WIN_LABEL}_${key}`);
 }
 
 export function loadConfig(): Config {

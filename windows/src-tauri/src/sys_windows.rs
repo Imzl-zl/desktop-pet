@@ -10,11 +10,14 @@
 // for 150ms, capping the real enumeration at ~7 calls/sec regardless of how
 // many pets are roaming.
 
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
 const WIN_CACHE_TTL: Duration = Duration::from_millis(150);
-static WIN_CACHE: Mutex<Option<(Instant, Vec<serde_json::Value>)>> = Mutex::new(None);
+/// Cache stores an `Arc` so cache hits return via a cheap atomic ref-count
+/// increment instead of deep-cloning ~20 JSON values per call. With N pets
+/// each calling 33×/sec, this avoids thousands of short-lived allocations/sec.
+static WIN_CACHE: Mutex<Option<(Instant, Arc<Vec<serde_json::Value>>)>> = Mutex::new(None);
 
 #[cfg(windows)]
 mod win {
@@ -96,13 +99,15 @@ mod win {
 /// Tauri command: returns visible application windows (physical pixels).
 /// On non-Windows platforms, returns an empty list. A 150ms TTL cache caps the
 /// real enumeration rate so multi-pet roaming doesn't flood Win32 EnumWindows.
+/// Returns an `Arc<Vec>` so cache hits are O(1) (atomic ref-count increment)
+/// instead of deep-cloning every JSON value on every call.
 #[tauri::command]
-pub fn list_system_windows() -> Vec<serde_json::Value> {
+pub fn list_system_windows() -> Arc<Vec<serde_json::Value>> {
     // Fast path: return the cached snapshot if it's still fresh.
     if let Ok(guard) = WIN_CACHE.lock() {
         if let Some((ts, ref data)) = *guard {
             if ts.elapsed() < WIN_CACHE_TTL {
-                return data.clone();
+                return Arc::clone(data);
             }
         }
     }
@@ -123,10 +128,11 @@ pub fn list_system_windows() -> Vec<serde_json::Value> {
     #[cfg(not(windows))]
     let fresh: Vec<serde_json::Value> = Vec::new();
 
+    let arc = Arc::new(fresh);
     // Update the cache for the next caller. A poisoned lock (panic in another
     // thread) just skips caching; the command still returns fresh data.
     if let Ok(mut guard) = WIN_CACHE.lock() {
-        *guard = Some((Instant::now(), fresh.clone()));
+        *guard = Some((Instant::now(), Arc::clone(&arc)));
     }
-    fresh
+    arc
 }
