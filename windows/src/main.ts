@@ -13,6 +13,7 @@ import * as usage from "./usage";
 import * as history from "./history";
 import * as reactive from "./reactive";
 import * as projectpets from "./projectpets";
+import { initRoam, setDragging } from "./roam";
 
 // Which project THIS pet window represents. `null` = the main window (the
 // default single pet). Split-pet spawns extra windows with `?project=<id>`.
@@ -67,6 +68,7 @@ const bubbleEl = document.getElementById("bubble") as HTMLDivElement;
 const pet = new Pet(canvas);
 const store = new SessionStore();
 const bubble = new BubbleRenderer(bubbleEl);
+initRoam(pet);
 
 // --- bubble appearance (theme / opacity / fonts) ------------------------------
 const FONT_FAMILIES: Record<string, string> = {
@@ -414,12 +416,22 @@ canvas.addEventListener("mousedown", async (e) => {
   // drag anyway so the pet is never untouchable.
   if (pet.spriteRect && !pet.hitTest(e.offsetX, e.offsetY)) return;
   emit("popover-close", null);
-  await getCurrentWindow().startDragging();
+  setDragging(true);
+  try {
+    await getCurrentWindow().startDragging();
+  } finally {
+    setDragging(false);
+  }
 });
 bubbleEl.addEventListener("mousedown", async (e) => {
   if (e.button !== 0) return;
   emit("popover-close", null);
-  await getCurrentWindow().startDragging();
+  setDragging(true);
+  try {
+    await getCurrentWindow().startDragging();
+  } finally {
+    setDragging(false);
+  }
 });
 canvas.addEventListener("contextmenu", (e) => {
   e.preventDefault();

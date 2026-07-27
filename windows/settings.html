@@ -163,6 +163,21 @@
               <span class="size-presets"><button data-size="80">S</button><button data-size="100">M</button><button data-size="125">L</button></span></span></div>
           </div>
         </div>
+
+        <div class="group">
+          <div class="ghead" id="t-roam">Roam</div>
+          <div class="gcard">
+            <div class="row"><span id="t-roam-mode">Mode</span>
+              <select id="roam-mode" class="roam-mode">
+                <option value="stay" id="t-roam-stay">Stay</option>
+                <option value="wander" id="t-roam-wander">Wander</option>
+                <option value="cursor" id="t-roam-cursor">Follow cursor</option>
+                <option value="climb" id="t-roam-climb">Climb windows</option>
+              </select></div>
+            <div class="row"><span id="t-roam-speed">Speed</span>
+              <span class="slider-wrap"><input type="range" id="roam-speed" min="1" max="10" /><span class="val dim" id="roam-speed-val"></span></span></div>
+          </div>
+        </div>
       </div>
 
       <!-- =============================== CARE ================================ -->

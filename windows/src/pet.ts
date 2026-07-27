@@ -88,6 +88,8 @@ export class Pet {
   private clips: Rect[][] = [];
   private frame = 0;
   private row = 0;
+  private overrideRow: number | null = null;
+  private lastDrawnRow = 0;
   private lastTick = 0;
   private fps = 3;
   /// Unused space above the sprite, as a fraction of canvas height. The bubble
@@ -166,7 +168,17 @@ export class Pet {
     // like the macOS PetBindings store.
     const bound = parseInt(localStorage.getItem(`ap_bind_${state}`) ?? "", 10);
     const row = Number.isFinite(bound) && bound >= 0 ? bound : (STATE_ROW[state] ?? 0);
-    if (row !== this.row) { this.row = row; this.frame = 0; }
+    if (row !== this.row) { this.row = row; }
+  }
+
+  /// Override the spritesheet row while roaming. setState still updates the
+  /// mood row in the background so the override can be cleared cleanly.
+  setRow(row: number) {
+    if (this.overrideRow !== row) { this.overrideRow = row; this.frame = 0; }
+  }
+
+  clearRow() {
+    if (this.overrideRow !== null) { this.overrideRow = null; this.frame = 0; }
   }
 
   /// The frames of the current row (clamped to what the sheet actually has).
@@ -188,18 +200,21 @@ export class Pet {
     const { width: W, height: H } = this.canvas;
     this.ctx.clearRect(0, 0, W, H);
 
+    const activeRow = this.overrideRow ?? this.row;
+    if (activeRow !== this.lastDrawnRow) { this.lastDrawnRow = activeRow; this.frame = 0; }
+
     let r: Rect;
     let scaleW: number; // width used for the scale , per CLIP, not per frame
     const clip = this.currentClip();
     if (clip) {
       r = clip[this.frame % clip.length];
-      scaleW = this.clipMaxW[Math.min(this.row, this.clips.length - 1)] || r.w;
+      scaleW = this.clipMaxW[Math.min(activeRow, this.clips.length - 1)] || r.w;
     } else {
       // Fallback: fixed 8x9 grid (pixels unreadable , e.g. no CORS).
       const fw = this.img.naturalWidth / COLS;
       const fh = this.img.naturalHeight / ROWS;
       if (!fw || !fh) return;
-      r = { x: (this.frame % COLS) * fw, y: Math.min(this.row, ROWS - 1) * fh, w: fw, h: fh };
+      r = { x: (this.frame % COLS) * fw, y: Math.min(activeRow, ROWS - 1) * fh, w: fw, h: fh };
       scaleW = fw;
     }
 

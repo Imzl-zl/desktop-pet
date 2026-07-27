@@ -9,6 +9,8 @@ import { agentIconUrl, uiIcon } from "./icons";
 import { LAYOUT_PRESETS, readBubbleConfig, type TokenItem, type BubbleToken } from "./bubble";
 import { initDemo } from "./demo";
 import { slice, type Rect } from "./pet";
+import { getRoamMode, setRoamMode, getRoamSpeed, setRoamSpeed } from "./roam";
+
 import * as care from "./care";
 import * as usage from "./usage";
 import * as projectpets from "./projectpets";
@@ -899,7 +901,18 @@ function initPetControls() {
     };
   });
 
-
+  const roamMode = document.getElementById("roam-mode") as HTMLSelectElement;
+  const roamSpeed = document.getElementById("roam-speed") as HTMLInputElement;
+  const roamSpeedVal = document.getElementById("roam-speed-val") as HTMLSpanElement;
+  roamMode.value = getRoamMode();
+  roamSpeed.value = String(getRoamSpeed());
+  roamSpeedVal.textContent = roamSpeed.value;
+  roamMode.onchange = () => { setRoamMode(roamMode.value as "wander" | "cursor" | "stay" | "climb"); };
+  roamSpeed.oninput = () => {
+    const v = parseInt(roamSpeed.value, 10);
+    setRoamSpeed(v);
+    roamSpeedVal.textContent = String(v);
+  };
 }
 
 // ------------------------------------------------------------- agent icons ----

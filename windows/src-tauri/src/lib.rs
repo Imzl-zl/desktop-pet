@@ -2,6 +2,7 @@ pub mod cli;
 pub mod hooks;
 pub mod server;
 pub mod statemap;
+pub mod sys_windows;
 pub mod transcript;
 
 use std::sync::Mutex;
@@ -416,7 +417,8 @@ pub fn run() {
             get_pet_visible,
             open_popover,
             log_debug,
-            set_hit_rect
+            set_hit_rect,
+            sys_windows::list_system_windows
         ])
         .setup(|app| {
             server::start(app.handle().clone());
