@@ -9,7 +9,7 @@ mod win {
     use serde::Serialize;
     use windows::Win32::Foundation::{BOOL, HWND, LPARAM, RECT, TRUE};
     use windows::Win32::UI::WindowsAndMessaging::{
-        EnumWindows, GetWindowRect, GetWindowTextW, IsWindowVisible,
+        EnumWindows, GetWindowRect, GetWindowTextW, GetWindowThreadProcessId, IsWindowVisible,
     };
 
     #[derive(Serialize)]
@@ -49,6 +49,13 @@ mod win {
             let w = rect.right - rect.left;
             let h = rect.bottom - rect.top;
             if w < 40 || h < 40 {
+                return TRUE;
+            }
+
+            // Exclude the pet's own process windows so it doesn't climb itself.
+            let mut pid: u32 = 0;
+            GetWindowThreadProcessId(hwnd, Some(&mut pid));
+            if pid == std::process::id() {
                 return TRUE;
             }
 

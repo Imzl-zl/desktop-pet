@@ -12,6 +12,8 @@ import {
   PHYSICS_MIN_SPEED,
   SAMPLE_WINDOW_MS,
   TICK_MS,
+  WIN_H,
+  WIN_W,
   sleep,
 } from "./types";
 import { currentLogicalPos, setLogical } from "./window";
@@ -106,7 +108,7 @@ export async function applyFall(
       throwing = false;
     }
 
-    pos = { x: Math.max(bounds.left, Math.min(bounds.right - 1, nx)), y: ny };
+    pos = { x: Math.max(bounds.left, Math.min(bounds.right - WIN_W, nx)), y: ny };
     try { await setLogical(pos); }
     catch (e) { void invoke("log_debug", { msg: `roam: fall error: ${e}` }).catch(() => {}); break; }
 
@@ -119,26 +121,28 @@ export async function applyFall(
 }
 
 function bounceX(vx: number, nx: number, bounds: Rect): [number, number] {
-  if (nx < bounds.left || nx > bounds.right - 1) {
-    return [-vx * 0.5, Math.max(bounds.left, Math.min(bounds.right - 1, nx))];
+  if (nx < bounds.left || nx > bounds.right - WIN_W) {
+    return [-vx * 0.5, Math.max(bounds.left, Math.min(bounds.right - WIN_W, nx))];
   }
   return [vx, nx];
 }
 
 function bounceY(vy: number, ny: number, bounds: Rect): [number, number] {
-  if (ny < bounds.top || ny > bounds.bottom - 1) {
-    return [-vy * 0.5, Math.max(bounds.top, Math.min(bounds.bottom - 1, ny))];
+  if (ny < bounds.top || ny > bounds.bottom - WIN_H) {
+    return [-vy * 0.5, Math.max(bounds.top, Math.min(bounds.bottom - WIN_H, ny))];
   }
   return [vy, ny];
 }
 
-/// Find the Y of the highest surface (window top edge or work-area bottom)
-/// under the pet's horizontal range [x1, x2].
+/// Find the highest surface (window top edge or work-area bottom) under the
+/// pet's horizontal range [x1, x2], returned as the pet's TOP-Y when resting on
+/// it. `pos.y` is the window's top-left, so landing = top at `surface.top - WIN_H`.
 function findFloor(x1: number, x2: number, bounds: Rect, surfaces: Rect[]): number {
-  let floor = bounds.bottom - 1;
+  let floor = bounds.bottom - WIN_H;
   for (const s of surfaces) {
     if (x2 < s.left || x1 > s.right) continue;
-    if (s.top < floor && s.top >= bounds.top) floor = s.top;
+    const top = s.top - WIN_H;
+    if (top < floor && top >= bounds.top) floor = top;
   }
   return floor;
 }

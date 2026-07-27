@@ -109,7 +109,7 @@ async function stepMode(mode: RoamMode): Promise<boolean> {
   const pos = await currentLogicalPos();
   if (!pos) return false;
 
-  const next = await runMode(mode, { env, pos, pet: petRef, stop });
+  const next = await runMode(mode, { env, pos, pet: petRef });
   const clamped = clampToBounds(next, env.workArea);
   if (Math.abs(clamped.x - pos.x) < 0.5 && Math.abs(clamped.y - pos.y) < 0.5) {
     return false;

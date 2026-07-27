@@ -15,7 +15,6 @@ import {
   clampToBounds,
   loadConfig,
   pxPerSec,
-  sleep,
 } from "./types";
 
 const ROW_RIGHT = 1;
@@ -25,7 +24,6 @@ export interface ModeContext {
   env: Environment;
   pos: Point;
   pet: Pet | null;
-  stop: () => boolean;
 }
 
 /// Dispatches to the active mode and returns the next position (or the
@@ -58,26 +56,45 @@ async function followCursor(ctx: ModeContext): Promise<Point> {
   }
 }
 
-/// Random walk within the work area. Picks a target, walks to it, idles,
-/// then picks another. Returns after each step so the engine stays responsive.
+/// Persistent wander target. The engine calls wander() once per tick (30ms),
+/// so the target must survive across calls , otherwise the pet picks a new
+/// random destination every tick and jitters in place instead of walking.
+let wanderTarget: Point | null = null;
+
+/// Shared "resting until" deadline (ms timestamp). Set by a mode when the pet
+/// reaches a destination / edge and should pause. The engine loop keeps
+/// ticking at 30ms while resting, so drag, mood changes, and mode switches
+/// stay responsive , the modes just no-op until the deadline passes.
+let restUntil = 0;
+
+function inBounds(p: Point, bounds: Rect): boolean {
+  return p.x >= bounds.left && p.x <= bounds.right - WIN_W
+      && p.y >= bounds.top && p.y <= bounds.bottom - WIN_H;
+}
+
+/// Random walk within the work area. Walks to a target, idles, picks another.
+/// The target persists across ticks so the pet actually reaches it. Idling is
+/// done by setting `restUntil` (no blocking sleep) so the engine stays live.
 async function wander(ctx: ModeContext): Promise<Point> {
-  const { env, pos, pet, stop } = ctx;
-  const target = randomTarget(env.workArea);
-
-  while (!stop()) {
-    if (loadConfig().mode !== "wander") return pos;
-    const dx = target.x - pos.x;
-    const dy = target.y - pos.y;
-    const dist = Math.hypot(dx, dy);
-
-    if (dist < 6) {
-      pet?.clearRow();
-      await sleep(IDLE_MS_MIN + Math.random() * (IDLE_MS_MAX - IDLE_MS_MIN));
-      return pos;
-    }
-    return moveToward(target, pos, env.workArea, pet);
+  const { env, pos, pet } = ctx;
+  if (loadConfig().mode !== "wander") { wanderTarget = null; restUntil = 0; return pos; }
+  if (Date.now() < restUntil) return pos;
+  if (!wanderTarget || !inBounds(wanderTarget, env.workArea)) {
+    wanderTarget = randomTarget(env.workArea);
   }
-  return pos;
+  const target = wanderTarget;
+
+  const dx = target.x - pos.x;
+  const dy = target.y - pos.y;
+  const dist = Math.hypot(dx, dy);
+
+  if (dist < 6) {
+    wanderTarget = null;
+    restUntil = Date.now() + IDLE_MS_MIN + Math.random() * (IDLE_MS_MAX - IDLE_MS_MIN);
+    pet?.clearRow();
+    return pos;
+  }
+  return moveToward(target, pos, env.workArea, pet);
 }
 
 /// Climb along the top edges of visible application windows, like Shimeji.
@@ -86,6 +103,7 @@ async function wander(ctx: ModeContext): Promise<Point> {
 async function climb(ctx: ModeContext): Promise<Point> {
   const { env, pos, pet } = ctx;
   if (env.windows.length === 0) return wander(ctx);
+  if (Date.now() < restUntil) return pos;
 
   const surface = findSurfaceBelow(pos, env);
   if (!surface) return pos;
@@ -96,8 +114,8 @@ async function climb(ctx: ModeContext): Promise<Point> {
   const onEdge = nextX < surface.rect.left - 2 || nextX > surface.rect.right + 2;
 
   if (onEdge) {
+    restUntil = Date.now() + IDLE_MS_MIN + Math.random() * (IDLE_MS_MAX - IDLE_MS_MIN);
     pet?.clearRow();
-    await sleep(IDLE_MS_MIN + Math.random() * (IDLE_MS_MAX - IDLE_MS_MIN));
     return pos;
   }
 
