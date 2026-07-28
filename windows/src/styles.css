@@ -445,19 +445,6 @@ input[type="range"]::-webkit-slider-thumb {
 }
 .msg-editor textarea:focus { border-color: rgba(10, 132, 255, 0.6); }
 
-/* ---- about ---- */
-.about-hero { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 18px 0 20px; text-align: center; }
-.about-paw { width: 44px; height: 44px; color: var(--accent); }
-.about-title { font-size: 19px; font-weight: 700; }
-
-/* ---- bottom bar ---- */
-.bottombar {
-  display: flex; align-items: center; gap: 10px;
-  padding: 9px 16px; border-top: 1px solid var(--hair);
-  background: rgba(255, 255, 255, 0.03);
-  flex: 0 0 auto;
-}
-.bottombar .spacer { flex: 1; }
 .preview-btns { display: flex; gap: 7px; }
 .preview-btns button {
   background: rgba(255, 255, 255, 0.12); color: var(--txt); border: 0;
@@ -574,8 +561,6 @@ body.settings:not(.demo-open) .main-col { flex: 1 1 auto; width: auto; }
 }
 .size-presets button:hover { background: rgba(255,255,255,0.2); }
 
-/* About pills */
-.btns .pill { border-radius: 999px; display: flex; align-items: center; justify-content: center; gap: 7px; }
 .cap.center { text-align: center; margin-top: 2px; }
 .alink { color: var(--accent); }
 
@@ -586,7 +571,6 @@ body.settings:not(.demo-open) .main-col { flex: 1 1 auto; width: auto; }
   display: inline-flex; align-items: center; gap: 6px; flex: 0 0 auto;
 }
 .lp-btn:hover { filter: brightness(1.1); }
-.bottombar { gap: 12px; }
 
 /* ---- demo panel (mac SettingsDemoPanel) ---- */
 #demo-panel { flex: 1; display: flex; min-width: 0; border-left: 1px solid var(--hair); background: #1c1c20; }
@@ -779,8 +763,6 @@ body.settings:not(.demo-open) .main-col { flex: 1 1 auto; width: auto; }
 .tok-chip2:hover { background: color-mix(in srgb, var(--tc) 20%, transparent); }
 /* section footer captions */
 .gfoot { margin: 6px 12px 0; }
-/* about hero on a card */
-.gcard.about-hero { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 18px 14px; text-align: center; }
 
 /* ---- inline SVG icon sizing ---- */
 .ui-ic { display: inline-flex; vertical-align: -2px; margin-right: 6px; }

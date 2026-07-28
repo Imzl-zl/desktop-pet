@@ -1333,6 +1333,7 @@ function applyStatic() {
   set("t-up-waiting", "Upload…");
   set("t-df-done", "Default");
   set("t-df-waiting", "Default");
+  set("t-app", "About");
   set("t-agents", "Agent integrations");
   set("t-agents-foot", "Install a hook so AgentPet can mirror your coding agents in the bubble.");
   set("t-version", "Version");
@@ -1466,7 +1467,6 @@ function applyStatic() {
   set("t-bubmode", "Bubble mode");
   set("t-multi", "Multi-agent bubble");
   set("t-multi-sub", "Structured rows with icons, state dots, and activity messages.");
-  set("t-thanks", "If AgentPet helps your workflow, a star means a lot. Thank you!");
   set("t-fontsize", "Font size");
   search.placeholder = t("Search your pets");
   (document.getElementById("bw-search") as HTMLInputElement).placeholder = t("Search pets");
@@ -1476,9 +1476,7 @@ function applyStatic() {
 function initMisc() {
   getVersion().then((v) => {
     const a = document.getElementById("app-version");
-    const b = document.getElementById("app-version2");
     if (a) a.textContent = v;
-    if (b) b.textContent = v;
   }).catch(() => {});
   (document.getElementById("quit-btn") as HTMLButtonElement).onclick = () => { exit(0); };
   document.querySelectorAll<HTMLElement>("[data-url]").forEach((el) => {
