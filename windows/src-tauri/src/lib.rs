@@ -308,8 +308,10 @@ const EXTRA_PREFIX: &str = "pet-extra-";
 /// stable click target (left = bubble menu, right = Settings) so the user
 /// doesn't have to chase a roaming pet.
 const FLOATING_BALL_LABEL: &str = "floating-ball";
-const BALL_W: f64 = 56.0;
-const BALL_H: f64 = 56.0;
+// The visible orb is 56×56, but the window is 80×80 so shadows and hover
+// scale are not clipped by the square window edges.
+const BALL_W: f64 = 80.0;
+const BALL_H: f64 = 80.0;
 const SNAP_MARGIN: f64 = 4.0; // gap from the screen edge after snapping
 
 fn ball_pos_file() -> Option<std::path::PathBuf> {

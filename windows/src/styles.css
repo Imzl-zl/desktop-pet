@@ -216,72 +216,125 @@ body.overlay, body.overlay * {
 }
 
 /* ---------------------------------------------------------------------------
-   Floating ball: a small draggable circle that sits on the desktop as a stable
-   click target. Left-click opens the bubble menu, right-click opens Settings.
-   The ball window is 56×56 transparent; only the round ball itself is opaque.
+   Floating ball: the visible orb is 56×56 but lives inside an 80×80 window so
+   shadows/hover scale are not clipped. The window grows to 260×340 when the
+   bubble menu opens; the orb stays at the top-left so its screen position
+   never shifts during the resize.
 ---------------------------------------------------------------------------- */
-body.floating-ball-body { overflow: visible; }
+body.floating-ball-body { overflow: hidden; }
+
+.floating-ball-body {
+  --ball-size: 56px;
+  --ball-margin: 12px;
+  --ball-bg-top: rgba(255, 255, 255, 0.16);
+  --ball-bg-mid: rgba(44, 48, 70, 0.72);
+  --ball-bg-bot: rgba(22, 24, 36, 0.88);
+  --ball-ring: rgba(255, 255, 255, 0.28);
+  --ball-glow: rgba(108, 182, 255, 0.35);
+  --menu-bg: rgba(28, 30, 44, 0.96);
+  --menu-border: rgba(255, 255, 255, 0.12);
+}
+
 .floating-ball-body #ball {
   position: absolute;
-  inset: 0;
-  margin: auto;
-  width: 44px;
-  height: 44px;
+  top: var(--ball-margin);
+  left: var(--ball-margin);
+  width: var(--ball-size);
+  height: var(--ball-size);
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
-  background: linear-gradient(145deg, #2a2d3a, #1a1c26);
-  border: 1.5px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: grab;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
   user-select: none;
   -webkit-user-select: none;
+
+  background:
+    radial-gradient(circle at 38% 28%, var(--ball-bg-top) 0%, transparent 42%),
+    radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0.35) 0%, transparent 55%),
+    linear-gradient(165deg, var(--ball-bg-mid) 0%, var(--ball-bg-bot) 100%);
+  border: 1.5px solid var(--ball-ring);
+  box-shadow:
+    0 3px 9px rgba(0, 0, 0, 0.45),
+    0 1px 4px rgba(0, 0, 0, 0.35),
+    inset 0 1.5px 1.5px rgba(255, 255, 255, 0.18),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(0, 0, 0, 0.12);
+
+  animation: ball-breathe 3.6s ease-in-out infinite;
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.18s ease,
+              filter 0.18s ease;
 }
+
+@keyframes ball-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.025); }
+}
+
 .floating-ball-body #ball:hover {
-  transform: scale(1.08);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  animation: none;
+  transform: scale(1.05);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.5),
+    0 0 4px var(--ball-glow),
+    inset 0 1.5px 1.5px rgba(255, 255, 255, 0.22),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(0, 0, 0, 0.12);
 }
-.floating-ball-body #ball:active { cursor: grabbing; transform: scale(0.96); }
+
+.floating-ball-body #ball.pressed { transform: scale(0.96); }
+.floating-ball-body #ball.dragging {
+  cursor: grabbing;
+  animation: none;
+  transform: scale(1.01);
+  filter: brightness(1.06);
+  transition: transform 0.08s ease;
+}
+
 .floating-ball-body #ball img {
-  width: 28px;
-  height: 28px;
+  width: 58%;
+  height: 58%;
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
   object-fit: cover;
   pointer-events: none;
   -webkit-user-drag: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.12);
 }
 
-/* Left-click menu anchored below the ball. */
-.ball-menu {
+/* ---- bubble menu --------------------------------------------------------- */
+.floating-ball-body .ball-menu {
   position: absolute;
-  top: 50px;
-  left: 0;
-  width: 240px;
-  padding: 10px;
-  border-radius: 12px;
-  background: var(--bubble-bg, rgba(22, 24, 38, 0.95));
-  color: var(--bubble-fg, #fff);
-  border: 1px solid var(--bubble-border, rgba(255, 255, 255, 0.10));
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(14px);
+  top: calc(var(--ball-size) + var(--ball-margin) + var(--ball-margin));
+  left: calc(var(--ball-margin) + 2px);
+  right: calc(var(--ball-margin) + 2px);
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--menu-bg);
+  border: 1px solid var(--menu-border);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(18px);
+  color: #fff;
   font-family: "Segoe UI", system-ui, sans-serif;
   font-size: 12px;
   user-select: none;
-  z-index: 9999;
+  z-index: 10;
 }
-.ball-menu .bm-target {
+
+.floating-ball-body .ball-menu .bm-target {
   display: flex;
   gap: 2px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   background: rgba(255, 255, 255, 0.06);
   border-radius: 8px;
   padding: 2px;
 }
-.ball-menu .bm-target button {
+.floating-ball-body .ball-menu .bm-target button {
   flex: 1;
-  padding: 4px 8px;
+  padding: 5px 8px;
   border: none;
   border-radius: 6px;
   background: transparent;
@@ -291,41 +344,43 @@ body.floating-ball-body { overflow: visible; }
   cursor: pointer;
   transition: background 0.12s, color 0.12s;
 }
-.ball-menu .bm-target button:hover { color: #fff; }
-.ball-menu .bm-target button.sel {
+.floating-ball-body .ball-menu .bm-target button:hover { color: #fff; }
+.floating-ball-body .ball-menu .bm-target button.sel {
   background: rgba(108, 182, 255, 0.2);
   color: #6cb6ff;
   font-weight: 600;
 }
-.ball-menu #bm-input {
+
+.floating-ball-body .ball-menu #bm-input {
   width: 100%;
-  padding: 7px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.25);
+  padding: 8px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9px;
+  background: rgba(0, 0, 0, 0.28);
   color: #fff;
   font: inherit;
   font-size: 12px;
   outline: none;
   box-sizing: border-box;
 }
-.ball-menu #bm-input:focus { border-color: rgba(108, 182, 255, 0.5); }
-.ball-menu #bm-input::placeholder { color: rgba(255, 255, 255, 0.35); }
-.ball-menu .bm-presets {
+.floating-ball-body .ball-menu #bm-input:focus { border-color: rgba(108, 182, 255, 0.55); }
+.floating-ball-body .ball-menu #bm-input::placeholder { color: rgba(255, 255, 255, 0.35); }
+
+.floating-ball-body .ball-menu .bm-presets {
   display: flex;
   flex-direction: column;
   gap: 3px;
-  margin-top: 8px;
-  max-height: 132px;
+  margin-top: 10px;
+  max-height: 148px;
   overflow-y: auto;
 }
-.ball-menu .bm-preset {
+.floating-ball-body .ball-menu .bm-preset {
   text-align: left;
-  padding: 5px 9px;
+  padding: 6px 10px;
   border: none;
-  border-radius: 6px;
+  border-radius: 7px;
   background: transparent;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.82);
   font: inherit;
   font-size: 11.5px;
   cursor: pointer;
@@ -334,37 +389,38 @@ body.floating-ball-body { overflow: visible; }
   text-overflow: ellipsis;
   transition: background 0.1s;
 }
-.ball-menu .bm-preset:hover { background: rgba(127, 127, 127, 0.22); }
-.ball-menu .bm-preset.sel { background: rgba(108, 182, 255, 0.18); color: #6cb6ff; }
-.ball-menu .bm-foot {
+.floating-ball-body .ball-menu .bm-preset:hover { background: rgba(127, 127, 127, 0.22); }
+.floating-ball-body .ball-menu .bm-preset.sel { background: rgba(108, 182, 255, 0.18); color: #6cb6ff; }
+
+.floating-ball-body .ball-menu .bm-foot {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-  margin-top: 10px;
+  margin-top: 12px;
 }
-.ball-menu .bm-foot .linklike {
+.floating-ball-body .ball-menu .bm-foot .linklike {
   background: none;
   border: none;
   color: rgba(255, 255, 255, 0.55);
   font: inherit;
   cursor: pointer;
-  padding: 5px 8px;
-  border-radius: 6px;
+  padding: 6px 10px;
+  border-radius: 7px;
 }
-.ball-menu .bm-foot .linklike:hover { color: #fff; background: rgba(127, 127, 127, 0.18); }
-.ball-menu .bm-foot .prominent {
+.floating-ball-body .ball-menu .bm-foot .linklike:hover { color: #fff; background: rgba(127, 127, 127, 0.18); }
+.floating-ball-body .ball-menu .bm-foot .prominent {
   background: #0a84ff;
   color: #fff;
   border: none;
   border-radius: 8px;
-  padding: 5px 14px;
+  padding: 6px 15px;
   font: inherit;
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.12s;
 }
-.ball-menu .bm-foot .prominent:hover { opacity: 0.88; }
-.ball-menu .bm-foot .prominent:disabled { opacity: 0.4; cursor: not-allowed; }
+.floating-ball-body .ball-menu .bm-foot .prominent:hover { opacity: 0.88; }
+.floating-ball-body .ball-menu .bm-foot .prominent:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* Settings textarea for quick bubbles. */
 body.settings textarea#quick-bubbles {
