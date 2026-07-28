@@ -336,6 +336,7 @@ export class BubbleRenderer {
   /// Re-entrant: repeated calls with the same text are no-ops (no DOM churn,
   /// no flicker) , only an actual text change cross-fades.
   renderLine(text: string) {
+    if (!text) { this.hide(); return; }
     let line = this.root.querySelector<HTMLElement>(".single-line");
     if (!line) {
       this.clear(); // leaving rows mode , rebuild as a single capsule line

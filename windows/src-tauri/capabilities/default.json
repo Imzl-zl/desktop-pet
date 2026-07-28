@@ -1,7 +1,7 @@
 {
   "identifier": "default",
   "description": "Permissions for the pet overlay and the settings window.",
-  "windows": ["pet", "pet-*", "settings", "popover", "floating-ball"],
+  "windows": ["stage", "settings"],
   "permissions": [
     "core:default",
     "core:window:default",

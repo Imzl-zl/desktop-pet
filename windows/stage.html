@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>DesktopPet Stage</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body class="stage-body">
+    <!-- Single transparent overlay window that hosts the main pet, floating ball
+         and (eventually) all extra/project pets. This replaces the previous
+         per-element WebView2 windows and cuts GPU compositing from N layers
+         down to one. -->
+    <div id="stage-root">
+      <div id="pets-layer"></div>
+      <div id="ball-layer"></div>
+      <div id="popover-layer" hidden></div>
+    </div>
+    <script type="module" src="/src/stage.ts"></script>
+  </body>
+</html>
