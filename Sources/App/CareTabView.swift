@@ -18,9 +18,6 @@ struct CareTabView: View {
     @State private var restoreNote: String?
     private let tick = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
 
-    private static let stageIcons = ["leaf.fill", "pawprint.fill", "binoculars.fill", "shield.fill", "crown.fill"]
-    private static let stageColors: [Color] = [.green, .teal, .blue, .purple, .orange]
-
     private var currentPack: ImagePetPack? {
         pet.selectedPetID.flatMap { imagePets.pack(id: $0) }
     }
@@ -32,75 +29,24 @@ struct CareTabView: View {
     var body: some View {
         Form {
             Section("Companion") {
-                HStack(spacing: 14) {
-                    Group {
-                        if let frame = currentPack?.clip(0).first {
-                            Image(nsImage: frame).resizable().interpolation(.none).scaledToFit()
-                                .padding(5)
-                        } else {
-                            Image(systemName: stageIcon)
-                                .font(.system(size: 22))
-                                .foregroundStyle(stageColor)
-                        }
-                    }
-                    .frame(width: 52, height: 52)
-                    .background(RoundedRectangle(cornerRadius: 12).fill(stageColor.opacity(0.16)))
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack(spacing: 8) {
-                            Text(verbatim: currentName)
-                                .font(.title3).bold()
-                            Text(verbatim: "Lv \(care.level)")
-                                .font(.title3).foregroundStyle(.secondary)
-                            StageBadge(stageIndex: care.stageIndex, size: 22)
-                            Text(NSLocalizedString(care.stageKey, comment: "evolution stage"))
-                                .font(.caption).bold()
-                                .padding(.horizontal, 8).padding(.vertical, 3)
-                                .background(Capsule().fill(stageColor.opacity(0.2)))
-                                .foregroundStyle(stageColor)
-                        }
-                        ProgressView(value: care.levelProgress)
-                            .tint(stageColor)
-                        Text(xpCaption)
-                            .font(.caption).foregroundStyle(.secondary)
-                        Text(String(format: NSLocalizedString("≈ %@ tokens to Lv %d", comment: ""),
-                                    Self.tokenString(PetCare.tokensToNextLevel(state: care.current)),
-                                    care.level + 1))
-                            .font(.caption).foregroundStyle(stageColor)
-                    }
-                }
-                .padding(.vertical, 4)
-                Text("Every pet levels up on its own: experience belongs to the companion you raise it with.")
-                    .font(.caption).foregroundStyle(.secondary)
+                companionCard
             }
 
             Section("Hunger") {
-                VStack(alignment: .leading, spacing: 6) {
-                    HStack {
-                        Text(hungerLabel)
-                        Spacer()
-                        if let last = care.current.lastFedAt {
-                            Text(String(format: NSLocalizedString("Last fed %@", comment: ""),
-                                        last.formatted(.relative(presentation: .named))))
-                                .font(.caption).foregroundStyle(.secondary)
-                        }
-                    }
-                    ProgressView(value: fullness)
-                        .tint(fullness > 0.5 ? .green : (fullness > 0.25 ? .orange : .red))
-                    Text("The pet eats real work: tokens burnt by your agents and finished sessions.")
-                        .font(.caption).foregroundStyle(.secondary)
-                }
-                .padding(.vertical, 2)
+                hungerCard
             }
 
             Section("Today") {
                 LabeledContent("Tokens eaten") {
                     Text(verbatim: Self.plain(care.current.tokensToday))
+                        .foregroundStyle(Theme.textPrimary)
                 }
                 LabeledContent("Sessions finished", value: "\(care.current.mealsToday)")
                 LabeledContent("Streak") {
                     Text(care.current.streakDays == 1
                          ? NSLocalizedString("1 day", comment: "streak singular")
                          : String(format: NSLocalizedString("%d days", comment: "streak"), care.current.streakDays))
+                    .foregroundStyle(Theme.textPrimary)
                 }
             }
 
@@ -110,31 +56,13 @@ struct CareTabView: View {
             }
 
             Section {
-                let unlocked = care.achievements
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 5), spacing: 14) {
-                    ForEach(Achievement.allCases, id: \.self) { a in
-                        let on = unlocked.contains(a)
-                        VStack(spacing: 4) {
-                            Image(systemName: PetCare.achievementSymbol(a))
-                                .font(.system(size: 18))
-                                .foregroundStyle(on ? stageColor : Color.secondary.opacity(0.4))
-                                .frame(height: 22)
-                            Text(PetCare.achievementDisplayName(a))
-                                .font(.system(size: 9))
-                                .multilineTextAlignment(.center)
-                                .foregroundStyle(on ? .primary : .secondary)
-                                .lineLimit(2)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .opacity(on ? 1 : 0.5)
-                        .help("\(PetCare.achievementDisplayName(a)) — \(PetCare.achievementDescription(a))")
-                    }
-                }
-                .padding(.vertical, 4)
+                achievementsGrid
+                    .padding(.vertical, Theme.space1)
             } header: {
                 Text("Achievements")
             } footer: {
                 Text(verbatim: "\(care.achievements.count) of \(Achievement.allCases.count) unlocked")
+                    .foregroundStyle(Theme.textMuted)
             }
 
             if care.raisedPetIDs.count > 1 {
@@ -143,114 +71,28 @@ struct CareTabView: View {
                         companionRow(id: id)
                     }
                     Text("Each companion keeps its own experience. Switch pets in the Pet tab to raise another one.")
-                        .font(.caption).foregroundStyle(.secondary)
+                        .font(.caption)
+                        .foregroundStyle(Theme.textMuted)
                 }
             }
 
-            Section {
-                if sync.linked {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 2) {
-                            if let login = sync.linkedLogin, !login.isEmpty {
-                                Text(String(format: NSLocalizedString("Connected as %@", comment: ""), login))
-                            } else {
-                                Text("Connected to your profile")
-                            }
-                            if let note = restoreNote {
-                                Text(note).font(.caption).foregroundStyle(.secondary)
-                            } else if let at = sync.lastSyncAt {
-                                Text(String(format: NSLocalizedString("Last synced %@", comment: ""),
-                                            at.formatted(.relative(presentation: .named))))
-                                    .font(.caption).foregroundStyle(.secondary)
-                            } else {
-                                Text("Your companions appear on your profile page.")
-                                    .font(.caption).foregroundStyle(.secondary)
-                            }
-                        }
-                        Spacer()
-                        Button("Restore") {
-                            restoreNote = NSLocalizedString("Restoring…", comment: "")
-                            Task {
-                                let n = await sync.restore(manual: true)
-                                restoreNote = n > 0
-                                    ? String(format: NSLocalizedString("Restored %d pet(s) from the cloud.", comment: ""), n)
-                                    : NSLocalizedString("Already up to date.", comment: "")
-                            }
-                        }
-                        .controlSize(.small)
-                        .disabled(sync.restoring)
-                        Button("Open profile") {
-                            openURL(URL(string: "https://agentpet.thenightwatcher.online/profile")!)
-                        }
-                        .controlSize(.small)
-                        Button("Disconnect") { sync.disconnect() }.controlSize(.small)
-                    }
-                } else {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Show your companions on your web profile")
-                            Text("Your browser opens GitHub sign-in; the app links automatically.")
-                                .font(.caption).foregroundStyle(.secondary)
-                            if let err = sync.lastError {
-                                Text(err).font(.caption).foregroundStyle(.red)
-                            }
-                        }
-                        Spacer()
-                        Button {
-                            sync.beginLink()
-                        } label: {
-                            Label("Sign in with GitHub", systemImage: "person.crop.circle.badge.checkmark")
-                        }
-                    }
-                }
-            } header: {
-                Text("Web profile")
-            } footer: {
-                Text("Connecting is optional. Your pet, its level and all stats live on this Mac whether or not you sign in, nothing leaves your machine until you connect.")
-            }
+            syncSection
 
             Section("Food sources") {
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Claude Code transcripts")
-                        Text("Token usage is read locally when a turn ends.")
-                            .font(.caption).foregroundStyle(.secondary)
-                    }
-                    Spacer()
-                    Text("Active").font(.caption).bold().foregroundStyle(.green)
-                }
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Subscription limits")
-                        Text(probe.providers.isEmpty
-                             ? "Read directly from your Claude Code / Codex sign-ins. None found yet."
-                             : "Read directly from your Claude Code / Codex sign-ins.")
-                            .font(.caption).foregroundStyle(.secondary)
-                    }
-                    Spacer()
-                    if !probe.providers.isEmpty {
-                        Text("Active").font(.caption).bold().foregroundStyle(.green)
-                    }
-                }
+                foodSourceRow(
+                    title: "Claude Code transcripts",
+                    detail: "Token usage is read locally when a turn ends.",
+                    isActive: true
+                )
+                foodSourceRow(
+                    title: "Subscription limits",
+                    detail: probe.providers.isEmpty
+                         ? "Read directly from your Claude Code / Codex sign-ins. None found yet."
+                         : "Read directly from your Claude Code / Codex sign-ins.",
+                    isActive: !probe.providers.isEmpty
+                )
                 ForEach(NativeUsageProbe.combined()) { p in
-                    let used = 1 - (p.fractionLeft ?? 0)
-                    let color: Color = used > 0.9 ? .red : (used > 0.75 ? .orange : stageColor)
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack(spacing: 6) {
-                            Text(verbatim: p.displayName).font(.callout.weight(.medium))
-                            if let w = p.windowLabel {
-                                Text(verbatim: w).font(.caption).foregroundStyle(.secondary)
-                            }
-                            Spacer()
-                            Text(String(format: NSLocalizedString("%d%% used", comment: ""), Int((used * 100).rounded())))
-                                .font(.caption.weight(.semibold)).foregroundStyle(color)
-                            if let reset = PetStatsView.resetText(p.resetsAt) {
-                                Text(verbatim: "· \(reset)").font(.caption).foregroundStyle(.secondary)
-                            }
-                        }
-                        ProgressView(value: used).tint(color)
-                    }
-                    .padding(.vertical, 2)
+                    usageRow(p: p)
                 }
             }
         }
@@ -266,6 +108,233 @@ struct CareTabView: View {
         }
     }
 
+    // MARK: - Companion hero
+
+    private var companionCard: some View {
+        HStack(spacing: Theme.space3) {
+            Group {
+                if let frame = currentPack?.clip(0).first {
+                    Image(nsImage: frame).resizable().interpolation(.none).scaledToFit()
+                        .padding(5)
+                } else {
+                    Image(systemName: stageIcon)
+                        .font(.ui(size: 22, weight: .semibold))
+                        .foregroundStyle(stageColor)
+                }
+            }
+            .frame(width: 52, height: 52)
+            .background(
+                RoundedRectangle(cornerRadius: Theme.radiusMd, style: .continuous)
+                    .fill(stageColor.opacity(0.14))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: Theme.radiusMd, style: .continuous)
+                    .strokeBorder(stageColor.opacity(0.35), lineWidth: 1)
+            )
+
+            VStack(alignment: .leading, spacing: Theme.space1) {
+                HStack(spacing: Theme.space2) {
+                    Text(verbatim: currentName)
+                        .font(.title3).bold()
+                        .foregroundStyle(Theme.textPrimary)
+                    Text(verbatim: "Lv \(care.level)")
+                        .font(.title3)
+                        .foregroundStyle(stageColor)
+                    StageBadge(stageIndex: care.stageIndex, size: 22)
+                    Text(NSLocalizedString(care.stageKey, comment: "evolution stage"))
+                        .font(.caption).bold()
+                        .padding(.horizontal, 8).padding(.vertical, 3)
+                        .background(Capsule().fill(stageColor.opacity(0.18)))
+                        .foregroundStyle(stageColor)
+                }
+                ProgressView(value: care.levelProgress)
+                    .tint(stageColor)
+                Text(xpCaption)
+                    .font(.caption)
+                    .foregroundStyle(Theme.textMuted)
+                Text(String(format: NSLocalizedString("≈ %@ tokens to Lv %d", comment: ""),
+                            Self.tokenString(PetCare.tokensToNextLevel(state: care.current)),
+                            care.level + 1))
+                    .font(.caption)
+                    .foregroundStyle(stageColor)
+            }
+        }
+        .padding(.vertical, Theme.space1)
+    }
+
+    // MARK: - Hunger
+
+    private var hungerCard: some View {
+        VStack(alignment: .leading, spacing: Theme.space2) {
+            HStack {
+                Text(hungerLabel)
+                    .foregroundStyle(Theme.textPrimary)
+                Spacer()
+                if let last = care.current.lastFedAt {
+                    Text(String(format: NSLocalizedString("Last fed %@", comment: ""),
+                                last.formatted(.relative(presentation: .named))))
+                        .font(.caption)
+                        .foregroundStyle(Theme.textMuted)
+                }
+            }
+            ProgressView(value: fullness)
+                .tint(fullness > 0.5 ? Theme.success : (fullness > 0.25 ? Theme.warning : Theme.danger))
+            Text("The pet eats real work: tokens burnt by your agents and finished sessions.")
+                .font(.caption)
+                .foregroundStyle(Theme.textMuted)
+        }
+        .padding(.vertical, Theme.space1)
+    }
+
+    // MARK: - Achievements
+
+    private var achievementsGrid: some View {
+        let unlocked = care.achievements
+        return LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: Theme.space2), count: 5), spacing: 14) {
+            ForEach(Achievement.allCases, id: \.self) { a in
+                let on = unlocked.contains(a)
+                VStack(spacing: Theme.space1) {
+                    Image(systemName: PetCare.achievementSymbol(a))
+                        .font(.ui(size: 18))
+                        .foregroundStyle(on ? stageColor : Theme.textDisabled)
+                        .frame(height: 22)
+                    Text(PetCare.achievementDisplayName(a))
+                        .font(.ui(size: 9))
+                        .multilineTextAlignment(.center)
+                        .foregroundStyle(on ? Theme.textPrimary : Theme.textMuted)
+                        .lineLimit(2)
+                }
+                .frame(maxWidth: .infinity)
+                .opacity(on ? 1 : 0.5)
+                .help("\(PetCare.achievementDisplayName(a)) — \(PetCare.achievementDescription(a))")
+            }
+        }
+    }
+
+    // MARK: - Sync
+
+    private var syncSection: some View {
+        Section {
+            if sync.linked {
+                HStack(spacing: Theme.space3) {
+                    VStack(alignment: .leading, spacing: Theme.space1) {
+                        if let login = sync.linkedLogin, !login.isEmpty {
+                            Text(String(format: NSLocalizedString("Connected as %@", comment: ""), login))
+                                .foregroundStyle(Theme.textPrimary)
+                        } else {
+                            Text("Connected to your profile")
+                                .foregroundStyle(Theme.textPrimary)
+                        }
+                        if let note = restoreNote {
+                            Text(note).font(.caption).foregroundStyle(Theme.textMuted)
+                        } else if let at = sync.lastSyncAt {
+                            Text(String(format: NSLocalizedString("Last synced %@", comment: ""),
+                                        at.formatted(.relative(presentation: .named))))
+                                .font(.caption)
+                                .foregroundStyle(Theme.textMuted)
+                        } else {
+                            Text("Your companions appear on your profile page.")
+                                .font(.caption)
+                                .foregroundStyle(Theme.textMuted)
+                        }
+                    }
+                    Spacer()
+                    HStack(spacing: Theme.space2) {
+                        Button("Restore") {
+                            restoreNote = NSLocalizedString("Restoring…", comment: "")
+                            Task {
+                                let n = await sync.restore(manual: true)
+                                restoreNote = n > 0
+                                    ? String(format: NSLocalizedString("Restored %d pet(s) from the cloud.", comment: ""), n)
+                                    : NSLocalizedString("Already up to date.", comment: "")
+                            }
+                        }
+                        .buttonStyle(BorderedButtonStyle())
+                        .disabled(sync.restoring)
+
+                        Button("Open profile") {
+                            openURL(URL(string: "https://agentpet.thenightwatcher.online/profile")!)
+                        }
+                        .buttonStyle(BorderedButtonStyle())
+
+                        Button("Disconnect") { sync.disconnect() }
+                            .buttonStyle(BorderedButtonStyle())
+                    }
+                }
+            } else {
+                HStack(spacing: Theme.space3) {
+                    VStack(alignment: .leading, spacing: Theme.space1) {
+                        Text("Show your companions on your web profile")
+                            .foregroundStyle(Theme.textPrimary)
+                        Text("Your browser opens GitHub sign-in; the app links automatically.")
+                            .font(.caption)
+                            .foregroundStyle(Theme.textMuted)
+                        if let err = sync.lastError {
+                            Text(err).font(.caption).foregroundStyle(Theme.danger)
+                        }
+                    }
+                    Spacer()
+                    Button {
+                        sync.beginLink()
+                    } label: {
+                        Label("Sign in with GitHub", systemImage: "person.crop.circle.badge.checkmark")
+                    }
+                    .buttonStyle(AccentButtonStyle())
+                }
+            }
+        } header: {
+            Text("Web profile")
+        } footer: {
+            Text("Connecting is optional. Your pet, its level and all stats live on this Mac whether or not you sign in, nothing leaves your machine until you connect.")
+                .foregroundStyle(Theme.textMuted)
+        }
+    }
+
+    // MARK: - Food sources helpers
+
+    private func foodSourceRow(title: String, detail: String, isActive: Bool) -> some View {
+        HStack {
+            VStack(alignment: .leading, spacing: Theme.space1) {
+                Text(title)
+                    .foregroundStyle(Theme.textPrimary)
+                Text(detail)
+                    .font(.caption)
+                    .foregroundStyle(Theme.textMuted)
+            }
+            Spacer()
+            if isActive {
+                Label("Active", systemImage: "checkmark.circle.fill")
+                    .font(.caption)
+                    .bold()
+                    .foregroundStyle(Theme.success)
+            }
+        }
+    }
+
+    private func usageRow(p: NativeUsageProvider) -> some View {
+        let used = 1 - (p.fractionLeft ?? 0)
+        let color: Color = used > 0.9 ? Theme.danger : (used > 0.75 ? Theme.warning : stageColor)
+        return VStack(alignment: .leading, spacing: Theme.space1) {
+            HStack(spacing: Theme.space2) {
+                Text(verbatim: p.displayName)
+                    .font(.callout.weight(.medium))
+                    .foregroundStyle(Theme.textPrimary)
+                if let w = p.windowLabel {
+                    Text(verbatim: w).font(.caption).foregroundStyle(Theme.textMuted)
+                }
+                Spacer()
+                Text(String(format: NSLocalizedString("%d%% used", comment: ""), Int((used * 100).rounded())))
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(color)
+                if let reset = PetStatsView.resetText(p.resetsAt) {
+                    Text(verbatim: "· \(reset)").font(.caption).foregroundStyle(Theme.textMuted)
+                }
+            }
+            ProgressView(value: used).tint(color)
+        }
+        .padding(.vertical, Theme.space1)
+    }
+
     // MARK: - Companions
 
     @ViewBuilder
@@ -273,14 +342,14 @@ struct CareTabView: View {
         let s = care.state(for: id)
         let lv = PetCare.displayLevel(forXP: s.xp)
         let idx = PetCare.stageIndex(forLevel: PetCare.level(forXP: s.xp))
-        let color = Self.stageColors[min(idx, Self.stageColors.count - 1)]
-        HStack(spacing: 10) {
+        let color = Theme.stageColors[min(idx, Theme.stageColors.count - 1)].top
+        HStack(spacing: Theme.space3) {
             Group {
                 if let frame = imagePets.pack(id: id)?.clip(0).first {
                     Image(nsImage: frame).resizable().interpolation(.none).scaledToFit()
                 } else {
-                    Image(systemName: Self.stageIcons[min(idx, Self.stageIcons.count - 1)])
-                        .font(.system(size: 13))
+                    Image(systemName: Theme.stageColors[min(idx, Theme.stageColors.count - 1)].glyph)
+                        .font(.ui(size: 13))
                         .foregroundStyle(color)
                 }
             }
@@ -289,14 +358,16 @@ struct CareTabView: View {
                 StageBadge(stageIndex: idx, size: 13).offset(x: 3, y: 3)
             }
             VStack(alignment: .leading, spacing: 2) {
-                HStack(spacing: 6) {
+                HStack(spacing: Theme.space2) {
                     Text(verbatim: imagePets.displayName(for: id))
-                        .font(.system(size: 13, weight: .semibold))
+                        .font(.ui(size: 13, weight: .semibold))
+                        .foregroundStyle(Theme.textPrimary)
                     if id == care.currentPetID {
-                        Text("Raising").font(.caption2).bold()
+                        Text("Raising")
+                            .font(.caption2).bold()
                             .padding(.horizontal, 6).padding(.vertical, 2)
-                            .background(Capsule().fill(Color.systemAccent.opacity(0.2)))
-                            .foregroundStyle(Color.systemAccent)
+                            .background(Capsule().fill(Theme.accentSoft))
+                            .foregroundStyle(Theme.accent)
                     }
                 }
                 ProgressView(value: PetCare.progress(forXP: s.xp))
@@ -305,18 +376,21 @@ struct CareTabView: View {
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 2) {
-                Text(verbatim: "Lv \(lv)").font(.system(size: 12, weight: .bold))
+                Text(verbatim: "Lv \(lv)")
+                    .font(.ui(size: 12, weight: .bold))
+                    .foregroundStyle(Theme.textPrimary)
                 Text(verbatim: "\(Self.plain(s.xp)) XP")
-                    .font(.caption2).foregroundStyle(.secondary)
+                    .font(.caption2)
+                    .foregroundStyle(Theme.textMuted)
             }
         }
-        .padding(.vertical, 2)
+        .padding(.vertical, Theme.space1)
     }
 
     // MARK: - Derived display
 
-    private var stageIcon: String { Self.stageIcons[min(care.stageIndex, Self.stageIcons.count - 1)] }
-    private var stageColor: Color { Self.stageColors[min(care.stageIndex, Self.stageColors.count - 1)] }
+    private var stageIcon: String { Theme.stageColors[min(care.stageIndex, Theme.stageColors.count - 1)].glyph }
+    private var stageColor: Color { Theme.stageColors[min(care.stageIndex, Theme.stageColors.count - 1)].top }
 
     private var xpCaption: String {
         let (inLevel, span) = PetCare.xpWithinLevel(forXP: care.current.xp)

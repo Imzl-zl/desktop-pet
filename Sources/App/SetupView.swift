@@ -33,22 +33,23 @@ struct SetupView: View {
         HStack(spacing: 0) {
             settingsColumn.frame(width: baseWidth)
             if demoOpen {
-                Divider()
+                Divider().overlay(Theme.cardStrokeStrong)
                 SettingsDemoPanel(onClose: { setDemo(false) }).frame(width: demoWidth)
             }
         }
         .frame(width: demoOpen ? baseWidth + demoWidth : baseWidth, height: 600)
+        .background(Theme.background)
         .preferredColorScheme(.dark)
         .noFocusRing()
         .environment(\.locale, appLang.locale)
-        .id(appLang.lang.rawValue)   // recreate the tree so every Text re-resolves on language change
+        .id(appLang.lang.rawValue)
         .onAppear { model.refresh() }
     }
 
     private var settingsColumn: some View {
         VStack(spacing: 0) {
             tabBar
-            Divider()
+            Divider().overlay(Theme.cardStrokeStrong)
             Group {
                 switch tab {
                 case .general:
@@ -64,27 +65,30 @@ struct SetupView: View {
                 }
             }
             .frame(maxHeight: .infinity)
-            Divider()
+            Divider().overlay(Theme.cardStrokeStrong)
             bottomBar
         }
     }
 
     private var bottomBar: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: Theme.space3) {
             Button { setDemo(!demoOpen) } label: {
                 Label(demoOpen ? "Hide live preview" : "Live preview", systemImage: "sparkles.tv")
             }
-            .buttonStyle(.borderedProminent).tint(Color.systemAccent).controlSize(.large)
+            .buttonStyle(AccentButtonStyle())
             Text("Preview your pet and bubble settings with live samples.")
-                .font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                .font(.caption)
+                .foregroundStyle(Theme.textMuted)
+                .lineLimit(1)
             Spacer()
         }
-        .padding(.horizontal, 16).padding(.vertical, 10)
-        .background(.bar)
+        .padding(.horizontal, Theme.space4)
+        .padding(.vertical, Theme.space3)
+        .background(Theme.card.opacity(0.5))
     }
 
     private var tabBar: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: Theme.space2) {
             TabButton(icon: "pawprint.fill", label: "Pet", selected: tab == .pet) { tab = .pet }
             TabButton(icon: "bubble.left.and.bubble.right.fill", label: "Bubble", selected: tab == .bubble) { tab = .bubble }
             TabButton(icon: "fork.knife", label: "Care", selected: tab == .care) { tab = .care }
@@ -92,7 +96,7 @@ struct SetupView: View {
             TabButton(icon: "wrench.and.screwdriver.fill", label: "Advanced", selected: tab == .advanced) { tab = .advanced }
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 10)
+        .padding(.vertical, Theme.space3)
     }
 }
 
@@ -104,16 +108,20 @@ private struct TabButton: View {
 
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 4) {
-                Image(systemName: icon).font(.system(size: 19))
-                Text(label).font(.system(size: 11))
+            VStack(spacing: Theme.space1) {
+                Image(systemName: icon).font(.ui(size: 19))
+                Text(label).font(.ui(size: 11))
             }
             .frame(width: 78, height: 48)
-            .background(RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(selected ? Color.systemAccent.opacity(0.22) : .clear))
-            .overlay(RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .strokeBorder(selected ? Color.systemAccent.opacity(0.55) : .clear, lineWidth: 1))
-            .foregroundStyle(selected ? Color.systemAccent : Color.primary)
+            .background(
+                RoundedRectangle(cornerRadius: Theme.radiusSm, style: .continuous)
+                    .fill(selected ? Theme.accentSoft : .clear)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: Theme.radiusSm, style: .continuous)
+                    .strokeBorder(selected ? Theme.accent.opacity(0.55) : .clear, lineWidth: 1)
+            )
+            .foregroundStyle(selected ? Theme.accent : Theme.textPrimary)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -130,16 +138,18 @@ private struct AdvancedTab: View {
         Form {
             Section("Agent integrations") {
                 ForEach(model.agents) { agent in
-                    HStack {
-                        VStack(alignment: .leading, spacing: 2) {
+                    HStack(spacing: Theme.space3) {
+                        VStack(alignment: .leading, spacing: Theme.space1) {
                             Text(agent.displayName)
+                                .foregroundStyle(Theme.textPrimary)
                             if agent.kind == .codex, model.isInstalled(.codex) {
-                                Text("Installed , needs a one-time trust (tap ?)")
-                                    .font(.caption).foregroundStyle(.orange)
+                                Text("Installed, needs a one-time trust (tap ?)")
+                                    .font(.caption)
+                                    .foregroundStyle(Theme.warning)
                             } else if let note = agent.note {
-                                Text(note).font(.caption).foregroundStyle(.secondary)
+                                Text(note).font(.caption).foregroundStyle(Theme.textMuted)
                             } else if model.isInstalled(agent.kind) {
-                                Text("Hook installed").font(.caption).foregroundStyle(.green)
+                                Text("Hook installed").font(.caption).foregroundStyle(Theme.success)
                             }
                         }
                         Spacer()
@@ -149,29 +159,34 @@ private struct AdvancedTab: View {
                             }
                             .buttonStyle(.borderless)
                             .help("How to connect Codex")
+                            .foregroundStyle(Theme.textMuted)
                         }
                         if agent.isSupported {
                             Button(model.isInstalled(agent.kind) ? "Remove" : "Install") {
                                 model.toggleInstall(agent.kind)
                             }
+                            .buttonStyle(model.isInstalled(agent.kind) ? BorderedButtonStyle() : AccentButtonStyle())
                         } else {
-                            Text("Coming soon").foregroundStyle(.secondary)
+                            Text("Coming soon").foregroundStyle(Theme.textMuted)
                         }
                     }
                 }
                 if let err = model.installError {
-                    Text(err).font(.caption).foregroundStyle(.red).textSelection(.enabled)
+                    Text(err).font(.caption).foregroundStyle(Theme.danger).textSelection(.enabled)
                 }
             } footer: {
                 Text("Install a hook so AgentPet can mirror your coding agents in the bubble.")
+                    .foregroundStyle(Theme.textMuted)
             }
 
             Section("Bash approval gate") {
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: Theme.space3) {
+                    VStack(alignment: .leading, spacing: Theme.space1) {
                         Text("Approve Bash from the bubble")
+                            .foregroundStyle(Theme.textPrimary)
                         Text("Claude Code Bash requests show Allow/Deny in the bubble instead of the terminal.")
-                            .font(.caption).foregroundStyle(.secondary)
+                            .font(.caption)
+                            .foregroundStyle(Theme.textMuted)
                     }
                     Spacer()
                     ColorSwitch(isOn: $model.approvalGateEnabled)
@@ -198,20 +213,26 @@ private struct SoundRow: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack {
+        VStack(alignment: .leading, spacing: Theme.space2) {
+            HStack(spacing: Theme.space3) {
                 Text(title)
+                    .foregroundStyle(Theme.textPrimary)
                 Spacer()
                 ColorSwitch(isOn: $enabled)
             }
-            HStack(spacing: 8) {
+            HStack(spacing: Theme.space2) {
                 Text(sourceLabel)
-                    .font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                    .font(.caption)
+                    .foregroundStyle(Theme.textMuted)
+                    .lineLimit(1)
                 Spacer()
-                Button { onPlay() } label: { Image(systemName: "play.circle") }.buttonStyle(.plain)
-                Button("Upload…") { onUpload() }.controlSize(.small)
+                Button { onPlay() } label: { Image(systemName: "play.circle") }
+                    .buttonStyle(BorderedButtonStyle())
+                Button("Upload…") { onUpload() }
+                    .buttonStyle(BorderedButtonStyle())
                 if !customPath.isEmpty {
-                    Button("Default") { onReset() }.controlSize(.small)
+                    Button("Default") { onReset() }
+                        .buttonStyle(BorderedButtonStyle())
                 }
             }
             .disabled(!enabled)
@@ -228,8 +249,6 @@ private struct GeneralTab: View {
     @ObservedObject private var sound = SoundSettings.shared
     @ObservedObject private var appLang = AppLanguage.shared
     @ObservedObject private var breaks = BreakReminderSettings.shared
-    // Local mirror of the system login-item state so the toggle re-renders
-    // reliably (the SMAppService status isn't observable on its own).
     @State private var launchAtLogin = LoginItem.isEnabled
 
     var body: some View {
@@ -244,11 +263,13 @@ private struct GeneralTab: View {
             }
 
             Section("Launch") {
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: Theme.space3) {
+                    VStack(alignment: .leading, spacing: Theme.space1) {
                         Text("Launch at login")
+                            .foregroundStyle(Theme.textPrimary)
                         Text("AgentPet starts automatically when you sign in.")
-                            .font(.caption).foregroundStyle(.secondary)
+                            .font(.caption)
+                            .foregroundStyle(Theme.textMuted)
                     }
                     Spacer()
                     ColorSwitch(isOn: Binding(
@@ -257,32 +278,37 @@ private struct GeneralTab: View {
                             LoginItem.setEnabled(newValue)
                             launchAtLogin = LoginItem.isEnabled
                         }))
-}
+                }
             }
 
             Section("Pet display") {
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: Theme.space3) {
+                    VStack(alignment: .leading, spacing: Theme.space1) {
                         Text("Animate pets")
+                            .foregroundStyle(Theme.textPrimary)
                         Text("Turn off to freeze pet/bubble animation (lower CPU).")
-                            .font(.caption).foregroundStyle(.secondary)
+                            .font(.caption)
+                            .foregroundStyle(Theme.textMuted)
                     }
                     Spacer()
                     ColorSwitch(isOn: $pet.animationsEnabled)
                 }
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: Theme.space3) {
+                    VStack(alignment: .leading, spacing: Theme.space1) {
                         Text("Animation speed")
+                            .foregroundStyle(Theme.textPrimary)
                         Text("Sprite frame rate. Idle is always capped at 2 fps.")
-                            .font(.caption).foregroundStyle(.secondary)
+                            .font(.caption)
+                            .foregroundStyle(Theme.textMuted)
                     }
                     Spacer()
-                    HStack(spacing: 8) {
+                    HStack(spacing: Theme.space2) {
                         Slider(value: $pet.animationFPS, in: 1...12, step: 1)
                             .frame(width: 120)
+                            .tint(Theme.accent)
                         Text("\(Int(pet.animationFPS)) fps")
                             .monospacedDigit()
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Theme.textMuted)
                             .fixedSize()
                     }
                 }
@@ -291,11 +317,13 @@ private struct GeneralTab: View {
             }
 
             Section("Break reminder") {
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: Theme.space3) {
+                    VStack(alignment: .leading, spacing: Theme.space1) {
                         Text("Remind me to take breaks")
+                            .foregroundStyle(Theme.textPrimary)
                         Text("The home pet nudges you to rest after a work stretch.")
-                            .font(.caption).foregroundStyle(.secondary)
+                            .font(.caption)
+                            .foregroundStyle(Theme.textMuted)
                     }
                     Spacer()
                     ColorSwitch(isOn: $breaks.enabled)
@@ -311,10 +339,13 @@ private struct GeneralTab: View {
             }
 
             Section("Notifications") {
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: Theme.space3) {
+                    VStack(alignment: .leading, spacing: Theme.space1) {
                         Text(notificationTitle)
-                        Text(notificationDetail).font(.caption).foregroundStyle(.secondary)
+                            .foregroundStyle(Theme.textPrimary)
+                        Text(notificationDetail)
+                            .font(.caption)
+                            .foregroundStyle(Theme.textMuted)
                     }
                     Spacer()
                     notificationButton
@@ -337,26 +368,38 @@ private struct GeneralTab: View {
             }
 
             Section("About") {
-                VStack(spacing: 10) {
-                    Image(systemName: "pawprint.fill")
-                        .font(.system(size: 40)).foregroundStyle(Color.systemAccent)
-                    Text("AgentPet").font(.title2.bold())
+                VStack(spacing: Theme.space3) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: Theme.radiusMd, style: .continuous)
+                            .fill(Theme.accentSoft)
+                        Image(systemName: "pawprint.fill")
+                            .font(.ui(size: 32, weight: .semibold))
+                            .foregroundStyle(Theme.accent)
+                    }
+                    .frame(width: 64, height: 64)
+                    .shadow(color: Theme.accentGlow, radius: 12, y: 3)
+
+                    Text("AgentPet")
+                        .font(.title2.bold())
+                        .foregroundStyle(Theme.textPrimary)
                     Text("A desktop pet that keeps you company while you work.")
-                        .font(.callout).foregroundStyle(.secondary).multilineTextAlignment(.center)
+                        .font(.callout)
+                        .foregroundStyle(Theme.textMuted)
+                        .multilineTextAlignment(.center)
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 8)
+                .padding(.vertical, Theme.space3)
                 LabeledContent("Version", value: appVersion)
+                    .foregroundStyle(Theme.textMuted)
             }
 
             Section {
                 Button("Quit AgentPet") { NSApplication.shared.terminate(nil) }
+                    .buttonStyle(BorderedButtonStyle())
             }
         }
         .formStyle(.grouped)
     }
-
-
 
     private var appVersion: String {
         let v = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.1.0"
@@ -387,13 +430,13 @@ private struct GeneralTab: View {
     @ViewBuilder private var notificationButton: some View {
         switch model.notificationState {
         case .enabled:
-            // Permission granted: an in-app toggle lets the user mute without
-            // revoking the system permission.
             ColorSwitch(isOn: $model.notificationsEnabled)
         case .denied:
             Button("Open Settings") { model.openSystemNotificationSettings() }
+                .buttonStyle(BorderedButtonStyle())
         case .notDetermined:
             Button("Enable") { model.enableNotifications() }
+                .buttonStyle(AccentButtonStyle())
         case .unavailable:
             EmptyView()
         }
@@ -438,28 +481,30 @@ private struct PetTab: View {
 
     var body: some View {
         Form {
-            // Hero card for selected slot
             Section {
                 heroCard
             }
 
-            // Split pet toggle
             Section {
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: Theme.space3) {
+                    VStack(alignment: .leading, spacing: Theme.space1) {
                         Text("Split pet")
+                            .foregroundStyle(Theme.textPrimary)
                         Text("Spawn one pet per active project instead of one shared pet.")
-                            .font(.caption).foregroundStyle(.secondary)
+                            .font(.caption)
+                            .foregroundStyle(Theme.textMuted)
                     }
                     Spacer()
                     ColorSwitch(isOn: $pet.splitPet)
                 }
                 if pet.splitPet {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 2) {
+                    HStack(spacing: Theme.space3) {
+                        VStack(alignment: .leading, spacing: Theme.space1) {
                             Text("Hide idle project pets")
+                                .foregroundStyle(Theme.textPrimary)
                             Text("Show a configured project's pet only while it's working; hide it when idle.")
-                                .font(.caption).foregroundStyle(.secondary)
+                                .font(.caption)
+                                .foregroundStyle(Theme.textMuted)
                         }
                         Spacer()
                         ColorSwitch(isOn: $pet.hideIdleProjectPets)
@@ -467,12 +512,10 @@ private struct PetTab: View {
                 }
             }
 
-            // Slot selector grid
             Section {
                 slotGrid
             }
 
-            // Config panel for selected slot
             configPanel
         }
         .formStyle(.grouped)
@@ -497,35 +540,44 @@ private struct PetTab: View {
     // MARK: - Hero card
 
     @ViewBuilder private var heroCard: some View {
-        HStack(spacing: 14) {
+        HStack(spacing: Theme.space3) {
             slotPetPreview
                 .frame(width: 84, height: 84)
-                .background(RoundedRectangle(cornerRadius: 12).fill(.quaternary))
-            VStack(alignment: .leading, spacing: 4) {
+                .themedCard(padding: 0, radius: Theme.radiusMd, fill: Theme.cardHover, stroke: Theme.cardStroke)
+            VStack(alignment: .leading, spacing: Theme.space1) {
                 switch selectedSlot {
                 case .defaultPet:
-                    HStack(spacing: 8) {
+                    HStack(spacing: Theme.space2) {
                         Text(imagePets.displayName(for: pet.selectedPetID))
                             .font(.title3.weight(.semibold))
+                            .foregroundStyle(Theme.textPrimary)
                         if let pack = selectedPack {
                             levelBadge(for: pack.id)
                         }
                     }
                     if let desc = selectedPack?.description {
-                        Text(desc).font(.callout).foregroundStyle(.secondary)
+                        Text(desc)
+                            .font(.callout)
+                            .foregroundStyle(Theme.textMuted)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 case .project(let path):
                     Text((path as NSString).lastPathComponent)
                         .font(.title3.weight(.semibold))
+                        .foregroundStyle(Theme.textPrimary)
                     if let pack = selectedSlotPack {
-                        HStack(spacing: 8) {
-                            Text(pack.displayName).font(.callout).foregroundStyle(.secondary)
+                        HStack(spacing: Theme.space2) {
+                            Text(pack.displayName)
+                                .font(.callout)
+                                .foregroundStyle(Theme.textMuted)
                             levelBadge(for: pack.id)
                         }
                     }
-                    Text(path).font(.caption).foregroundStyle(.secondary)
-                        .lineLimit(1).truncationMode(.middle)
+                    Text(path)
+                        .font(.caption)
+                        .foregroundStyle(Theme.textMuted)
+                        .lineLimit(1)
+                        .truncationMode(.middle)
                 }
             }
             Spacer()
@@ -547,29 +599,39 @@ private struct PetTab: View {
                 addProjectSlot
             }
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, Theme.space1)
     }
 
     private func slotButton(for slot: PetSlot, petID: String?, label: String) -> some View {
         let isSelected = selectedSlot == slot
         return Button { selectedSlot = slot } label: {
-            VStack(spacing: 4) {
+            VStack(spacing: Theme.space1) {
                 Group {
                     if let petID, let pack = imagePets.pack(id: petID), let frame = pack.clip(0).first {
                         Image(nsImage: frame).resizable().interpolation(.high).scaledToFit()
                     } else {
-                        Image(systemName: "pawprint.fill").font(.system(size: 20)).foregroundStyle(.secondary)
+                        Image(systemName: "pawprint.fill")
+                            .font(.ui(size: 20))
+                            .foregroundStyle(Theme.textMuted)
                     }
                 }
                 .frame(width: 48, height: 48)
-                Text(label).font(.caption).lineLimit(1).frame(width: 64)
+                Text(label)
+                    .font(.caption)
+                    .lineLimit(1)
+                    .frame(width: 64)
+                    .foregroundStyle(Theme.textPrimary)
             }
             .padding(6)
-            .background(RoundedRectangle(cornerRadius: 10)
-                .fill(isSelected ? Color.systemAccent.opacity(0.2) : .clear))
-            .overlay(RoundedRectangle(cornerRadius: 10)
-                .strokeBorder(isSelected ? Color.systemAccent : .secondary.opacity(0.3),
-                              lineWidth: isSelected ? 2 : 1))
+            .background(
+                RoundedRectangle(cornerRadius: Theme.radiusMd, style: .continuous)
+                    .fill(isSelected ? Theme.accentSoft : .clear)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: Theme.radiusMd, style: .continuous)
+                    .strokeBorder(isSelected ? Theme.accent : Theme.cardStroke,
+                                  lineWidth: isSelected ? 2 : 1)
+            )
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -577,16 +639,13 @@ private struct PetTab: View {
             if let petID {
                 let level = PetCare.displayLevel(forXP: PetCareController.shared.states[petID]?.xp ?? 0)
                 Text(verbatim: "Lv \(level)")
-                    .font(.system(size: 9, weight: .bold))
+                    .font(.ui(size: 9, weight: .bold))
                     .padding(.horizontal, 5).padding(.vertical, 1.5)
-                    .background(Capsule().fill(level > 0 ? Color.systemAccent.opacity(0.85) : Color.secondary.opacity(0.45)))
+                    .background(Capsule().fill(level > 0 ? Theme.accent.opacity(0.85) : Theme.textMuted.opacity(0.45)))
                     .foregroundStyle(.white)
                     .offset(x: -3, y: -3)
             }
         }
-        // Project slots get a direct remove button so deleting a project is one
-        // click (the "Remove project" button at the bottom of its config panel
-        // was easy to miss).
         .overlay(alignment: .topTrailing) {
             if case .project(let path) = slot {
                 Button {
@@ -594,9 +653,9 @@ private struct PetTab: View {
                     projectSettings.remove(projectPath: path)
                 } label: {
                     Image(systemName: "xmark.circle.fill")
-                        .font(.system(size: 15))
+                        .font(.ui(size: 15))
                         .symbolRenderingMode(.palette)
-                        .foregroundStyle(.white, .black.opacity(0.45))
+                        .foregroundStyle(.white, Theme.textDisabled)
                 }
                 .buttonStyle(.plain)
                 .offset(x: 5, y: -5)
@@ -607,15 +666,22 @@ private struct PetTab: View {
 
     private var addProjectSlot: some View {
         Button { addProject() } label: {
-            VStack(spacing: 4) {
+            VStack(spacing: Theme.space1) {
                 Image(systemName: "plus")
-                    .font(.system(size: 20)).foregroundStyle(.secondary)
+                    .font(.ui(size: 20))
+                    .foregroundStyle(Theme.textMuted)
                     .frame(width: 48, height: 48)
-                Text("Add…").font(.caption).lineLimit(1).frame(width: 64)
+                Text("Add…")
+                    .font(.caption)
+                    .lineLimit(1)
+                    .frame(width: 64)
+                    .foregroundStyle(Theme.textMuted)
             }
             .padding(6)
-            .overlay(RoundedRectangle(cornerRadius: 10)
-                .strokeBorder(.secondary.opacity(0.3), style: StrokeStyle(lineWidth: 1, dash: [5, 3])))
+            .overlay(
+                RoundedRectangle(cornerRadius: Theme.radiusMd, style: .continuous)
+                    .strokeBorder(Theme.cardStroke, style: StrokeStyle(lineWidth: 1, dash: [5, 3]))
+            )
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -635,17 +701,19 @@ private struct PetTab: View {
     @ViewBuilder private var defaultPetConfig: some View {
         if let id = pet.selectedPetID {
             Section {
-                HStack {
+                HStack(spacing: Theme.space2) {
                     TextField("Pet name", text: $renameText)
                         .textFieldStyle(.roundedBorder)
                         .onSubmit { imagePets.rename(id, to: renameText) }
                     Button("Save") { imagePets.rename(id, to: renameText) }
+                        .buttonStyle(AccentButtonStyle())
                         .disabled(renameText.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             } header: {
                 Text("Name")
             } footer: {
                 Text("Give your companion a custom name. Clear it to use the original.")
+                    .foregroundStyle(Theme.textMuted)
             }
             .onAppear { renameText = imagePets.displayName(for: id) }
             .onChange(of: pet.selectedPetID) { _ in
@@ -655,7 +723,8 @@ private struct PetTab: View {
 
         Section("Choose pet") {
             if imagePets.packs.isEmpty {
-                Text("No pets yet. Tap Browse to add one.").foregroundStyle(.secondary)
+                Text("No pets yet. Tap Browse to add one.")
+                    .foregroundStyle(Theme.textMuted)
             } else {
                 if imagePets.packs.count > 4 {
                     NativeSearchField(text: $petQuery, placeholder: "Search your pets")
@@ -668,13 +737,15 @@ private struct PetTab: View {
                              if wasSelected { pet.selectedPetID = imagePets.packs.first?.id }
                          })
             }
-            HStack {
+            HStack(spacing: Theme.space2) {
                 Button { browsing = true } label: {
                     Label("Browse pets…", systemImage: "square.grid.2x2")
                 }
+                .buttonStyle(BorderedButtonStyle())
                 Button { creating = true } label: {
                     Label("Create pet…", systemImage: "square.and.pencil")
                 }
+                .buttonStyle(BorderedButtonStyle())
             }
         }
 
@@ -685,13 +756,16 @@ private struct PetTab: View {
         }
 
         Section("Size on screen") {
-            HStack(spacing: 8) {
+            HStack(spacing: Theme.space2) {
                 Slider(value: $pet.petPoint, in: PetController.minPoint...PetController.maxPoint)
+                    .tint(Theme.accent)
                 Text("\(Int(pet.petPoint))")
-                    .monospacedDigit().foregroundStyle(.secondary).fixedSize()
+                    .monospacedDigit()
+                    .foregroundStyle(Theme.textMuted)
+                    .fixedSize()
                 ForEach(PetController.presets, id: \.0) { preset in
                     Button(preset.0) { pet.animateSize(to: preset.1) }
-                        .buttonStyle(.bordered)
+                        .buttonStyle(BorderedButtonStyle())
                 }
             }
         }
@@ -700,7 +774,8 @@ private struct PetTab: View {
     @ViewBuilder private func projectPetConfig(path: String) -> some View {
         Section("Choose pet") {
             if imagePets.packs.isEmpty {
-                Text("No pets installed.").foregroundStyle(.secondary)
+                Text("No pets installed.")
+                    .foregroundStyle(Theme.textMuted)
             } else {
                 PetPager(packs: imagePets.packs,
                          selectedID: projectSettings.petID(forProject: path),
@@ -719,8 +794,9 @@ private struct PetTab: View {
                 projectSettings.remove(projectPath: path)
             } label: {
                 Label("Remove project", systemImage: "trash")
-                    .foregroundStyle(.red)
+                    .foregroundStyle(Theme.danger)
             }
+            .buttonStyle(BorderedButtonStyle())
         }
     }
 
@@ -731,7 +807,9 @@ private struct PetTab: View {
             ImageSpriteView(frames: pack.clip(0), mood: .idle,
                             fps: pet.spriteFPS(forMood: .idle), size: 78)
         } else {
-            Image(systemName: "pawprint.fill").font(.system(size: 40)).foregroundStyle(.secondary)
+            Image(systemName: "pawprint.fill")
+                .font(.ui(size: 40))
+                .foregroundStyle(Theme.textMuted)
         }
     }
 
@@ -739,8 +817,8 @@ private struct PetTab: View {
         Text(verbatim: "Lv \(PetCare.displayLevel(forXP: PetCareController.shared.states[packID]?.xp ?? 0))")
             .font(.caption.weight(.bold))
             .padding(.horizontal, 7).padding(.vertical, 2)
-            .background(Capsule().fill(Color.systemAccent.opacity(0.2)))
-            .foregroundStyle(Color.systemAccent)
+            .background(Capsule().fill(Theme.accentSoft))
+            .foregroundStyle(Theme.accent)
     }
 
     private func addProject() {
@@ -771,7 +849,7 @@ private struct StaticFrame: View {
             if let image {
                 Image(nsImage: image).resizable().interpolation(.high).scaledToFit()
             } else {
-                Image(systemName: "pawprint.fill").foregroundStyle(.secondary)
+                Image(systemName: "pawprint.fill").foregroundStyle(Theme.textMuted)
             }
         }
         .frame(width: size, height: size)
@@ -791,7 +869,7 @@ private struct PetPager: View {
         let pageCount = max(1, Int(ceil(Double(packs.count) / Double(perPage))))
         let current = min(page, pageCount - 1)
 
-        VStack(spacing: 10) {
+        VStack(spacing: Theme.space3) {
             GeometryReader { geo in
                 HStack(alignment: .top, spacing: 0) {
                     ForEach(0..<pageCount, id: \.self) { p in
@@ -799,18 +877,18 @@ private struct PetPager: View {
                     }
                 }
                 .offset(x: -CGFloat(current) * geo.size.width)
-                .animation(.easeInOut(duration: 0.28), value: current)
+                .animation(Theme.easeMedium, value: current)
             }
             .frame(height: 188)
             .clipped()
 
             if pageCount > 1 {
-                HStack(spacing: 14) {
+                HStack(spacing: Theme.space3) {
                     arrow("chevron.left", enabled: current > 0) { page = max(0, current - 1) }
                     HStack(spacing: 5) {
                         ForEach(0..<pageCount, id: \.self) { i in
                             Circle()
-                                .fill(i == current ? Color.systemAccent : .secondary.opacity(0.4))
+                                .fill(i == current ? Theme.accent : Theme.textMuted.opacity(0.4))
                                 .frame(width: 6, height: 6)
                         }
                     }
@@ -818,7 +896,7 @@ private struct PetPager: View {
                 }
             }
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, Theme.space1)
         .onChange(of: packs.count) { _ in page = 0 }
     }
 
@@ -841,7 +919,7 @@ private struct PetPager: View {
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .foregroundStyle(enabled ? Color.secondary : Color.secondary.opacity(0.3))
+        .foregroundStyle(enabled ? Theme.textSecondary : Theme.textDisabled)
         .disabled(!enabled)
     }
 }
@@ -853,29 +931,38 @@ private struct PetThumb: View {
     var onDelete: (() -> Void)? = nil
     @State private var hovering = false
 
-    /// This companion's display level; a never-raised pet reads as Lv 0.
     private var level: Int {
         PetCare.displayLevel(forXP: PetCareController.shared.states[pack.id]?.xp ?? 0)
     }
 
     var body: some View {
         Button(action: select) {
-            VStack(spacing: 4) {
+            VStack(spacing: Theme.space1) {
                 StaticFrame(image: pack.clip(0).first, size: 48)
                     .frame(width: 56, height: 48)
-                Text(pack.displayName).font(.caption).lineLimit(1).frame(width: 64)
+                Text(pack.displayName)
+                    .font(.caption)
+                    .lineLimit(1)
+                    .frame(width: 64)
+                    .foregroundStyle(Theme.textPrimary)
             }
             .padding(6)
-            .background(RoundedRectangle(cornerRadius: 10).fill(selected ? Color.systemAccent.opacity(0.2) : .clear))
-            .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(selected ? Color.systemAccent : .secondary.opacity(0.3), lineWidth: selected ? 2 : 1))
+            .background(
+                RoundedRectangle(cornerRadius: Theme.radiusMd, style: .continuous)
+                    .fill(selected ? Theme.accentSoft : .clear)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: Theme.radiusMd, style: .continuous)
+                    .strokeBorder(selected ? Theme.accent : Theme.cardStroke, lineWidth: selected ? 2 : 1)
+            )
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .overlay(alignment: .topLeading) {
             Text(verbatim: "Lv \(level)")
-                .font(.system(size: 9, weight: .bold))
+                .font(.ui(size: 9, weight: .bold))
                 .padding(.horizontal, 5).padding(.vertical, 1.5)
-                .background(Capsule().fill(level > 0 ? Color.systemAccent.opacity(0.85) : Color.secondary.opacity(0.45)))
+                .background(Capsule().fill(level > 0 ? Theme.accent.opacity(0.85) : Theme.textMuted.opacity(0.45)))
                 .foregroundStyle(.white)
                 .offset(x: -3, y: -3)
         }
@@ -883,8 +970,8 @@ private struct PetThumb: View {
             if hovering, let onDelete {
                 Button(action: onDelete) {
                     Image(systemName: "xmark.circle.fill")
-                        .font(.system(size: 15))
-                        .foregroundStyle(.white, .black.opacity(0.55))
+                        .font(.ui(size: 15))
+                        .foregroundStyle(.white, Theme.textDisabled)
                 }
                 .buttonStyle(.plain)
                 .offset(x: 4, y: -4)
@@ -911,7 +998,8 @@ private struct AnimationPicker: View {
         .labelsHidden()
 
         Text("Hover a clip to preview it.")
-            .font(.caption2).foregroundStyle(.secondary)
+            .font(.caption2)
+            .foregroundStyle(Theme.textMuted)
 
         let current = store.clipIndex(packId: pack.id, clipCount: pack.clipCount, mood: state)
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 72), spacing: 10)], spacing: 10) {
@@ -919,7 +1007,7 @@ private struct AnimationPicker: View {
                 Button {
                     store.setClip(i, mood: state, packId: pack.id, clipCount: pack.clipCount)
                 } label: {
-                    VStack(spacing: 3) {
+                    VStack(spacing: Theme.space1) {
                         Group {
                             if hoveredClip == i {
                                 ImageSpriteView(frames: pack.clip(i), mood: .working,
@@ -929,19 +1017,27 @@ private struct AnimationPicker: View {
                             }
                         }
                         .frame(width: 54, height: 44)
-                        Text("Clip \(i + 1)").font(.caption2).foregroundStyle(.secondary)
+                        Text("Clip \(i + 1)")
+                            .font(.caption2)
+                            .foregroundStyle(Theme.textMuted)
                     }
                     .frame(maxWidth: .infinity)
-                    .padding(5)
-                    .background(RoundedRectangle(cornerRadius: 9).fill(i == current ? Color.systemAccent.opacity(0.2) : .clear))
-                    .overlay(RoundedRectangle(cornerRadius: 9).strokeBorder(i == current ? Color.systemAccent : .secondary.opacity(0.25), lineWidth: i == current ? 2 : 1))
+                    .padding(Theme.space1)
+                    .background(
+                        RoundedRectangle(cornerRadius: Theme.radiusSm, style: .continuous)
+                            .fill(i == current ? Theme.accentSoft : .clear)
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: Theme.radiusSm, style: .continuous)
+                            .strokeBorder(i == current ? Theme.accent : Theme.cardStroke, lineWidth: i == current ? 2 : 1)
+                    )
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .onHover { hoveredClip = $0 ? i : (hoveredClip == i ? nil : hoveredClip) }
             }
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, Theme.space1)
     }
 
     private func label(_ mood: PetMood) -> String {
@@ -971,50 +1067,67 @@ private struct CodexHelpView: View {
         .init(n: 2, text: NSLocalizedString("Type /hooks and press Enter to list the hooks.", comment: "codex help step")),
         .init(n: 3, text: NSLocalizedString("Press t to Trust all hooks.", comment: "codex help step")),
         .init(n: 4, text: NSLocalizedString("Quit and reopen Codex (both the CLI and the desktop app).", comment: "codex help step")),
-        .init(n: 5, text: NSLocalizedString("Run any prompt , your pet now shows the Codex session.", comment: "codex help step")),
+        .init(n: 5, text: NSLocalizedString("Run any prompt, your pet now shows the Codex session.", comment: "codex help step")),
     ]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack(spacing: 10) {
-                Image(systemName: "checkmark.shield")
-                    .font(.title2).foregroundStyle(.blue)
-                Text("Connect Codex").font(.title3.bold())
+        VStack(alignment: .leading, spacing: Theme.space4) {
+            HStack(spacing: Theme.space3) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: Theme.radiusSm, style: .continuous)
+                        .fill(Theme.infoSoft)
+                    Image(systemName: "checkmark.shield")
+                        .font(.ui(size: 17, weight: .semibold))
+                        .foregroundStyle(Theme.info)
+                }
+                .frame(width: 34, height: 34)
+                Text("Connect Codex")
+                    .font(.title3.bold())
+                    .foregroundStyle(Theme.textPrimary)
                 Spacer()
             }
 
-            Text("The hook is installed. Codex blocks unknown command hooks until you trust them once , a Codex security feature, not an AgentPet bug. Do this one time:")
-                .font(.callout).foregroundStyle(.secondary)
+            Text("The hook is installed. Codex blocks unknown command hooks until you trust them once, a Codex security feature, not an AgentPet bug. Do this one time:")
+                .font(.callout)
+                .foregroundStyle(Theme.textMuted)
                 .fixedSize(horizontal: false, vertical: true)
 
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: Theme.space3) {
                 ForEach(steps) { s in
-                    HStack(alignment: .top, spacing: 10) {
+                    HStack(alignment: .top, spacing: Theme.space3) {
                         Text("\(s.n)")
-                            .font(.caption.bold()).foregroundStyle(.white)
+                            .font(.caption.bold())
+                            .foregroundStyle(.white)
                             .frame(width: 20, height: 20)
-                            .background(Circle().fill(.blue))
+                            .background(Circle().fill(Theme.info))
                         Text(s.text)
                             .font(.callout)
+                            .foregroundStyle(Theme.textPrimary)
                             .fixedSize(horizontal: false, vertical: true)
                             .textSelection(.enabled)
                     }
                 }
             }
 
-            Text("Trust is shared, so trusting once in the CLI also covers the Codex desktop app. If /hooks shows nothing, add  [features] hooks = true  to ~/.codex/config.toml, then retry.")
-                .font(.caption).foregroundStyle(.secondary)
+            Text("Trust is shared, so trusting once in the CLI also covers the Codex desktop app. If /hooks shows nothing, add [features] hooks = true to ~/.codex/config.toml, then retry.")
+                .font(.caption)
+                .foregroundStyle(Theme.textMuted)
                 .fixedSize(horizontal: false, vertical: true)
 
             HStack {
                 Link("Codex hooks docs", destination: URL(string: "https://developers.openai.com/codex/hooks")!)
                     .font(.caption)
+                    .foregroundStyle(Theme.accent)
                 Spacer()
                 Button("Got it") { dismiss() }
+                    .buttonStyle(AccentButtonStyle())
                     .keyboardShortcut(.defaultAction)
             }
         }
-        .padding(20)
+        .padding(Theme.space5)
         .frame(width: 460)
+        .background(Theme.background)
+        .themedCard(shadow: true)
+        .preferredColorScheme(.dark)
     }
 }

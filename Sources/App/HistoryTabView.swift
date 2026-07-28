@@ -25,10 +25,22 @@ struct HistoryTabView: View {
 
             if records.isEmpty {
                 Section {
-                    Text("No sessions yet")
-                        .foregroundStyle(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.vertical, 8)
+                    HStack(spacing: Theme.space2) {
+                        Spacer()
+                        Image(systemName: "clock.arrow.circlepath")
+                            .font(.ui(size: 24))
+                            .foregroundStyle(Theme.textMuted)
+                        VStack(alignment: .leading, spacing: Theme.space1) {
+                            Text("No sessions yet")
+                                .font(.callout.weight(.medium))
+                                .foregroundStyle(Theme.textSecondary)
+                            Text("Your agent sessions will appear here once they finish.")
+                                .font(.caption)
+                                .foregroundStyle(Theme.textMuted)
+                        }
+                        Spacer()
+                    }
+                    .padding(.vertical, Theme.space4)
                 }
             } else {
                 Section {
@@ -99,22 +111,34 @@ private struct SummaryBar: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 16) {
-                Label("\(records.count) sessions", systemImage: "clock.arrow.circlepath")
-                    .font(.caption).foregroundStyle(.secondary)
-                Label(formatBarDuration(totalDuration), systemImage: "timer")
-                    .font(.caption).foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: Theme.space2) {
+            HStack(spacing: Theme.space4) {
+                summaryPill(icon: "clock.arrow.circlepath", text: "\(records.count) sessions")
+                summaryPill(icon: "timer", text: formatBarDuration(totalDuration))
             }
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 6) {
+                HStack(spacing: Theme.space2) {
                     ForEach(kindCounts, id: \.0.rawValue) { kind, count in
                         KindChip(kind: kind, count: count)
                     }
                 }
             }
         }
-        .padding(.vertical, 2)
+        .padding(.vertical, Theme.space1)
+    }
+
+    private func summaryPill(icon: String, text: String) -> some View {
+        HStack(spacing: Theme.space1) {
+            Image(systemName: icon)
+                .font(.ui(size: 11))
+                .foregroundStyle(Theme.textMuted)
+            Text(text)
+                .font(.caption)
+                .foregroundStyle(Theme.textSecondary)
+        }
+        .padding(.horizontal, Theme.space2)
+        .padding(.vertical, Theme.space1)
+        .themedCard(padding: 0, radius: Theme.radiusMd, fill: Theme.cardHover, stroke: Theme.cardStroke)
     }
 }
 
@@ -123,16 +147,16 @@ private struct KindChip: View {
     let count: Int
 
     var body: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: Theme.space1) {
             Image(systemName: sfSymbol(for: kind))
-                .font(.system(size: 10))
+                .font(.ui(size: 10))
             Text("\(kind.rawValue) ×\(count)")
                 .font(.caption2)
         }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 3)
-        .background(Capsule().fill(Color.systemAccent.opacity(0.15)))
-        .foregroundStyle(Color.systemAccent)
+        .padding(.horizontal, Theme.space2)
+        .padding(.vertical, Theme.space1)
+        .background(Capsule().fill(Theme.accentSoft))
+        .foregroundStyle(Theme.accent)
     }
 }
 
@@ -145,9 +169,10 @@ private struct DaySectionHeader: View {
     var body: some View {
         HStack {
             Text(date, style: .date)
+                .foregroundStyle(Theme.textPrimary)
             Spacer()
             Text("\(count) session\(count == 1 ? "" : "s")")
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.textMuted)
         }
         .font(.caption)
     }
@@ -165,21 +190,25 @@ private struct SessionRow: View {
     }
 
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: Theme.space3) {
             Image(systemName: sfSymbol(for: record.agentKind))
-                .font(.system(size: 16))
+                .font(.ui(size: 16))
                 .frame(width: 28, height: 28)
-                .background(RoundedRectangle(cornerRadius: 6).fill(Color.systemAccent.opacity(0.12)))
-                .foregroundStyle(Color.systemAccent)
+                .background(
+                    RoundedRectangle(cornerRadius: Theme.radiusSm, style: .continuous)
+                        .fill(Theme.accentSoft)
+                )
+                .foregroundStyle(Theme.accent)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(displayTitle)
                     .font(.callout)
+                    .foregroundStyle(Theme.textPrimary)
                     .lineLimit(1)
                 if let project = record.project, !project.isEmpty {
                     Text(project)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.textMuted)
                         .lineLimit(1)
                 }
             }
@@ -189,15 +218,15 @@ private struct SessionRow: View {
             VStack(alignment: .trailing, spacing: 2) {
                 Text(formatRowDuration(record.duration))
                     .font(.caption.monospacedDigit())
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.textSecondary)
                 if let tokens = record.tokenCount {
                     Text("\(tokens)t")
                         .font(.caption2)
-                        .foregroundStyle(.tertiary)
+                        .foregroundStyle(Theme.textMuted)
                 }
             }
         }
-        .padding(.vertical, 2)
+        .padding(.vertical, Theme.space1)
     }
 }
 

@@ -45,9 +45,11 @@ export const ACH_NAME: Record<string, string> = {
   streak7: "7-Day Streak", streak14: "14-Day Streak", streak30: "30-Day Streak", nightOwl: "Night Owl",
 };
 export const ACH_ICON: Record<string, string> = {
-  firstMeal: "🍽", sessions100: "🏆", sessions500: "🥇", tokens1M: "🔥", tokens10M: "⚡",
-  tokens50M: "💥", level5: "⭐", level10: "🌟", level20: "🛡️", level35: "👑",
-  streak7: "📅", streak14: "📆", streak30: "🗓️", nightOwl: "🌙",
+  firstMeal: "utensils", sessions100: "trophy", sessions500: "award",
+  tokens1M: "flame", tokens10M: "zap", tokens50M: "bomb",
+  level5: "star", level10: "sparkles", level20: "shield", level35: "crown",
+  streak7: "calendar", streak14: "calendarCheck", streak30: "calendarDays",
+  nightOwl: "moon",
 };
 
 function checkAchievements(s: CareState, hour: number): Set<string> {

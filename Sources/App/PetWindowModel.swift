@@ -51,9 +51,9 @@ final class PetWindowModel: ObservableObject {
     private var lastPetTime: Date?
 
     private static let petReactions: [[String]] = [
-        ["Hehe~", "That tickles!", "Hi there! 👋", "Oh! Hello~", "*purrs*", "Nyaa~"],
-        ["I love you! 💕", "More pets please!", "Best human ever!", "So happy~ ✨"],
-        ["MAXIMUM LOVE! 💖", "Can't stop smiling! 🥰", "I'm gonna melt~"],
+        ["Hehe~", "That tickles!", "Hi there!", "Oh! Hello~", "*purrs*", "Nyaa~"],
+        ["I love you!", "More pets please!", "Best human ever!", "So happy~"],
+        ["MAXIMUM LOVE!", "Can't stop smiling!", "I'm gonna melt~"],
     ]
 
     func petTap() {

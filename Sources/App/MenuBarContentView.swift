@@ -31,28 +31,39 @@ struct MenuContentView: View {
             footer
         }
         .frame(width: 300)
-        .background(.regularMaterial)
+        .background(Theme.background)
+        .themedCard(padding: 0, radius: Theme.radiusXl, shadow: true)
         .environment(\.colorScheme, .dark)
         .noFocusRing()
     }
 
-    private var divider: some View { Divider().overlay(Color.white.opacity(0.08)) }
+    private var divider: some View { Divider().overlay(Theme.cardStrokeStrong) }
 
     // MARK: Header
 
     private var header: some View {
-        HStack(spacing: 10) {
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(Theme.accent)
-                .frame(width: 28, height: 28)
-                .overlay(Image(systemName: "pawprint.fill").font(.system(size: 13)).foregroundStyle(.white))
+        HStack(spacing: Theme.space3) {
+            ZStack {
+                RoundedRectangle(cornerRadius: Theme.radiusSm, style: .continuous)
+                    .fill(Theme.accent)
+                Image(systemName: "pawprint.fill")
+                    .font(.ui(size: 13, weight: .semibold))
+                    .foregroundStyle(.white)
+            }
+            .frame(width: 28, height: 28)
+            .shadow(color: Theme.accentGlow, radius: 8, y: 2)
+
             VStack(alignment: .leading, spacing: 1) {
-                Text("AgentPet").font(.system(size: 14, weight: .bold)).foregroundStyle(.white)
-                Text(subtitle).font(.system(size: 11)).foregroundStyle(.white.opacity(0.5))
+                Text("AgentPet")
+                    .font(.ui(size: 14, weight: .bold))
+                    .foregroundStyle(Theme.textPrimary)
+                Text(subtitle)
+                    .font(.ui(size: 11))
+                    .foregroundStyle(Theme.textMuted)
             }
             Spacer()
         }
-        .padding(14)
+        .padding(Theme.space4)
     }
 
     private var subtitle: String {
@@ -68,45 +79,51 @@ struct MenuContentView: View {
     @ObservedObject private var care = PetCareController.shared
     @ObservedObject private var imagePets = ImagePetStore.shared
 
-    private static let stageIcons = ["leaf.fill", "pawprint.fill", "binoculars.fill", "shield.fill", "crown.fill"]
-    private static let stageColors: [Color] = [.green, .teal, .blue, .purple, .orange]
-
     private var careSection: some View {
         let state = care.current
         let level = care.level
-        let idx = min(care.stageIndex, Self.stageColors.count - 1)
-        let color = Self.stageColors[idx]
+        let idx = min(care.stageIndex, Theme.stageColors.count - 1)
+        let color = Theme.stageColors[idx].top
         let name = imagePets.displayName(for: pet.selectedPetID)
 
-        return VStack(alignment: .leading, spacing: 6) {
-            sectionLabel("Companion")
-            HStack(spacing: 8) {
+        return VStack(alignment: .leading, spacing: Theme.space2) {
+            EyebrowLabel("Companion")
+                .padding(.horizontal, Theme.space4)
+                .padding(.top, Theme.space3)
+                .padding(.bottom, Theme.space1)
+
+            HStack(spacing: Theme.space2) {
                 StageBadge(stageIndex: idx, size: 20)
                 Text(name)
-                    .font(.system(size: 13, weight: .semibold)).foregroundStyle(.white)
+                    .font(.ui(size: 13, weight: .semibold))
+                    .foregroundStyle(Theme.textPrimary)
                     .lineLimit(1).truncationMode(.tail)
                 Text(verbatim: "Lv \(level)")
-                    .font(.system(size: 12, weight: .bold)).foregroundStyle(color)
+                    .font(.ui(size: 12, weight: .bold))
+                    .foregroundStyle(color)
                     .layoutPriority(1)
-                Spacer(minLength: 6)
+                Spacer(minLength: Theme.space2)
                 Text(hungerText)
-                    .font(.system(size: 11)).foregroundStyle(.white.opacity(0.55))
+                    .font(.ui(size: 11))
+                    .foregroundStyle(Theme.textMuted)
                     .lineLimit(1).layoutPriority(1)
             }
-            .padding(.horizontal, 14)
+            .padding(.horizontal, Theme.space4)
+
             ProgressView(value: care.levelProgress)
                 .tint(color)
                 .controlSize(.small)
-                .padding(.horizontal, 14)
+                .padding(.horizontal, Theme.space4)
+
             HStack {
                 Text(verbatim: xpLine)
                 Spacer()
                 Text(verbatim: todayLine)
             }
-            .font(.system(size: 10))
-            .foregroundStyle(.white.opacity(0.45))
-            .padding(.horizontal, 14)
-            .padding(.bottom, 12)
+            .font(.ui(size: 10))
+            .foregroundStyle(Theme.textMuted)
+            .padding(.horizontal, Theme.space4)
+            .padding(.bottom, Theme.space3)
         }
     }
 
@@ -143,43 +160,42 @@ struct MenuContentView: View {
     private var agentSection: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                sectionLabel("Agents")
+                EyebrowLabel("Agents")
+                    .padding(.horizontal, Theme.space4)
+                    .padding(.top, Theme.space3)
+                    .padding(.bottom, Theme.space1)
                 Spacer()
                 if !agents.isEmpty {
                     Button("Clear all") { daemon.clearSessions() }
                         .buttonStyle(.plain)
-                        .font(.system(size: 11))
-                        .foregroundStyle(.white.opacity(0.45))
-                        .padding(.trailing, 14).padding(.top, 12).padding(.bottom, 6)
+                        .font(.ui(size: 11, weight: .medium))
+                        .foregroundStyle(Theme.textMuted)
+                        .padding(.trailing, Theme.space4)
+                        .padding(.top, Theme.space3)
+                        .padding(.bottom, Theme.space1)
                 }
             }
             if agents.isEmpty {
                 TimelineView(.periodic(from: .now, by: 60)) { context in
-                    VStack(alignment: .leading, spacing: 3) {
+                    VStack(alignment: .leading, spacing: Theme.space1) {
                         Text("Nothing running right now.")
-                            .font(.system(size: 12, weight: .medium))
-                            .foregroundStyle(.white.opacity(0.55))
+                            .font(.ui(size: 12, weight: .medium))
+                            .foregroundStyle(Theme.textSecondary)
                         Text(IdleBoost.line(at: context.date))
-                            .font(.system(size: 12))
-                            .foregroundStyle(.white.opacity(0.4))
+                            .font(.ui(size: 12))
+                            .foregroundStyle(Theme.textMuted)
                             .lineLimit(2)
                     }
-                    .padding(.horizontal, 14).padding(.bottom, 12)
+                    .padding(.horizontal, Theme.space4)
+                    .padding(.bottom, Theme.space3)
                 }
             } else {
                 ForEach(agents) { session in
                     AgentRow(session: session, onClear: { daemon.removeSession(session.id) })
                 }
-                .padding(.bottom, 6)
+                .padding(.bottom, Theme.space2)
             }
         }
-    }
-
-    private func sectionLabel(_ text: String) -> some View {
-        Text(text.uppercased())
-            .font(.system(size: 10, weight: .semibold)).tracking(1.4)
-            .foregroundStyle(.white.opacity(0.35))
-            .padding(.horizontal, 14).padding(.top, 12).padding(.bottom, 6)
     }
 
     // MARK: Controls
@@ -197,49 +213,62 @@ struct MenuContentView: View {
     }
 
     private var animationRow: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: Theme.space2) {
             Image(systemName: "play.fill")
-                .foregroundStyle(.white.opacity(0.8)).frame(width: 16)
-            Text("Animate pets").font(.system(size: 13)).foregroundStyle(.white)
+                .foregroundStyle(Theme.textSecondary)
+                .frame(width: 16)
+            Text("Animate pets")
+                .font(.ui(size: 13))
+                .foregroundStyle(Theme.textPrimary)
             Spacer()
             if pet.animationsEnabled {
-                HStack(spacing: 4) {
+                HStack(spacing: Theme.space1) {
                     Slider(value: $pet.animationFPS, in: 1...12, step: 1)
                         .controlSize(.mini)
-                        .tint(Color.systemAccent)
+                        .tint(Theme.accent)
                         .frame(width: 80)
                     Text("\(Int(pet.animationFPS))")
-                        .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.5))
+                        .font(.ui(size: 10, weight: .medium, design: .monospaced))
+                        .foregroundStyle(Theme.textMuted)
                         .fixedSize()
                 }
             }
             ColorSwitch(isOn: $pet.animationsEnabled)
         }
-        .padding(.horizontal, 14).padding(.vertical, 8)
-        .animation(.easeInOut(duration: 0.2), value: pet.animationsEnabled)
+        .padding(.horizontal, Theme.space4)
+        .padding(.vertical, Theme.space2)
+        .animation(Theme.easeMedium, value: pet.animationsEnabled)
     }
 
     private var sizeRow: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: Theme.space2) {
             Image(systemName: "arrow.up.left.and.arrow.down.right")
-                .foregroundStyle(.white.opacity(0.8)).frame(width: 16)
-            Text("Pet size").font(.system(size: 13)).foregroundStyle(.white)
+                .foregroundStyle(Theme.textSecondary)
+                .frame(width: 16)
+            Text("Pet size")
+                .font(.ui(size: 13))
+                .foregroundStyle(Theme.textPrimary)
             Slider(value: $pet.petPoint, in: PetController.minPoint...PetController.maxPoint)
                 .controlSize(.mini)
-                .tint(Color.systemAccent)
+                .tint(Theme.accent)
         }
-        .padding(.horizontal, 14).padding(.vertical, 8)
+        .padding(.horizontal, Theme.space4)
+        .padding(.vertical, Theme.space2)
     }
 
     private func controlRow(icon: String, label: String, isOn: Binding<Bool>) -> some View {
-        HStack(spacing: 8) {
-            Image(systemName: icon).foregroundStyle(.white.opacity(0.8)).frame(width: 16)
-            Text(label).font(.system(size: 13)).foregroundStyle(.white)
+        HStack(spacing: Theme.space2) {
+            Image(systemName: icon)
+                .foregroundStyle(Theme.textSecondary)
+                .frame(width: 16)
+            Text(label)
+                .font(.ui(size: 13))
+                .foregroundStyle(Theme.textPrimary)
             Spacer()
             ColorSwitch(isOn: isOn)
         }
-        .padding(.horizontal, 14).padding(.vertical, 8)
+        .padding(.horizontal, Theme.space4)
+        .padding(.vertical, Theme.space2)
     }
 
     // MARK: Footer
@@ -247,10 +276,8 @@ struct MenuContentView: View {
     @ObservedObject private var updater = UpdaterController.shared
 
     private var footer: some View {
-        HStack {
+        HStack(spacing: Theme.space3) {
             FooterButton(icon: "gearshape", label: "Settings") {
-                // Use closeAndThen so the window appears only after the popover
-                // animation fully completes — no race, no overlap.
                 StatusBarController.shared.closeAndThen {
                     SettingsWindowController.shared.show()
                 }
@@ -269,7 +296,8 @@ struct MenuContentView: View {
                 NSApplication.shared.terminate(nil)
             }
         }
-        .padding(.horizontal, 14).padding(.vertical, 10)
+        .padding(.horizontal, Theme.space4)
+        .padding(.vertical, Theme.space3)
     }
 }
 
@@ -297,19 +325,20 @@ private struct FooterButton: View {
             HStack(spacing: 5) {
                 ZStack(alignment: .topTrailing) {
                     Image(systemName: icon)
+                        .font(.ui(size: 13, weight: .medium))
                     if badge {
                         Circle()
-                            .fill(Color.orange)
+                            .fill(Theme.warning)
                             .frame(width: 6, height: 6)
                             .offset(x: 4, y: -4)
                     }
                 }
                 Text(label)
             }
-            .font(.system(size: 12, weight: .medium))
-            .foregroundStyle(.white.opacity(0.8))
+            .font(.ui(size: 12, weight: .medium))
+            .foregroundStyle(Theme.textSecondary)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PillButtonStyle())
     }
 }
 
@@ -319,30 +348,37 @@ private struct AgentRow: View {
     @State private var hovering = false
 
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: Theme.space3) {
             Circle().fill(dotColor).frame(width: 8, height: 8)
             VStack(alignment: .leading, spacing: 1) {
-                Text(project).font(.system(size: 13, weight: .semibold)).foregroundStyle(.white)
+                Text(project)
+                    .font(.ui(size: 13, weight: .semibold))
+                    .foregroundStyle(Theme.textPrimary)
                 Text(subtitle)
-                    .font(.system(size: 11)).foregroundStyle(.white.opacity(0.5))
+                    .font(.ui(size: 11))
+                    .foregroundStyle(Theme.textMuted)
                     .lineLimit(1).truncationMode(.tail)
             }
-            Spacer(minLength: 8)
+            Spacer(minLength: Theme.space2)
             if hovering {
                 Button(action: onClear) {
-                    Image(systemName: "xmark.circle.fill").foregroundStyle(.white.opacity(0.45))
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(Theme.textMuted)
                 }
                 .buttonStyle(.plain)
             } else {
                 TimelineView(.periodic(from: .now, by: 1)) { context in
                     Text(timeString(now: context.date))
-                        .font(.system(size: 11, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.55))
+                        .font(.ui(size: 11, design: .monospaced))
+                        .foregroundStyle(Theme.textMuted)
                 }
             }
         }
-        .padding(.horizontal, 14).padding(.vertical, 6)
+        .padding(.horizontal, Theme.space4)
+        .padding(.vertical, 6)
         .contentShape(Rectangle())
+        .background(hovering ? Theme.cardHover : .clear)
+        .animation(Theme.easeFast, value: hovering)
         .onHover { hovering = $0 }
     }
 
@@ -358,10 +394,10 @@ private struct AgentRow: View {
 
     private var dotColor: Color {
         switch session.state {
-        case .working, .registered: return .blue
-        case .waiting: return .orange
-        case .done: return .green
-        case .idle: return .gray
+        case .working, .registered: return Theme.info
+        case .waiting: return Theme.warning
+        case .done: return Theme.success
+        case .idle: return Theme.textMuted
         }
     }
 

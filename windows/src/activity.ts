@@ -80,10 +80,6 @@ export const ACTIVITY_THEMES: Record<ActivityThemeName, ThemePools> = {
   },
 };
 
-export const THEME_EMOJI: Record<ActivityThemeName, string> = {
-  chef: "👨‍🍳", engineer: "⚙️", wizard: "🧙", explorer: "🧭", scientist: "🔬",
-};
-
 export function currentTheme(): ThemePools {
   const name = (localStorage.getItem("ap_theme_phrases") || "chef") as ActivityThemeName;
   return ACTIVITY_THEMES[name] ?? ACTIVITY_THEMES.chef;
@@ -166,10 +162,10 @@ export const PET_CHAT: Record<string, string[]> = {
   ],
   waiting: ["Waiting for your input", "Your turn — over to you", "Needs your input"],
   done: [
-    "All done! ✅", "Finished!", "Ta-da!", "Done and dusted!",
+    "All done!", "Finished!", "Ta-da!", "Done and dusted!",
     "Nailed it!", "That's a wrap!", "Mission complete!",
   ],
-  celebrate: ["🎉 Woohoo!", "We did it!", "Victory!", "Yesss!", "High five! 🙌", "Champion!"],
+  celebrate: ["Woohoo!", "We did it!", "Victory!", "Yesss!", "High five!", "Champion!"],
 };
 
 export const IDLE_BOOST = [

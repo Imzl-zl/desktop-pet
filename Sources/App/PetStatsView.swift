@@ -17,8 +17,6 @@ struct PetStatsView: View {
     @State private var updateLabel: String?
     @State private var hoveredAchievement: Achievement?
 
-    private static let stageColors: [Color] = [.green, .teal, .blue, .purple, .orange]
-
     /// The pet id this card is showing — the passed id, else the selected pet.
     private var resolvedPetID: String? { petID ?? pet.selectedPetID }
 
@@ -34,11 +32,11 @@ struct PetStatsView: View {
     private var levelProgress: Double { PetCare.progress(forXP: careState.xp) }
     private var hunger: PetHunger { PetCare.hunger(state: careState, now: Date()) }
 
-    private var stageColor: Color { Self.stageColors[min(stageIndex, Self.stageColors.count - 1)] }
+    private var stageColor: Color { Theme.stageColors[min(stageIndex, Theme.stageColors.count - 1)].top }
 
     var body: some View {
         let state = careState
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: Theme.space3) {
             header(state)
             xpBlock(state)
             achievementBlock
@@ -48,17 +46,21 @@ struct PetStatsView: View {
             usageBlock
             if let last = state.lastFedAt {
                 HStack {
-                    Text("Last fed").font(.system(size: 10)).foregroundStyle(.white.opacity(0.4))
+                    Text("Last fed")
+                        .font(.ui(size: 10))
+                        .foregroundStyle(Theme.textMuted)
                     Spacer()
                     Text(verbatim: last.formatted(.relative(presentation: .named)))
-                        .font(.system(size: 10)).foregroundStyle(.white.opacity(0.55))
+                        .font(.ui(size: 10))
+                        .foregroundStyle(Theme.textSecondary)
                 }
             }
             footer
         }
-        .padding(14)
+        .padding(Theme.space4)
         .frame(width: 300)
-        .background(.regularMaterial)
+        .background(Theme.background)
+        .themedCard(padding: 0, radius: Theme.radiusXl, shadow: true)
         .environment(\.colorScheme, .dark)
         .textSelection(.enabled)
         .noFocusRing()
@@ -67,16 +69,18 @@ struct PetStatsView: View {
     // MARK: - Footer (Settings / Updates / Quit)
 
     private var footer: some View {
-        VStack(spacing: 8) {
-            Divider().overlay(Color.white.opacity(0.08))
-            HStack {
+        VStack(spacing: Theme.space2) {
+            Divider().overlay(Theme.cardStrokeStrong)
+            HStack(spacing: Theme.space3) {
                 footButton(icon: "gearshape", label: "Settings") {
                     PetWindowController.shared.closeStatsPopover()
                     SettingsWindowController.shared.show()
                 }
-                footButton(icon: "arrow.triangle.2.circlepath",
-                           label: updateLabel ?? NSLocalizedString("Updates", comment: ""),
-                           badge: updater.updatePending) {
+                footButton(
+                    icon: "arrow.triangle.2.circlepath",
+                    label: updateLabel ?? NSLocalizedString("Updates", comment: ""),
+                    badge: updater.updatePending
+                ) {
                     updateLabel = NSLocalizedString("Checking…", comment: "")
                     UpdaterController.shared.checkForUpdates()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 3) { updateLabel = nil }
@@ -87,6 +91,7 @@ struct PetStatsView: View {
                 }
             }
         }
+        .padding(.top, Theme.space2)
     }
 
     private func footButton(icon: String, label: String, badge: Bool = false, action: @escaping () -> Void) -> some View {
@@ -94,52 +99,65 @@ struct PetStatsView: View {
             HStack(spacing: 5) {
                 ZStack(alignment: .topTrailing) {
                     Image(systemName: icon)
+                        .font(.ui(size: 12, weight: .medium))
                     if badge {
-                        Circle().fill(Color.orange).frame(width: 5, height: 5).offset(x: 3, y: -3)
+                        Circle().fill(Theme.warning).frame(width: 5, height: 5).offset(x: 3, y: -3)
                     }
                 }
                 Text(verbatim: label)
             }
-            .font(.system(size: 11, weight: .medium))
-            .foregroundStyle(.white.opacity(0.8))
+            .font(.ui(size: 11, weight: .medium))
+            .foregroundStyle(Theme.textSecondary)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PillButtonStyle())
     }
 
     // MARK: - Header
 
     private func header(_ state: PetCareState) -> some View {
-        HStack(spacing: 10) {
+        HStack(spacing: Theme.space3) {
             Group {
                 if let frame = pack?.clip(0).first {
                     Image(nsImage: frame).resizable().interpolation(.none).scaledToFit().padding(4)
                 } else {
-                    Image(systemName: "pawprint.fill").foregroundStyle(.secondary)
+                    Image(systemName: "pawprint.fill")
+                        .font(.ui(size: 20, weight: .semibold))
+                        .foregroundStyle(Theme.textMuted)
                 }
             }
             .frame(width: 46, height: 46)
-            .background(RoundedRectangle(cornerRadius: 10).fill(stageColor.opacity(0.14)))
+            .background(
+                RoundedRectangle(cornerRadius: Theme.radiusMd, style: .continuous)
+                    .fill(stageColor.opacity(0.14))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: Theme.radiusMd, style: .continuous)
+                    .strokeBorder(stageColor.opacity(0.35), lineWidth: 1)
+            )
 
-            VStack(alignment: .leading, spacing: 3) {
+            VStack(alignment: .leading, spacing: Theme.space1) {
                 Text(imagePets.displayName(for: resolvedPetID))
-                    .font(.system(size: 14, weight: .bold)).foregroundStyle(.white)
-                HStack(spacing: 6) {
+                    .font(.ui(size: 14, weight: .bold))
+                    .foregroundStyle(Theme.textPrimary)
+                HStack(spacing: Theme.space2) {
                     Text(verbatim: "Lv \(level)")
-                        .font(.system(size: 12, weight: .bold)).foregroundStyle(stageColor)
+                        .font(.ui(size: 12, weight: .bold))
+                        .foregroundStyle(stageColor)
                     StageBadge(stageIndex: stageIndex, size: 16)
                     Text(NSLocalizedString(stageKey, comment: "stage"))
-                        .font(.system(size: 10, weight: .semibold))
+                        .font(.ui(size: 10, weight: .semibold))
                         .padding(.horizontal, 6).padding(.vertical, 2)
-                        .background(Capsule().fill(stageColor.opacity(0.2)))
+                        .background(Capsule().fill(stageColor.opacity(0.18)))
                         .foregroundStyle(stageColor)
                 }
             }
             Spacer()
-            VStack(alignment: .trailing, spacing: 3) {
+            VStack(alignment: .trailing, spacing: Theme.space1) {
                 Text(hungerText)
-                    .font(.system(size: 11, weight: .medium)).foregroundStyle(.white.opacity(0.7))
+                    .font(.ui(size: 11, weight: .medium))
+                    .foregroundStyle(Theme.textSecondary)
                 ProgressView(value: fullness)
-                    .tint(fullness > 0.5 ? .green : (fullness > 0.25 ? .orange : .red))
+                    .tint(fullness > 0.5 ? Theme.success : (fullness > 0.25 ? Theme.warning : Theme.danger))
                     .controlSize(.small)
                     .frame(width: 64)
             }
@@ -150,18 +168,21 @@ struct PetStatsView: View {
 
     private func xpBlock(_ state: PetCareState) -> some View {
         let (inLevel, span) = PetCare.xpWithinLevel(forXP: state.xp)
-        return VStack(alignment: .leading, spacing: 4) {
+        return VStack(alignment: .leading, spacing: Theme.space1) {
             ProgressView(value: levelProgress).tint(stageColor).controlSize(.small)
             HStack {
                 Text(verbatim: "\(Self.plain(inLevel)) / \(Self.plain(span)) XP")
-                    .font(.system(size: 10)).foregroundStyle(.white.opacity(0.45))
+                    .font(.ui(size: 10))
+                    .foregroundStyle(Theme.textMuted)
                 Spacer()
                 Text(verbatim: "\(Int((levelProgress * 100).rounded()))%")
-                    .font(.system(size: 10, weight: .semibold)).foregroundStyle(stageColor)
+                    .font(.ui(size: 10, weight: .semibold))
+                    .foregroundStyle(stageColor)
             }
             Text(String(format: NSLocalizedString("≈ %@ tokens to Lv %d", comment: ""),
                         Self.tokenString(PetCare.tokensToNextLevel(state: state)), level + 1))
-                .font(.system(size: 10, weight: .medium)).foregroundStyle(stageColor.opacity(0.9))
+                .font(.ui(size: 10, weight: .medium))
+                .foregroundStyle(stageColor)
         }
     }
 
@@ -170,29 +191,25 @@ struct PetStatsView: View {
     private var achievementBlock: some View {
         let unlocked = care.achievements
         let total = Achievement.allCases.count
-        return VStack(alignment: .leading, spacing: 5) {
+        return VStack(alignment: .leading, spacing: Theme.space2) {
             HStack {
-                Text("Achievements")
-                    .font(.system(size: 9, weight: .semibold)).tracking(0.8)
-                    .foregroundStyle(.white.opacity(0.35))
+                EyebrowLabel("Achievements")
                 Spacer()
                 Text(verbatim: "\(unlocked.count) / \(total)")
-                    .font(.system(size: 9, weight: .semibold)).foregroundStyle(.white.opacity(0.55))
+                    .font(.ui(size: 10, weight: .semibold))
+                    .foregroundStyle(Theme.textSecondary)
             }
             HStack(spacing: 2) {
                 ForEach(Achievement.allCases, id: \.self) { a in
                     let symbol = PetCare.achievementSymbol(a)
                     let isUnlocked = unlocked.contains(a)
                     Image(systemName: symbol)
-                        .font(.system(size: 11))
-                        .foregroundStyle(isUnlocked ? stageColor : Color.white.opacity(0.15))
-                        // Distribute evenly across the card width so 14 badges
-                        // never overflow the fixed 300pt popover (the overflow
-                        // clipped the whole HUD's left edge).
+                        .font(.ui(size: 11))
+                        .foregroundStyle(isUnlocked ? stageColor : Theme.textDisabled)
                         .frame(maxWidth: .infinity, minHeight: 20)
                         .background(
-                            RoundedRectangle(cornerRadius: 5)
-                                .fill(hoveredAchievement == a ? Color.white.opacity(0.08) : .clear)
+                            RoundedRectangle(cornerRadius: Theme.radiusSm)
+                                .fill(hoveredAchievement == a ? Theme.cardHover : .clear)
                         )
                         .help(PetCare.achievementDisplayName(a))
                         .onHover { inside in
@@ -203,27 +220,33 @@ struct PetStatsView: View {
             .frame(maxWidth: .infinity)
             achievementHint(unlocked: unlocked)
         }
+        .themedCard(padding: Theme.space3, radius: Theme.radiusMd)
     }
 
     /// A single line under the badge row: hovering a badge shows its name, how to
     /// unlock it, and whether it's done. Reliable in the floating HUD where the
     /// system `.help` tooltip can be slow or suppressed.
     @ViewBuilder private func achievementHint(unlocked: Set<Achievement>) -> some View {
-        HStack(spacing: 5) {
+        HStack(spacing: Theme.space2) {
             if let a = hoveredAchievement {
                 let done = unlocked.contains(a)
                 Image(systemName: done ? "checkmark.circle.fill" : "lock.fill")
-                    .font(.system(size: 8))
-                    .foregroundStyle(done ? stageColor : .white.opacity(0.35))
+                    .font(.ui(size: 8))
+                    .foregroundStyle(done ? stageColor : Theme.textMuted)
                 Text(PetCare.achievementDisplayName(a))
-                    .font(.system(size: 9, weight: .semibold)).foregroundStyle(.white.opacity(0.8))
-                Text(verbatim: "·").font(.system(size: 9)).foregroundStyle(.white.opacity(0.3))
+                    .font(.ui(size: 9, weight: .semibold))
+                    .foregroundStyle(Theme.textSecondary)
+                Text(verbatim: "·")
+                    .font(.ui(size: 9))
+                    .foregroundStyle(Theme.textMuted)
                 Text(PetCare.achievementDescription(a))
-                    .font(.system(size: 9)).foregroundStyle(.white.opacity(0.5))
+                    .font(.ui(size: 9))
+                    .foregroundStyle(Theme.textMuted)
                     .lineLimit(1)
             } else {
                 Text("Hover a badge to see how to unlock it")
-                    .font(.system(size: 9)).foregroundStyle(.white.opacity(0.3))
+                    .font(.ui(size: 9))
+                    .foregroundStyle(Theme.textMuted)
             }
             Spacer(minLength: 0)
         }
@@ -243,20 +266,24 @@ struct PetStatsView: View {
             (NSLocalizedString("Sessions", comment: ""), "\(state.totalMeals)",
              NSLocalizedString("completed", comment: "")),
         ]
-        return LazyVGrid(columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)], spacing: 8) {
+        return LazyVGrid(columns: [GridItem(.flexible(), spacing: Theme.space2), GridItem(.flexible(), spacing: Theme.space2)], spacing: Theme.space2) {
             ForEach(cells, id: \.0) { cell in
                 VStack(alignment: .leading, spacing: 1) {
                     Text(cell.0.uppercased())
-                        .font(.system(size: 8, weight: .semibold)).tracking(0.8)
-                        .foregroundStyle(.white.opacity(0.35))
+                        .font(.ui(size: 8, weight: .semibold))
+                        .tracking(0.8)
+                        .foregroundStyle(Theme.textMuted)
                     Text(verbatim: cell.1)
-                        .font(.system(size: 15, weight: .bold)).foregroundStyle(.white)
+                        .font(.ui(size: 15, weight: .bold))
+                        .foregroundStyle(Theme.textPrimary)
                     Text(verbatim: cell.2)
-                        .font(.system(size: 9)).foregroundStyle(.white.opacity(0.45))
+                        .font(.ui(size: 9))
+                        .foregroundStyle(Theme.textMuted)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 9).padding(.vertical, 7)
-                .background(RoundedRectangle(cornerRadius: 8).fill(Color.white.opacity(0.06)))
+                .padding(.horizontal, Theme.space2)
+                .padding(.vertical, Theme.space2)
+                .themedCard(padding: 0, radius: Theme.radiusSm, fill: Theme.cardHover, stroke: Theme.cardStroke)
             }
         }
     }
@@ -266,42 +293,42 @@ struct PetStatsView: View {
     private func trendBlock(_ state: PetCareState) -> some View {
         let series = PetCare.recentDays(state: state, now: Date())
         let peak = max(series.map(\.tokens).max() ?? 0, 1)
-        return VStack(alignment: .leading, spacing: 5) {
+        return VStack(alignment: .leading, spacing: Theme.space2) {
             HStack {
-                Text("Burn, last 7 days")
-                    .font(.system(size: 9, weight: .semibold)).tracking(0.8)
-                    .foregroundStyle(.white.opacity(0.35))
+                EyebrowLabel("Burn, last 7 days")
                 Spacer()
                 Text(verbatim: Self.tokenString(series.map(\.tokens).reduce(0, +)))
-                    .font(.system(size: 9, weight: .semibold)).foregroundStyle(.white.opacity(0.55))
+                    .font(.ui(size: 10, weight: .semibold))
+                    .foregroundStyle(Theme.textSecondary)
             }
-            HStack(alignment: .bottom, spacing: 5) {
+            HStack(alignment: .bottom, spacing: Theme.space2) {
                 ForEach(Array(series.enumerated()), id: \.offset) { i, day in
-                    VStack(spacing: 2) {
+                    VStack(spacing: Theme.space1) {
                         RoundedRectangle(cornerRadius: 2)
                             .fill(i == series.count - 1 ? stageColor : stageColor.opacity(0.4))
                             .frame(height: max(3, CGFloat(day.tokens) / CGFloat(peak) * 34))
                             .frame(maxWidth: .infinity)
                         Text(verbatim: day.label)
-                            .font(.system(size: 8)).foregroundStyle(.white.opacity(0.35))
+                            .font(.ui(size: 8))
+                            .foregroundStyle(Theme.textMuted)
                     }
                 }
             }
             .frame(height: 48, alignment: .bottom)
         }
+        .themedCard(padding: Theme.space3, radius: Theme.radiusMd)
     }
 
     // MARK: - Cost
 
     private var costBlock: some View {
         HStack {
-            Text("Est. cost (Claude)")
-                .font(.system(size: 9, weight: .semibold)).tracking(0.8)
-                .foregroundStyle(.white.opacity(0.35))
+            EyebrowLabel("Est. cost (Claude)")
             Spacer()
             Text(verbatim: String(format: NSLocalizedString("Today %@ · Month %@", comment: "cost row: today / this month estimate"),
                                    Self.costString(usageStore.todayCostUSD), Self.costString(usageStore.monthlyCostUSD)))
-                .font(.system(size: 9, weight: .semibold)).foregroundStyle(.white.opacity(0.55))
+                .font(.ui(size: 10, weight: .semibold))
+                .foregroundStyle(Theme.textSecondary)
         }
     }
 
@@ -316,32 +343,30 @@ struct PetStatsView: View {
     @ViewBuilder private var usageBlock: some View {
         let providers = NativeUsageProbe.combined()
         if !providers.isEmpty {
-            VStack(alignment: .leading, spacing: 7) {
-                Text("Limits")
-                    .font(.system(size: 9, weight: .semibold)).tracking(0.8)
-                    .foregroundStyle(.white.opacity(0.35))
+            VStack(alignment: .leading, spacing: Theme.space2) {
+                EyebrowLabel("Limits")
                 ForEach(providers) { p in
-                    let used = 1 - (p.fractionLeft ?? 0)      // bar fills as you spend
-                    // Match the level bar's stage colour; only flip to a warning
-                    // tint when a budget is nearly spent.
-                    let color: Color = used > 0.9 ? .red : (used > 0.75 ? .orange : stageColor)
-                    VStack(alignment: .leading, spacing: 3) {
-                        HStack(spacing: 6) {
+                    let used = 1 - (p.fractionLeft ?? 0)
+                    let color: Color = used > 0.9 ? Theme.danger : (used > 0.75 ? Theme.warning : stageColor)
+                    VStack(alignment: .leading, spacing: Theme.space1) {
+                        HStack(spacing: Theme.space2) {
                             Text(verbatim: p.displayName)
-                                .font(.system(size: 11, weight: .semibold)).foregroundStyle(.white.opacity(0.9))
+                                .font(.ui(size: 11, weight: .semibold))
+                                .foregroundStyle(Theme.textSecondary)
                             if let w = p.windowLabel {
-                                Text(verbatim: w).font(.system(size: 9)).foregroundStyle(.white.opacity(0.4))
+                                Text(verbatim: w).font(.ui(size: 9)).foregroundStyle(Theme.textMuted)
                             }
                             Spacer()
                             Text(String(format: NSLocalizedString("%d%% used", comment: ""), Int((used * 100).rounded())))
-                                .font(.system(size: 10, weight: .semibold)).foregroundStyle(color)
+                                .font(.ui(size: 10, weight: .semibold))
+                                .foregroundStyle(color)
                             if let reset = Self.resetText(p.resetsAt) {
-                                Text(verbatim: "· \(reset)").font(.system(size: 9)).foregroundStyle(.white.opacity(0.4))
+                                Text(verbatim: "· \(reset)").font(.ui(size: 9)).foregroundStyle(Theme.textMuted)
                             }
                         }
                         GeometryReader { geo in
                             ZStack(alignment: .leading) {
-                                Capsule().fill(.white.opacity(0.1))
+                                Capsule().fill(Theme.cardStrokeStrong)
                                 Capsule().fill(color).frame(width: max(2, geo.size.width * used))
                             }
                         }
@@ -349,6 +374,7 @@ struct PetStatsView: View {
                     }
                 }
             }
+            .themedCard(padding: Theme.space3, radius: Theme.radiusMd)
         }
     }
 

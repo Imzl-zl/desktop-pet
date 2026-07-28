@@ -539,15 +539,15 @@ enum PetChat {
             "Brain go brrr…", "Almost there…", "Wiring it up…",
         ],
         .waiting: [
-            "I need you!", "Your turn 👀", "Waiting on you…", "Can you check this?",
+            "I need you!", "Your turn", "Waiting on you…", "Can you check this?",
             "Psst, need input!", "Awaiting orders…", "Help me out?", "Stuck, need you!",
         ],
         .done: [
-            "All done! ✅", "Finished!", "Ta-da!", "Done and dusted!",
+            "All done!", "Finished!", "Ta-da!", "Done and dusted!",
             "Nailed it!", "That's a wrap!", "Mission complete!",
         ],
         .celebrate: [
-            "🎉 Woohoo!", "We did it!", "Victory!", "Yesss!", "High five! 🙌", "Champion!",
+            "Woohoo!", "We did it!", "Victory!", "Yesss!", "High five!", "Champion!",
         ],
     ]
 }

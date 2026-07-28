@@ -67,12 +67,12 @@ final class BreakReminderController {
             let brk = settings.breakLengthMinutes
             NotificationManager.shared.notify(
                 title: "Time for a break",
-                body: "You've worked \(mins) min — rest \(brk) min 😴")
+                body: "You've worked \(mins) min — rest \(brk) min")
             NSSound(named: "Purr")?.play()
             PetController.shared.beginBreakRest(
-                line: "Worked \(mins) min — let's rest \(brk) min 😴")
+                line: "Worked \(mins) min — let's rest \(brk) min")
         case .breakOver:
-            PetController.shared.endBreakRest(line: "Break's over — back to it! 💪")
+            PetController.shared.endBreakRest(line: "Break's over — back to it!")
         }
     }
 }

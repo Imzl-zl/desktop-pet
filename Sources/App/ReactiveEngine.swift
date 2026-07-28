@@ -57,18 +57,18 @@ private enum Thresholds {
 private enum Phrases {
     static let rateLimitLow = ["Usage is climbing~", "Take it easy, no rush", "Keep an eye on quota"]
     static let rateLimitHigh = ["Rate limit running low…", "Use sparingly!", "Quota getting thin"]
-    static let rateLimitCritical = ["Almost out of quota 😰", "Maybe take a break…", "Quota nearly spent"]
+    static let rateLimitCritical = ["Almost out of quota", "Maybe take a break…", "Quota nearly spent"]
 
     static let dailyTokensLow = ["Burned quite a few tokens today~", "Eaten a lot of tokens", "Token usage rising"]
     static let dailyTokensMid = ["Big appetite mode!", "Great appetite today~", "Tokens going fast"]
-    static let dailyTokensHigh = ["Token usage off the charts today 🔥", "Token burn is extreme!", "Heavy burn today"]
+    static let dailyTokensHigh = ["Token usage off the charts today", "Token burn is extreme!", "Heavy burn today"]
 
     static let sessionCountLow = ["5 agents running at once~", "Lots of agents at work", "Parallelism is up"]
-    static let sessionCountHigh = ["Command center mode 😳", "So many sessions!", "Full throttle"]
+    static let sessionCountHigh = ["Command center mode", "So many sessions!", "Full throttle"]
 
     static let hungerLow = ["A little hungry…", "Hmm… want food", "Tummy rumbling"]
-    static let hungerMid = ["Haven't been fed in a while 😢", "Hungry…", "Want food…"]
-    static let hungerHigh = ["Where did you go… 😭", "About to faint from hunger", "So hungry"]
+    static let hungerMid = ["Haven't been fed in a while", "Hungry…", "Want food…"]
+    static let hungerHigh = ["Where did you go…", "About to faint from hunger", "So hungry"]
 
     static let streakLow = ["Days in a row! Keep going", "Going strong~", "Keeping it up"]
     static let streakMid = ["A whole week straight!", "Such persistence~", "So consistent"]

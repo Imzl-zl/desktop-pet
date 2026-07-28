@@ -120,7 +120,7 @@ function renderCare() {
   setTxt("care-achcount", `${unlocked.size} / ${care.ACHIEVEMENTS.length}`);
   const badges = document.getElementById("care-badges");
   if (badges) badges.innerHTML = care.ACHIEVEMENTS
-    .map((a) => `<span class="care-badge${unlocked.has(a) ? " on" : ""}" title="${t(care.ACH_NAME[a])}">${care.ACH_ICON[a]}</span>`)
+    .map((a) => `<span class="care-badge${unlocked.has(a) ? " on" : ""}" title="${t(care.ACH_NAME[a])}">${uiIcon(care.ACH_ICON[a])}</span>`)
     .join("");
   setTxt("care-today", fmtNum(s.tokensToday));
   setTxt("care-today-sub", `${s.mealsToday} ${t("sessions")}`);
@@ -1477,6 +1477,17 @@ async function initAutostart() {
   });
 }
 
+// ----------------------------------------------------------------- icons ----
+/// Fill every `<span class="ui-ic" data-icon="name">` with the matching SVG.
+function initIcons() {
+  document.querySelectorAll<HTMLElement>(".ui-ic[data-icon]").forEach((el) => {
+    const name = el.dataset.icon;
+    if (!name) return;
+    const svg = uiIcon(name);
+    if (svg) el.innerHTML = svg;
+  });
+}
+
 // ----------------------------------------------------------------- i18n ----
 function applyStatic() {
   document.documentElement.lang = getLang();
@@ -1761,6 +1772,7 @@ function initQuickBubbles() {
 
 initTabs();
 initLang();
+initIcons();
 loadAgents();
 initPet();
 initMainPetVisibility();

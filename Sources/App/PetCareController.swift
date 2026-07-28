@@ -107,7 +107,7 @@ final class PetCareController: ObservableObject {
         let levelAfter = PetCare.level(forXP: s.xp)
         if levelAfter > levelBefore {
             let line = String(
-                format: NSLocalizedString("Level up! Lv %d ⭐", comment: "pet level-up celebrate line"),
+                format: NSLocalizedString("Level up! Lv %d", comment: "pet level-up celebrate line"),
                 PetCare.displayLevel(forXP: s.xp)
             )
             PetController.shared.flashLevelUp(line: line, petID: petID)
@@ -118,7 +118,7 @@ final class PetCareController: ObservableObject {
             // Bulk backfill (first run after the feature shipped, or a veteran
             // pet): one summary line instead of a burst of celebrate flashes.
             let line = String(
-                format: NSLocalizedString("%d achievements unlocked! 🏆", comment: "bulk achievement unlock celebrate line"),
+                format: NSLocalizedString("%d achievements unlocked!", comment: "bulk achievement unlock celebrate line"),
                 newAchievements.count
             )
             PetController.shared.flashCelebrate(line: line, petID: petID)
@@ -126,7 +126,7 @@ final class PetCareController: ObservableObject {
             for achievement in newAchievements {
                 let name = PetCare.achievementDisplayName(achievement)
                 let line = String(
-                    format: NSLocalizedString("Achievement unlocked: %@ 🏆", comment: "achievement unlock celebrate line"),
+                    format: NSLocalizedString("Achievement unlocked: %@", comment: "achievement unlock celebrate line"),
                     name
                 )
                 PetController.shared.flashCelebrate(line: line, petID: petID)
