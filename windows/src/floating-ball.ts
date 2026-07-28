@@ -12,8 +12,8 @@ const TARGET_KEY = "ap_ball_target";
 const MAX_PRESETS = 12;
 
 const WIN_SIZE = 80;        // window is larger than the 56px orb so shadows/scale fit
-const MENU_W = 260;
-const MENU_H = 340;
+const MENU_W = 300;
+const MENU_H = 420;
 const DRAG_THRESHOLD_PX = 4;
 const CLICK_MAX_MS = 280;
 

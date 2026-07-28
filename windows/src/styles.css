@@ -221,7 +221,7 @@ body.overlay, body.overlay * {
 
 /* ---------------------------------------------------------------------------
    Floating ball: the visible orb is 56×56 but lives inside an 80×80 window so
-   shadows/hover scale are not clipped. The window grows to 260×340 when the
+   shadows/hover scale are not clipped. The window grows to 300×420 when the
    bubble menu opens; the orb stays at the top-left so its screen position
    never shifts during the resize.
 ---------------------------------------------------------------------------- */
@@ -230,6 +230,7 @@ body.floating-ball-body { overflow: hidden; }
 .floating-ball-body {
   --ball-size: 56px;
   --ball-margin: 12px;
+  --menu-width: 300px;
   --ball-bg-top: rgba(255, 255, 255, 0.18);
   --ball-bg-mid: rgba(40, 36, 72, 0.78);
   --ball-bg-bot: rgba(16, 14, 30, 0.92);
@@ -313,37 +314,37 @@ body.floating-ball-body { overflow: hidden; }
 .floating-ball-body .ball-menu {
   position: absolute;
   top: calc(var(--ball-size) + var(--ball-margin) + var(--ball-margin));
-  left: calc(var(--ball-margin) + 2px);
-  right: calc(var(--ball-margin) + 2px);
-  padding: 12px;
-  border-radius: 14px;
+  left: var(--ball-margin);
+  width: var(--menu-width);
+  padding: 14px;
+  border-radius: 16px;
   background: var(--menu-bg);
   border: 1px solid var(--menu-border);
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
   color: #fff;
   font-family: "Segoe UI", system-ui, sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   user-select: none;
   z-index: 10;
 }
 
 .floating-ball-body .ball-menu .bm-target {
   display: flex;
-  gap: 2px;
+  gap: 3px;
   margin-bottom: 10px;
   background: rgba(255, 255, 255, 0.06);
-  border-radius: 8px;
-  padding: 2px;
+  border-radius: 9px;
+  padding: 3px;
 }
 .floating-ball-body .ball-menu .bm-target button {
   flex: 1;
-  padding: 5px 8px;
+  padding: 6px 10px;
   border: none;
-  border-radius: 6px;
+  border-radius: 7px;
   background: transparent;
   color: rgba(255, 255, 255, 0.6);
   font: inherit;
-  font-size: 11px;
+  font-size: 12px;
   cursor: pointer;
   transition: background 0.12s, color 0.12s;
 }
@@ -356,13 +357,13 @@ body.floating-ball-body { overflow: hidden; }
 
 .floating-ball-body .ball-menu #bm-input {
   width: 100%;
-  padding: 8px 11px;
+  padding: 9px 12px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 9px;
+  border-radius: 10px;
   background: rgba(0, 0, 0, 0.28);
   color: #fff;
   font: inherit;
-  font-size: 12px;
+  font-size: 13px;
   outline: none;
   box-sizing: border-box;
 }
@@ -372,20 +373,20 @@ body.floating-ball-body { overflow: hidden; }
 .floating-ball-body .ball-menu .bm-presets {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
   margin-top: 10px;
-  max-height: 148px;
+  max-height: 180px;
   overflow-y: auto;
 }
 .floating-ball-body .ball-menu .bm-preset {
   text-align: left;
-  padding: 6px 10px;
+  padding: 7px 11px;
   border: none;
-  border-radius: 7px;
+  border-radius: 8px;
   background: transparent;
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(255, 255, 255, 0.85);
   font: inherit;
-  font-size: 11.5px;
+  font-size: 12.5px;
   cursor: pointer;
   white-space: nowrap;
   overflow: hidden;
@@ -861,18 +862,40 @@ input[type="range"]::-webkit-slider-thumb {
 }
 .preset-btns button:hover { background: rgba(255,255,255,0.2); }
 
-/* ---- modal (Codex help) ---- */
+/* ---- modal (create / browse / icon / codex help) ----
+   Modal cards must NOT reuse the subtle card alpha; they sit above a dim
+   backdrop and need an opaque surface so text is readable. */
+body.settings {
+  --modal-bg: #1a1b26;
+  --modal-border: rgba(255, 255, 255, 0.12);
+  --modal-radius: var(--radius-lg);
+  --modal-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+}
 .modal-backdrop {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+  position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55);
   display: flex; align-items: center; justify-content: center; z-index: 50;
+  padding: 16px;
 }
 .modal-backdrop[hidden] { display: none; }
 .modal {
-  background: var(--card); border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 12px; padding: 18px; width: 380px; max-width: 90vw;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  background: var(--modal-bg);
+  border: 1px solid var(--modal-border);
+  border-radius: var(--modal-radius);
+  padding: 20px;
+  width: min(420px, calc(100vw - 32px));
+  max-width: 90vw;
+  max-height: min(640px, calc(100vh - 32px));
+  overflow-y: auto;
+  box-shadow: var(--modal-shadow);
+  color: var(--txt);
 }
 .modal h3 { font-size: 15px; margin-bottom: 4px; }
+.modal.browse {
+  width: min(520px, calc(100vw - 32px));
+  height: min(600px, calc(100vh - 40px));
+  display: flex; flex-direction: column;
+  padding: 18px;
+}
 
 /* ---- sound rows ---- */
 .sound-block { border-top: 1px solid var(--hair); }
