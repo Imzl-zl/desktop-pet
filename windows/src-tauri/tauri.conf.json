@@ -46,8 +46,8 @@
       "icons/icon.ico",
       "icons/icon.png"
     ],
-    "publisher": "ntd4996",
-    "homepage": "https://github.com/ntd4996/agentpet",
+    "publisher": "Imzl-zl",
+    "homepage": "https://github.com/Imzl-zl/desktop-pet",
     "shortDescription": "A desktop pet that watches your AI coding agents.",
     "longDescription": "AgentPet floats a pixel companion on your desktop that reacts in real time to your AI coding agents (Claude Code, Codex, Gemini, Cursor, ...).",
     "windows": {

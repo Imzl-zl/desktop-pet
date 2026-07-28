@@ -1443,9 +1443,6 @@ function applyStatic() {
   // about
   set("t-tagline", "A desktop pet that watches your AI coding agents.");
   set("t-star", "Star on GitHub");
-  set("t-discord", "Join the Discord");
-  set("t-coffee", "Buy me a coffee");
-  set("t-author", "Author");
   set("t-version2", "Version");
   // bottom bar + demo panel
   set("t-lp", "Live preview");
