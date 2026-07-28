@@ -388,6 +388,7 @@ function setupPetInteractions(entity: PetEntity) {
     if (Math.abs(e.screenX - downX) <= 4 && Math.abs(e.screenY - downY) <= 4) return;
     pendingDrag = false;
     entity.dragging = true;
+    setDragLock(true);
     const startX = entity.x;
     const startY = entity.y;
 
@@ -402,6 +403,7 @@ function setupPetInteractions(entity: PetEntity) {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onUp);
       entity.dragging = false;
+      setDragLock(false);
       if (entity.isMain) saveMainPetPos(entity.x, entity.y);
     };
     window.addEventListener("mousemove", onMove);
@@ -416,6 +418,7 @@ function setupPetInteractions(entity: PetEntity) {
     if (e.button !== 0) return;
     emit("popover-close", null);
     entity.dragging = true;
+    setDragLock(true);
     const startX = entity.x;
     const startY = entity.y;
     const onMove = (ev: MouseEvent) => {
@@ -429,6 +432,7 @@ function setupPetInteractions(entity: PetEntity) {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onUp);
       entity.dragging = false;
+      setDragLock(false);
       if (entity.isMain) saveMainPetPos(entity.x, entity.y);
     };
     window.addEventListener("mousemove", onMove);
@@ -465,6 +469,15 @@ function randomPreset(): string | null {
 
 function saveMainPetPos(x: number, y: number) {
   invoke("save_main_pet_pos", { x, y }).catch(() => {});
+}
+
+// Hold the whole stage interactive for the duration of a drag. Without this a
+// fast drag can outrun the hit-region update (DOM move → IPC → Rust poll, ~60ms+
+// latency); the cursor briefly sits outside the reported region, Rust flips the
+// window to click-through, and the drag dies mid-flight. The lock makes the hit
+// loop skip its region test and stay interactive until the pointer is released.
+function setDragLock(locked: boolean) {
+  invoke("set_drag_lock", { locked }).catch(() => {});
 }
 
 // ---- entities ----------------------------------------------------------------
@@ -647,6 +660,7 @@ function initFloatingBall() {
     if (dx <= 4 && dy <= 4) return;
     ballMayBeClick = false;
     ballIsDragging = true;
+    setDragLock(true);
     ball.classList.remove("pressed");
     ball.classList.add("dragging");
     const startX = ballX, startY = ballY;
@@ -660,6 +674,7 @@ function initFloatingBall() {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onUp);
       ballIsDragging = false;
+      setDragLock(false);
       ball.classList.remove("dragging");
       invoke("snap_stage_ball", { x: ballX, y: ballY }).catch(() => {});
     };
@@ -761,9 +776,10 @@ function showBallMenu() {
   const x = Math.min(ballX, window.innerWidth - MENU_W);
   const y = Math.min(ballY + BALL_SIZE + 8, window.innerHeight - MENU_H);
   menu.style.transform = `translate(${x}px, ${y}px)`;
+  reportHitRegions();   // register the menu as an opaque region right away
   requestAnimationFrame(() => (menu.querySelector("#bm-input") as HTMLInputElement)?.focus());
 }
-function hideBallMenu() { menu.hidden = true; }
+function hideBallMenu() { menu.hidden = true; reportHitRegions(); }
 
 window.addEventListener("keydown", (e) => { if (e.key === "Escape" && !menu.hidden) hideBallMenu(); });
 
@@ -833,8 +849,9 @@ function showPopover() {
   popoverLayer.style.transform = `translate(${Math.max(8, x)}px, ${Math.max(8, y)}px)`;
   emit("sessions-request", null);
   paintPopover();
+  reportHitRegions();   // register the popover card as an opaque region
 }
-function hidePopover() { popoverVisible = false; popoverLayer.hidden = true; }
+function hidePopover() { popoverVisible = false; popoverLayer.hidden = true; reportHitRegions(); }
 
 listen<AgentEventPayload>("agent-event", (e) => { popStore.update(e.payload); if (popoverVisible) paintPopover(); });
 listen<string>("agent-end", (e) => { popStore.remove(e.payload); if (popoverVisible) paintPopover(); });
@@ -959,12 +976,13 @@ function applyStageVisible(visible: boolean) {
   }
 }
 
-// Rust flips this on the tray show/hide toggle (see set_pet_visible).
+// Rust flips this on the tray show/hide toggle (see set_pet_visible). This is
+// the ONLY source of truth for stage visibility. We deliberately do NOT listen
+// to `document.visibilitychange`: a full-screen transparent click-through
+// overlay frequently reports itself as `hidden` in WebView2 even while fully on
+// screen, which would wrongly freeze every loop (pet undraggable, menus dead,
+// roaming stopped).
 listen<boolean>("stage-visibility", (e) => applyStageVisible(e.payload));
-// Belt-and-suspenders: the WebView also reports its own background state.
-document.addEventListener("visibilitychange", () => {
-  applyStageVisible(document.visibilityState === "visible");
-});
 
 listen<boolean>("stage-ball-visible", (e) => {
   ball.style.display = e.payload ? "" : "none";
@@ -1013,7 +1031,11 @@ listen<{ label: string }>("stage-close-extra", (e) => {
 // ---- roaming -----------------------------------------------------------------
 
 function syncRoamMode(ent: PetEntity) {
-  ent.roamMode = getRoamMode(ent.label);
+  // The main pet's roam mode is configured on the Settings → Pet screen, which
+  // writes the "default" key (ap_roam_mode). Project/extra pets keep their own
+  // per-window key. Reading ent.label for the main pet ("pet") pointed at a key
+  // Settings never wrote, so the main pet's roam selection silently did nothing.
+  ent.roamMode = getRoamMode(ent.isMain ? "default" : ent.label);
 }
 
 function randomRoamTarget(ent: PetEntity): { x: number; y: number } {
@@ -1097,15 +1119,18 @@ window.addEventListener("mousemove", (e) => {
 
 setInterval(() => {
   if (!stageVisible) return;
-  let moved = false;
   for (const ent of entities.values()) {
-    if (ent.isMain) continue; // main pet is positioned by the user
-    if (tickRoam(ent)) moved = true;
+    // The main pet roams too when its mode isn't `stay` (pure-pet mode). In
+    // `stay` it's positioned by the user, so we skip it — its drag handler
+    // owns the position.
+    if (ent.isMain && getRoamMode("default") === "stay") continue;
+    tickRoam(ent);
   }
-  // Only re-report hit regions when a pet actually moved. When everything is
-  // in `stay` mode this loop now costs one cheap map walk and no layout /
-  // IPC — previously it forced a full-screen reflow + bridge call 20×/s.
-  if (moved) reportHitRegions();
+  // Always re-report; `reportHitRegions` itself skips the IPC bridge when the
+  // opaque geometry is unchanged (signature dedupe). This keeps the click-
+  // through mask correct for a STATIONARY pet too — the previous "only when a
+  // pet moved" gate left a just-loaded / just-repositioned pet unclickable.
+  reportHitRegions();
 }, 50);
 
 renderEntity(mainPet);

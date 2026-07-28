@@ -5,7 +5,7 @@ pub mod statemap;
 pub mod sys_windows;
 pub mod transcript;
 
-use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 use std::sync::Mutex;
 use std::time::Duration;
 use tauri::menu::{Menu, MenuItem};
@@ -43,6 +43,19 @@ const BALL_H: f64 = 80.0;
 const SNAP_MARGIN: f64 = 4.0;
 
 static EXTRA_COUNTER: AtomicUsize = AtomicUsize::new(0);
+
+/// Set by the frontend for the whole duration of a pet/ball drag. While true,
+/// the hit loop keeps the window interactive no matter where the cursor is —
+/// otherwise a fast drag can outrun the 60ms hit poll + IPC region update, the
+/// cursor lands "outside" the (stale) hit region, click-through re-enables
+/// mid-drag and the window stops receiving mousemove/mouseup (drag dies).
+static DRAG_LOCK: AtomicBool = AtomicBool::new(false);
+
+/// Frontend toggles this around a drag (mousedown → mouseup). See DRAG_LOCK.
+#[tauri::command]
+fn set_drag_lock(locked: bool) {
+    DRAG_LOCK.store(locked, Ordering::Relaxed);
+}
 
 /// Append a line to %APPDATA%/DesktopPet/debug.log , lightweight field
 /// diagnostics for the Windows build (no console there).
@@ -544,7 +557,13 @@ fn start_stage_hit_loop(handle: tauri::AppHandle) {
             let Some(win) = handle.get_webview_window(STAGE_LABEL) else { continue };
             let cur = handle.cursor_position();
             let Ok(wp) = win.outer_position() else { continue };
-            let inside = match &cur {
+            let inside = if DRAG_LOCK.load(Ordering::Relaxed) {
+                // A drag is in progress — keep the whole window interactive so a
+                // fast drag that outruns the hit-region update can't slip into
+                // click-through and kill the drag.
+                true
+            } else {
+                match &cur {
                 Ok(cur) => {
                     let rx = cur.x - wp.x as f64;
                     let ry = cur.y - wp.y as f64;
@@ -565,6 +584,7 @@ fn start_stage_hit_loop(handle: tauri::AppHandle) {
                         .unwrap_or(true)
                 }
                 Err(_) => true,
+                }
             };
             let ignore = !inside;
             if last_ignore != Some(ignore) {
@@ -680,6 +700,7 @@ pub fn run() {
             open_popover,
             log_debug,
             set_stage_hit_regions,
+            set_drag_lock,
             read_main_pet_pos,
             save_main_pet_pos,
             read_ball_pos,

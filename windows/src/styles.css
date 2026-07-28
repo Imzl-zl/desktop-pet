@@ -53,6 +53,10 @@ body.stage-body, body.stage-body * {
   image-rendering: pixelated;
   cursor: grab;
 }
+/* `display:flex` below would override the HTML `hidden` attribute's default
+   `display:none`, so a hidden bubble kept showing as an empty padded/bordered
+   box (the "air bubble" when idle chatter is off). Restore hidden = gone. */
+.bubble[hidden] { display: none; }
 .bubble {
   position: relative;
   display: flex;
