@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "AgentPet for Windows , a desktop pet that watches your AI coding agents.",
+  "description": "AgentPet for Windows — a desktop companion that keeps you company while you work.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",

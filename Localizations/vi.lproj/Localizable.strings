@@ -4,6 +4,8 @@
 "General" = "Chung";
 "Pet" = "Thú cưng";
 "Bubble" = "Bong bóng";
+"Care" = "Chăm sóc";
+"Advanced" = "Nâng cao";
 "About" = "Giới thiệu";
 
 /* General / common */
@@ -42,7 +44,8 @@
 "Font size" = "Cỡ chữ";
 "Opacity" = "Độ mờ";
 "Show idle message" = "Hiện câu lúc rảnh";
-"The pet's chatter while no agent is running." = "Câu pet nói khi không có agent chạy.";
+"The pet's chatter while nothing is running." = "Câu pet nói khi không có gì đang chạy.";
+"The pet's chatter while no agent is running." = "Câu pet nói khi không có gì đang chạy.";
 "Display" = "Hiển thị";
 "Rows" = "Dòng";
 "Sessions" = "Phiên";
@@ -71,10 +74,13 @@
 "Bubble messages" = "Câu trong bong bóng";
 "Simple bubble" = "Bong bóng đơn giản";
 "All agents" = "Tất cả agent";
-"Turn on multi-agent bubble above for per-agent rows with icons and activity." = "Bật bong bóng đa agent ở trên để có dòng riêng từng agent kèm icon và hoạt động.";
+"Turn on multi-agent bubble above for rows with icons and activity." = "Bật bong bóng đa agent ở trên để có các dòng kèm icon và hoạt động.";
+"Turn on multi-agent bubble above for per-agent rows with icons and activity." = "Bật bong bóng đa agent ở trên để có các dòng kèm icon và hoạt động.";
 
 /* About & Pet tab */
-"A desktop pet that watches your AI coding agents." = "Thú cưng desktop theo dõi các agent code AI của bạn.";
+"A desktop companion that keeps you company while you work." = "Một ngườI bạn desktop đồng hành cùng bạn khi làm việc.";
+"A desktop pet that keeps you company while you work." = "Một ngườI bạn desktop đồng hành cùng bạn khi làm việc.";
+"A desktop pet that watches your AI coding agents." = "Một ngườI bạn desktop đồng hành cùng bạn khi làm việc.";
 "Star on GitHub" = "Star trên GitHub";
 "Join the Discord" = "Tham gia Discord";
 "Buy me a coffee" = "Mời tôi ly cà phê";
@@ -136,7 +142,8 @@
 /* Demo panel, notifications, sounds, footers */
 "Live preview" = "Xem trực tiếp";
 "Hide live preview" = "Ẩn xem trực tiếp";
-"Fire webhooks for many agents with your current settings" = "Bắn webhook cho nhiều agent với cài đặt hiện tại";
+"Preview your pet and bubble settings with live samples." = "Xem trước pet và bong bóng bằng các mẫu thực tế.";
+"Fire webhooks for many agents with your current settings" = "Xem trước pet và bong bóng bằng các mẫu thực tế.";
 "Add webhook" = "Thêm webhook";
 "Add" = "Thêm";
 "Quick scenarios" = "Kịch bản nhanh";
@@ -157,12 +164,16 @@
 "Enable notifications" = "Bật thông báo";
 "Available once installed as AgentPet.app" = "Khả dụng sau khi cài dưới dạng AgentPet.app";
 "Turn on in System Settings to get alerts" = "Bật trong Cài đặt hệ thống để nhận thông báo";
-"Alerts when an agent finishes or needs input" = "Báo khi agent xong hoặc cần nhập";
+"Alerts when something needs your attention." = "Báo khi có việc cần bạn chú ý.";
+"Alerts when an agent finishes or needs input" = "Báo khi có việc cần bạn chú ý.";
 "Muted, the toggle turns alerts back on" = "Đang tắt tiếng, gạt công tắc để bật lại";
-"When an agent finishes" = "Khi một agent hoàn tất";
-"When an agent needs input" = "Khi một agent cần nhập";
+"When a task finishes" = "Khi một tác vụ xong";
+"When your pet needs you" = "Khi pet cần bạn";
+"When an agent finishes" = "Khi một tác vụ xong";
+"When an agent needs input" = "Khi pet cần bạn";
 "Per-agent overrides win over \"All agents\". A custom line replaces the live/theme text and the real pet honours it." = "Câu riêng từng agent ưu tiên hơn \"Tất cả agent\". Câu tùy chỉnh thay cho text live/theme và pet thật cũng áp dụng.";
-"Whimsical phrases shown while agents work, e.g. \"Brewing…\" or \"Compiling…\"." = "Câu vui hiện khi agent làm việc, ví dụ \"Brewing…\" hoặc \"Compiling…\".";
+"Whimsical phrases shown while something is happening, e.g. \"Brewing…\" or \"Compiling…\"." = "Câu vui hiện khi có việc đang xảy ra, ví dụ \"Brewing…\" hoặc \"Compiling…\".";
+"Whimsical phrases shown while agents work, e.g. \"Brewing…\" or \"Compiling…\"." = "Câu vui hiện khi có việc đang xảy ra, ví dụ \"Brewing…\" hoặc \"Compiling…\".";
 
 /* Pet chat & idle messages */
 "Thinking…" = "Đang nghĩ…";
@@ -202,7 +213,8 @@
 "The build is quiet. Too quiet." = "Build đang im. Im đáng ngờ.";
 "Ship something small. Future you is watching." = "Ship cái gì nhỏ thôi. Bạn của tương lai đang nhìn đấy.";
 "Your TODOs are pretending not to see us." = "Đống TODO đang giả vờ không thấy mình.";
-"No agents running. The keyboard has entered standby drama." = "Không có agent nào chạy. Bàn phím đang diễn cảnh chờ.";
+"Nothing running. Time for a little standby drama." = "Không có gì đang chạy. Đến lúc diễn cảnh chờ rồi.";
+"No agents running. The keyboard has entered standby drama." = "Không có gì đang chạy. Đến lúc diễn cảnh chờ rồi.";
 "Turn coffee into code. Carefully." = "Biến cà phê thành code. Cẩn thận nhé.";
 "Open one file. Intimidate it professionally." = "Mở một file. Hù nó một cách chuyên nghiệp.";
 "The repo is calm. Suspicious, but calm." = "Repo đang yên. Đáng ngờ, nhưng yên.";
@@ -216,7 +228,8 @@
 "Language" = "Ngôn ngữ";
 
 /* App: onboarding, create-pet, browser, menu */
-"A desktop pet that watches your AI coding agents. Two quick steps to get going." = "Thú cưng desktop theo dõi các agent code AI của bạn. Hai bước nhanh để bắt đầu.";
+"A desktop companion that keeps you company while you work. Pick a pet to get started." = "Một ngườI bạn desktop đồng hành cùng bạn khi làm việc. Chọn một pet để bắt đầu.";
+"A desktop pet that watches your AI coding agents. Two quick steps to get going." = "Một ngườI bạn desktop đồng hành cùng bạn khi làm việc. Chọn một pet để bắt đầu.";
 "Added" = "Đã thêm";
 "Browse pets" = "Duyệt thú cưng";
 "Cancel" = "Hủy";
@@ -225,9 +238,11 @@
 "Community" = "Cộng đồng";
 "Create" = "Tạo";
 "Create pet" = "Tạo thú cưng";
-"Get alerted when an agent finishes or needs input." = "Được báo khi một agent xong hoặc cần bạn nhập.";
+"Get alerted when something needs your attention." = "Được báo khi có việc cần bạn chú ý.";
+"Get alerted when an agent finishes or needs input." = "Được báo khi có việc cần bạn chú ý.";
 "Get started" = "Bắt đầu";
-"Install a hook so AgentPet can see when an agent works, finishes, or needs you." = "Cài hook để AgentPet biết khi agent làm việc, hoàn tất, hoặc cần bạn.";
+"Install a hook so AgentPet can mirror your coding agents in the bubble. You can always do this later in Advanced settings." = "Cài hook để AgentPet đồng bộ các agent code trong bong bóng. Bạn luôn có thể làm sau trong Cài đặt nâng cao.";
+"Install a hook so AgentPet can see when an agent works, finishes, or needs you." = "Cài hook để AgentPet đồng bộ các agent code trong bong bóng. Bạn luôn có thể làm sau trong Cài đặt nâng cao.";
 "Loading pets…" = "Đang tải thú cưng…";
 "Nothing running right now." = "Hiện không có gì đang chạy.";
 "Pet info" = "Thông tin thú cưng";
@@ -237,6 +252,9 @@
 "Spritesheet" = "Spritesheet";
 "Use the same 8×9 transparent spritesheet format as downloaded pets." = "Dùng cùng định dạng spritesheet 8×9 trong suốt như pet tải về.";
 "Welcome to AgentPet" = "Chào mừng đến với AgentPet";
+"Connect coding agents" = "Kết nối agent code";
+"Pick a pet to get started." = "Chọn một pet để bắt đầu.";
+"Pick your pet" = "Chọn pet của bạn";
 
 /* Codex connection help */
 "Connect Codex" = "Kết nối Codex";
@@ -253,7 +271,6 @@
 "Installed , needs a one-time trust (tap ?)" = "Đã cài , cần duyệt một lần (bấm ?)";
 
 /* Care (tamagotchi) */
-"Care" = "Chăm sóc";
 "Companion" = "Bạn đồng hành";
 "Hunger" = "Cơn đói";
 "Today" = "Hôm nay";
@@ -270,7 +287,8 @@
 "Starving" = "Đói lả";
 "Last fed %@" = "Ăn lần cuối %@";
 "%@ / %@ XP to next level" = "%@ / %@ XP tới cấp tiếp theo";
-"The pet eats real work: tokens burnt by your agents and finished sessions." = "Pet ăn công việc thật: token mà agent của bạn đốt và các phiên hoàn thành.";
+"The pet eats real work: tokens burnt by your coding agents and finished sessions." = "Pet ăn công việc thật: token mà agent code của bạn đốt và các phiên hoàn thành.";
+"The pet eats real work: tokens burnt by your agents and finished sessions." = "Pet ăn công việc thật: token mà agent code của bạn đốt và các phiên hoàn thành.";
 "Tokens eaten" = "Token đã ăn";
 "Full! The daily bowl is empty." = "No rồi! Bát hôm nay đã hết.";
 "Sessions finished" = "Phiên hoàn thành";
@@ -287,7 +305,8 @@
 "Get it" = "Tải về";
 "left" = "còn lại";
 "Level up! Lv %d ⭐" = "Lên cấp! Lv %d ⭐";
-"Getting hungry… run an agent?" = "Đói rồi… chạy một agent nhé?";
+"Getting hungry… do a little work?" = "Đói rồi… làm chút việc nhé?";
+"Getting hungry… run an agent?" = "Đói rồi… làm chút việc nhé?";
 "A little snack? One small task?" = "Ăn nhẹ chút không? Một task nhỏ thôi?";
 "My tummy is rumbling…" = "Bụng mình đang sôi ùng ục…";
 "Feed me some tokens, please." = "Cho mình ăn ít token đi mà.";
@@ -360,7 +379,6 @@
 "resets in %dm" = "làm mới sau %d phút";
 
 /* Coffee / donate */
-"Buy me a coffee" = "Mời mình ly cà phê";
 "Thanks for using AgentPet" = "Cảm ơn bạn đã dùng AgentPet";
 "It's free and open source. If it makes your day a little nicer, a coffee is always appreciated, never expected." = "App miễn phí và mã nguồn mở. Nếu nó giúp ngày của bạn dễ chịu hơn, một ly cà phê luôn được trân trọng, nhưng không bao giờ bắt buộc.";
 "Quét mã bằng app ngân hàng bất kỳ" = "Quét mã bằng app ngân hàng bất kỳ";

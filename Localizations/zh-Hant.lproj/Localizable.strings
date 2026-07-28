@@ -4,6 +4,8 @@
 "General" = "通用";
 "Pet" = "寵物";
 "Bubble" = "氣泡";
+"Care" = "養成";
+"Advanced" = "進階";
 "About" = "關於";
 
 /* General / common */
@@ -42,7 +44,8 @@
 "Font size" = "字號";
 "Opacity" = "不透明度";
 "Show idle message" = "顯示空閒訊息";
-"The pet's chatter while no agent is running." = "沒有 Agent 執行時寵物的碎碎念。";
+"The pet's chatter while nothing is running." = "沒有任務執行時寵物的碎碎念。";
+"The pet's chatter while no agent is running." = "沒有任務執行時寵物的碎碎念。";
 "Display" = "顯示";
 "Rows" = "行";
 "Sessions" = "會話";
@@ -71,10 +74,13 @@
 "Bubble messages" = "氣泡訊息";
 "Simple bubble" = "簡單氣泡";
 "All agents" = "所有 Agent";
-"Turn on multi-agent bubble above for per-agent rows with icons and activity." = "開啟上方的多 Agent 氣泡，即可為每個 Agent 顯示帶圖示和活動的獨立行。";
+"Turn on multi-agent bubble above for rows with icons and activity." = "開啟上方的多 Agent 氣泡，即可顯示帶圖示和活動的獨立行。";
+"Turn on multi-agent bubble above for per-agent rows with icons and activity." = "開啟上方的多 Agent 氣泡，即可顯示帶圖示和活動的獨立行。";
 
 /* About & Pet tab */
-"A desktop pet that watches your AI coding agents." = "盯著你的 AI 編碼 Agent 的桌面寵物。";
+"A desktop companion that keeps you company while you work." = "一個在工作時陪伴你的桌面夥伴。";
+"A desktop pet that keeps you company while you work." = "一個在工作時陪伴你的桌面夥伴。";
+"A desktop pet that watches your AI coding agents." = "一個在工作時陪伴你的桌面夥伴。";
 "Star on GitHub" = "在 GitHub 上點亮 Star";
 "Join the Discord" = "加入 Discord";
 "Buy me a coffee" = "請我喝杯咖啡";
@@ -136,7 +142,8 @@
 /* Demo panel, notifications, sounds, footers */
 "Live preview" = "實時預覽";
 "Hide live preview" = "隱藏實時預覽";
-"Fire webhooks for many agents with your current settings" = "用當前設定為多個 Agent 觸發 webhook";
+"Preview your pet and bubble settings with live samples." = "用實時示例預覽寵物和氣泡設定。";
+"Fire webhooks for many agents with your current settings" = "用實時示例預覽寵物和氣泡設定。";
 "Add webhook" = "新增 Webhook";
 "Add" = "新增";
 "Quick scenarios" = "快捷場景";
@@ -157,12 +164,16 @@
 "Enable notifications" = "啟用通知";
 "Available once installed as AgentPet.app" = "以 AgentPet.app 安裝後可用";
 "Turn on in System Settings to get alerts" = "在系統設定中開啟以接收提醒";
-"Alerts when an agent finishes or needs input" = "Agent 完成或需要輸入時提醒";
+"Alerts when something needs your attention." = "有事情需要關注時提醒。";
+"Alerts when an agent finishes or needs input" = "有事情需要關注時提醒。";
 "Muted, the toggle turns alerts back on" = "已靜音，撥動開關重新開啟提醒";
-"When an agent finishes" = "當 Agent 完成時";
-"When an agent needs input" = "當 Agent 需要輸入時";
+"When a task finishes" = "當任務完成時";
+"When your pet needs you" = "當寵物需要你時";
+"When an agent finishes" = "當任務完成時";
+"When an agent needs input" = "當寵物需要你時";
 "Per-agent overrides win over \"All agents\". A custom line replaces the live/theme text and the real pet honours it." = "針對單個 Agent 的設定優先於\"所有 Agent\"。自定義文案會替換實時/主題文字，真實寵物也會生效。";
-"Whimsical phrases shown while agents work, e.g. \"Brewing…\" or \"Compiling…\"." = "Agent 工作時顯示的趣味短語，例如 \"Brewing…\" 或 \"Compiling…\"。";
+"Whimsical phrases shown while something is happening, e.g. \"Brewing…\" or \"Compiling…\"." = "有事情發生時顯示的趣味短語，例如 \"Brewing…\" 或 \"Compiling…\"。";
+"Whimsical phrases shown while agents work, e.g. \"Brewing…\" or \"Compiling…\"." = "有事情發生時顯示的趣味短語，例如 \"Brewing…\" 或 \"Compiling…\"。";
 
 /* Pet chat & idle messages */
 "Thinking…" = "思考中…";
@@ -202,7 +213,8 @@
 "The build is quiet. Too quiet." = "構建很安靜，安靜得可疑。";
 "Ship something small. Future you is watching." = "釋出點小東西吧，未來的你正看著呢。";
 "Your TODOs are pretending not to see us." = "你的 TODO 正假裝沒看見我們。";
-"No agents running. The keyboard has entered standby drama." = "沒有 Agent 在跑，鍵盤開始上演待機大戲。";
+"Nothing running. Time for a little standby drama." = "沒什麼在跑，鍵盤開始上演待機大戲。";
+"No agents running. The keyboard has entered standby drama." = "沒什麼在跑，鍵盤開始上演待機大戲。";
 "Turn coffee into code. Carefully." = "把咖啡變成程式碼，小心點。";
 "Open one file. Intimidate it professionally." = "開啟一個檔案，專業地震懾它。";
 "The repo is calm. Suspicious, but calm." = "倉庫很平靜。可疑，但平靜。";
@@ -216,7 +228,8 @@
 "Language" = "語言";
 
 /* App: onboarding, create-pet, browser, menu */
-"A desktop pet that watches your AI coding agents. Two quick steps to get going." = "盯著你的 AI 編碼 Agent 的桌面寵物。兩步即可開始。";
+"A desktop companion that keeps you company while you work. Pick a pet to get started." = "一個在工作時陪伴你的桌面夥伴。選隻寵物即可開始。";
+"A desktop pet that watches your AI coding agents. Two quick steps to get going." = "一個在工作時陪伴你的桌面夥伴。選隻寵物即可開始。";
 "Added" = "已新增";
 "Browse pets" = "瀏覽寵物";
 "Cancel" = "取消";
@@ -225,11 +238,13 @@
 "Community" = "社群";
 "Create" = "建立";
 "Create pet" = "建立寵物";
-"Get alerted when an agent finishes or needs input." = "Agent 完成或需要輸入時收到提醒。";
+"Get alerted when something needs your attention." = "有事情需要關注時收到提醒。";
+"Get alerted when an agent finishes or needs input." = "有事情需要關注時收到提醒。";
 "Get started" = "開始";
-"Install a hook so AgentPet can see when an agent works, finishes, or needs you." = "安裝 hook，讓 AgentPet 知道 Agent 何時工作、完成或需要你。";
+"Install a hook so AgentPet can mirror your coding agents in the bubble. You can always do this later in Advanced settings." = "安裝 hook，讓 AgentPet 在氣泡中同步顯示你的程式設計 agent。你隨時可以在進階設定裡完成。";
+"Install a hook so AgentPet can see when an agent works, finishes, or needs you." = "安裝 hook，讓 AgentPet 在氣泡中同步顯示你的程式設計 agent。你隨時可以在進階設定裡完成。";
 "Loading pets…" = "正在載入寵物…";
-"Nothing running right now." = "當前沒有執行中的 Agent。";
+"Nothing running right now." = "當前沒有執行中的內容。";
 "Pet info" = "寵物資訊";
 "Pet size" = "寵物大小";
 "Retry" = "重試";
@@ -237,6 +252,9 @@
 "Spritesheet" = "精靈圖";
 "Use the same 8×9 transparent spritesheet format as downloaded pets." = "使用與下載寵物相同的 8×9 透明精靈圖格式。";
 "Welcome to AgentPet" = "歡迎使用 AgentPet";
+"Connect coding agents" = "連接程式設計 agent";
+"Pick a pet to get started." = "選隻寵物開始吧。";
+"Pick your pet" = "挑選你的寵物";
 
 /* Codex connection help */
 "Connect Codex" = "連線 Codex";
@@ -253,7 +271,6 @@
 "Installed , needs a one-time trust (tap ?)" = "已安裝 , 需要一次性信任（點選 ?）";
 
 /* Care (tamagotchi) */
-"Care" = "養成";
 "Companion" = "夥伴";
 "Hunger" = "飢餓度";
 "Today" = "今天";
@@ -270,7 +287,8 @@
 "Starving" = "餓壞了";
 "Last fed %@" = "上次進食 %@";
 "%@ / %@ XP to next level" = "%@ / %@ 經驗升級";
-"The pet eats real work: tokens burnt by your agents and finished sessions." = "寵物吃的是真實工作：Agent 消耗的 token 和完成的會話。";
+"The pet eats real work: tokens burnt by your coding agents and finished sessions." = "寵物吃的是真實工作：程式設計 agent 消耗的 token 和完成的會話。";
+"The pet eats real work: tokens burnt by your agents and finished sessions." = "寵物吃的是真實工作：程式設計 agent 消耗的 token 和完成的會話。";
 "Tokens eaten" = "已吃 token";
 "Full! The daily bowl is empty." = "吃飽啦！今天的碗空了。";
 "Sessions finished" = "完成的會話";
@@ -287,7 +305,8 @@
 "Get it" = "去安裝";
 "left" = "剩餘";
 "Level up! Lv %d ⭐" = "升級啦！Lv %d ⭐";
-"Getting hungry… run an agent?" = "有點餓了……跑個 Agent 吧？";
+"Getting hungry… do a little work?" = "有點餓了……做點小工作？";
+"Getting hungry… run an agent?" = "有點餓了……做點小工作？";
 "A little snack? One small task?" = "來點小零食？一個小任務就行？";
 "My tummy is rumbling…" = "肚子咕咕叫了……";
 "Feed me some tokens, please." = "請餵我一點 token 吧。";

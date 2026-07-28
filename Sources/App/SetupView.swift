@@ -13,8 +13,8 @@ struct SetupView: View {
     /// panel can slide in on the right. Provided by SettingsWindowController.
     var onResize: (CGFloat) -> Void = { _ in }
 
-    enum Tab { case general, pet, care, bubble, history, about }
-    @State private var tab: Tab = .general
+    enum Tab { case pet, bubble, care, general, advanced }
+    @State private var tab: Tab = .pet
     @State private var demoOpen = false
 
     private let baseWidth: CGFloat = 640
@@ -59,10 +59,8 @@ struct SetupView: View {
                     CareTabView()
                 case .bubble:
                     BubbleSettingsView()
-                case .history:
-                    HistoryTabView()
-                case .about:
-                    AboutTab()
+                case .advanced:
+                    AdvancedTab(model: model)
                 }
             }
             .frame(maxHeight: .infinity)
@@ -77,7 +75,7 @@ struct SetupView: View {
                 Label(demoOpen ? "Hide live preview" : "Live preview", systemImage: "sparkles.tv")
             }
             .buttonStyle(.borderedProminent).tint(Color.systemAccent).controlSize(.large)
-            Text("Fire webhooks for many agents with your current settings")
+            Text("Preview your pet and bubble settings with live samples.")
                 .font(.caption).foregroundStyle(.secondary).lineLimit(1)
             Spacer()
         }
@@ -87,12 +85,11 @@ struct SetupView: View {
 
     private var tabBar: some View {
         HStack(spacing: 8) {
-            TabButton(icon: "gearshape.fill", label: "General", selected: tab == .general) { tab = .general }
             TabButton(icon: "pawprint.fill", label: "Pet", selected: tab == .pet) { tab = .pet }
-            TabButton(icon: "fork.knife", label: "Care", selected: tab == .care) { tab = .care }
             TabButton(icon: "bubble.left.and.bubble.right.fill", label: "Bubble", selected: tab == .bubble) { tab = .bubble }
-            TabButton(icon: "clock.arrow.circlepath", label: "History", selected: tab == .history) { tab = .history }
-            TabButton(icon: "heart.fill", label: "About", selected: tab == .about) { tab = .about }
+            TabButton(icon: "fork.knife", label: "Care", selected: tab == .care) { tab = .care }
+            TabButton(icon: "gearshape.fill", label: "General", selected: tab == .general) { tab = .general }
+            TabButton(icon: "wrench.and.screwdriver.fill", label: "Advanced", selected: tab == .advanced) { tab = .advanced }
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 10)
@@ -123,82 +120,68 @@ private struct TabButton: View {
     }
 }
 
-// MARK: - About
+// MARK: - Advanced
 
-private struct AboutTab: View {
-    @Environment(\.openURL) private var openURL
-    @State private var showCoffee = false
-
-    private let repo = URL(string: "https://github.com/ntd4996/agentpet")!
-    private let profile = URL(string: "https://github.com/ntd4996")!
-    private let coffee = URL(string: "https://buymeacoffee.com/ntd4996")!
-    private let discord = URL(string: "https://discord.gg/kzFJKsZav")!
-    private let homepage = URL(string: "https://agentpet.thenightwatcher.online")!
+private struct AdvancedTab: View {
+    @ObservedObject var model: SettingsModel
+    @State private var showCodexHelp = false
 
     var body: some View {
         Form {
-            Section {
-                VStack(spacing: 10) {
-                    Image(systemName: "pawprint.fill")
-                        .font(.system(size: 40)).foregroundStyle(Color.systemAccent)
-                    Text("AgentPet").font(.title2.bold())
-                    Text("A desktop pet that watches your AI coding agents.")
-                        .font(.callout).foregroundStyle(.secondary).multilineTextAlignment(.center)
-                    Link(destination: homepage) {
-                        Label("agentpet.thenightwatcher.online", systemImage: "globe")
-                            .font(.callout)
+            Section("Agent integrations") {
+                ForEach(model.agents) { agent in
+                    HStack {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(agent.displayName)
+                            if agent.kind == .codex, model.isInstalled(.codex) {
+                                Text("Installed , needs a one-time trust (tap ?)")
+                                    .font(.caption).foregroundStyle(.orange)
+                            } else if let note = agent.note {
+                                Text(note).font(.caption).foregroundStyle(.secondary)
+                            } else if model.isInstalled(agent.kind) {
+                                Text("Hook installed").font(.caption).foregroundStyle(.green)
+                            }
+                        }
+                        Spacer()
+                        if agent.kind == .codex {
+                            Button { showCodexHelp = true } label: {
+                                Image(systemName: "questionmark.circle")
+                            }
+                            .buttonStyle(.borderless)
+                            .help("How to connect Codex")
+                        }
+                        if agent.isSupported {
+                            Button(model.isInstalled(agent.kind) ? "Remove" : "Install") {
+                                model.toggleInstall(agent.kind)
+                            }
+                        } else {
+                            Text("Coming soon").foregroundStyle(.secondary)
+                        }
                     }
-                    .padding(.top, 2)
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 8)
-            }
-
-            Section {
-                Button { openURL(repo) } label: {
-                    Label("Star on GitHub", systemImage: "star.fill")
-                        .frame(maxWidth: .infinity)
+                if let err = model.installError {
+                    Text(err).font(.caption).foregroundStyle(.red).textSelection(.enabled)
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(Color.systemAccent)
-                .controlSize(.large)
-
-                Button { openURL(discord) } label: {
-                    Label("Join the Discord", systemImage: "bubble.left.and.bubble.right.fill")
-                        .frame(maxWidth: .infinity)
-                }
-                .controlSize(.large)
-
-                Button { showCoffee = true } label: {
-                    Label("Buy me a coffee", systemImage: "cup.and.saucer.fill")
-                        .frame(maxWidth: .infinity)
-                }
-                .controlSize(.large)
             } footer: {
-                Text("If AgentPet helps your workflow, a star means a lot. Thank you!")
+                Text("Install a hook so AgentPet can mirror your coding agents in the bubble.")
             }
 
-            Section("Author") {
-                Link(destination: profile) {
-                    Label("Nguyễn Thành Đạt (@ntd4996)", systemImage: "person.crop.circle")
-                }
-                Link(destination: repo) {
-                    Label("github.com/ntd4996/agentpet", systemImage: "chevron.left.forwardslash.chevron.right")
+            Section("Bash approval gate") {
+                HStack {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Approve Bash from the bubble")
+                        Text("Claude Code Bash requests show Allow/Deny in the bubble instead of the terminal.")
+                            .font(.caption).foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    ColorSwitch(isOn: $model.approvalGateEnabled)
                 }
             }
 
-            Section("About") {
-                LabeledContent("Version", value: appVersion)
-            }
+            HistoryTabView()
         }
         .formStyle(.grouped)
-        .sheet(isPresented: $showCoffee) { CoffeeView(coffeeURL: coffee) }
-    }
-
-    private var appVersion: String {
-        let v = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.1.0"
-        let b = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
-        return "\(v) (\(b))"
+        .sheet(isPresented: $showCodexHelp) { CodexHelpView() }
     }
 }
 
@@ -248,7 +231,6 @@ private struct GeneralTab: View {
     // Local mirror of the system login-item state so the toggle re-renders
     // reliably (the SMAppService status isn't observable on its own).
     @State private var launchAtLogin = LoginItem.isEnabled
-    @State private var showCodexHelp = false
 
     var body: some View {
         Form {
@@ -340,13 +322,13 @@ private struct GeneralTab: View {
             }
 
             Section("Sounds") {
-                SoundRow(title: "When an agent finishes",
+                SoundRow(title: "When a task finishes",
                          enabled: $sound.doneEnabled,
                          customPath: sound.doneCustomPath,
                          onPlay: { sound.play(.done) },
                          onUpload: { sound.upload(for: .done) },
                          onReset: { sound.resetToDefault(.done) })
-                SoundRow(title: "When an agent needs input",
+                SoundRow(title: "When your pet needs you",
                          enabled: $sound.waitingEnabled,
                          customPath: sound.waitingCustomPath,
                          onPlay: { sound.play(.waiting) },
@@ -354,55 +336,16 @@ private struct GeneralTab: View {
                          onReset: { sound.resetToDefault(.waiting) })
             }
 
-            Section("Agent integrations") {
-                ForEach(model.agents) { agent in
-                    HStack {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(agent.displayName)
-                            if agent.kind == .codex, model.isInstalled(.codex) {
-                                Text("Installed , needs a one-time trust (tap ?)")
-                                    .font(.caption).foregroundStyle(.orange)
-                            } else if let note = agent.note {
-                                Text(note).font(.caption).foregroundStyle(.secondary)
-                            } else if model.isInstalled(agent.kind) {
-                                Text("Hook installed").font(.caption).foregroundStyle(.green)
-                            }
-                        }
-                        Spacer()
-                        if agent.kind == .codex {
-                            Button { showCodexHelp = true } label: {
-                                Image(systemName: "questionmark.circle")
-                            }
-                            .buttonStyle(.borderless)
-                            .help("How to connect Codex")
-                        }
-                        if agent.isSupported {
-                            Button(model.isInstalled(agent.kind) ? "Remove" : "Install") {
-                                model.toggleInstall(agent.kind)
-                            }
-                        } else {
-                            Text("Coming soon").foregroundStyle(.secondary)
-                        }
-                    }
-                }
-                if let err = model.installError {
-                    Text(err).font(.caption).foregroundStyle(.red).textSelection(.enabled)
-                }
-            }
-
-            Section("Bash approval gate") {
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Approve Bash from the bubble")
-                        Text("Claude Code Bash requests show Allow/Deny in the bubble instead of the terminal.")
-                            .font(.caption).foregroundStyle(.secondary)
-                    }
-                    Spacer()
-                    ColorSwitch(isOn: $model.approvalGateEnabled)
-                }
-            }
-
             Section("About") {
+                VStack(spacing: 10) {
+                    Image(systemName: "pawprint.fill")
+                        .font(.system(size: 40)).foregroundStyle(Color.systemAccent)
+                    Text("AgentPet").font(.title2.bold())
+                    Text("A desktop pet that keeps you company while you work.")
+                        .font(.callout).foregroundStyle(.secondary).multilineTextAlignment(.center)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8)
                 LabeledContent("Version", value: appVersion)
             }
 
@@ -411,7 +354,6 @@ private struct GeneralTab: View {
             }
         }
         .formStyle(.grouped)
-        .sheet(isPresented: $showCodexHelp) { CodexHelpView() }
     }
 
 
@@ -436,9 +378,9 @@ private struct GeneralTab: View {
         case .unavailable: return NSLocalizedString("Available once installed as AgentPet.app", comment: "")
         case .denied: return NSLocalizedString("Turn on in System Settings to get alerts", comment: "")
         case .enabled: return model.notificationsEnabled
-            ? NSLocalizedString("Alerts when an agent finishes or needs input", comment: "")
+            ? NSLocalizedString("Alerts when something needs your attention.", comment: "")
             : NSLocalizedString("Muted, the toggle turns alerts back on", comment: "")
-        case .notDetermined: return NSLocalizedString("Alerts when an agent finishes or needs input", comment: "")
+        case .notDetermined: return NSLocalizedString("Alerts when something needs your attention.", comment: "")
         }
     }
 

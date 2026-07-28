@@ -10,109 +10,31 @@
     <div class="main-col">
     <!-- macOS preferences-style tab bar -->
     <nav class="tabbar">
-      <button class="tab sel" data-tab="general">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-        <span id="tab-general">General</span>
-      </button>
-      <button class="tab" data-tab="pet">
+      <button class="tab sel" data-tab="pet">
         <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5.2" cy="10.2" r="2.1"/><circle cx="9.3" cy="6.4" r="2.2"/><circle cx="14.7" cy="6.4" r="2.2"/><circle cx="18.8" cy="10.2" r="2.1"/><path d="M12 10.5c-2.6 0-5.4 2.5-5.4 5 0 1.6 1.2 2.6 2.7 2.6 1 0 1.8-.4 2.7-.4s1.7.4 2.7.4c1.5 0 2.7-1 2.7-2.6 0-2.5-2.8-5-5.4-5z"/></svg>
         <span id="tab-pet">Pet</span>
-      </button>
-      <button class="tab" data-tab="care">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-        <span id="tab-care">Care</span>
       </button>
       <button class="tab" data-tab="bubble">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 6.75A3.25 3.25 0 0 1 4.75 3.5h7A3.25 3.25 0 0 1 15 6.75v3.5a3.25 3.25 0 0 1-3.25 3.25H8.6l-3.35 2.8a.5.5 0 0 1-.82-.38V13.5h.32A3.25 3.25 0 0 1 1.5 10.25v-3.5z"/><path d="M16.4 7.9h1.35a4.75 4.75 0 0 1 4.75 4.75v1.6a4.75 4.75 0 0 1-4.05 4.7v2.17a.5.5 0 0 1-.83.37l-2.86-2.49h-2.51a4.74 4.74 0 0 1-3.92-2.07h3.42a4.65 4.65 0 0 0 4.65-4.65V7.9z"/></svg>
         <span id="tab-bubble">Bubble</span>
       </button>
-      <button class="tab" data-tab="history">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
-        <span id="tab-history">History</span>
-      </button>
-      <button class="tab" data-tab="about">
+      <button class="tab" data-tab="care">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-        <span id="tab-about">About</span>
+        <span id="tab-care">Care</span>
+      </button>
+      <button class="tab" data-tab="general">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+        <span id="tab-general">General</span>
+      </button>
+      <button class="tab" data-tab="advanced">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <span id="tab-advanced">Advanced</span>
       </button>
     </nav>
 
     <main class="pages">
-      <!-- ============================== GENERAL ============================== -->
-      <div class="page sel" data-page="general">
-        <div class="group">
-          <div class="ghead" id="t-lang">Language</div>
-          <div class="gcard">
-            <div class="row"><span id="t-lang2">Language</span>
-              <select id="lang">
-                <option value="en">English</option>
-                <option value="vi">Tiếng Việt</option>
-                <option value="zh">中文</option>
-              </select></div>
-          </div>
-        </div>
-
-        <div class="group">
-          <div class="ghead" id="t-startup">Launch</div>
-          <div class="gcard">
-            <label class="row"><span class="rt"><span id="t-autostart">Launch at login</span>
-              <span class="cap" id="t-autostart-sub">AgentPet starts automatically when you sign in.</span></span>
-              <input type="checkbox" id="autostart" /></label>
-          </div>
-        </div>
-
-        <div class="group">
-          <div class="ghead" id="t-notif">Notifications</div>
-          <div class="gcard">
-            <label class="row"><span class="rt"><span id="t-notify">Notifications on</span>
-              <span class="cap" id="t-notify-sub">Alerts when an agent finishes or needs input</span></span>
-              <input type="checkbox" id="notify" /></label>
-          </div>
-        </div>
-
-        <div class="group">
-          <div class="ghead" id="t-sounds">Sounds</div>
-          <div class="gcard">
-            <div class="sound-block">
-              <label class="row"><span id="t-sound-done">When an agent finishes</span><input type="checkbox" id="sound-done" /></label>
-              <div class="row tight sound-sub" data-ev="done">
-                <span class="cap sound-name" id="sound-done-name">Default</span>
-                <span class="sound-btns">
-                  <button class="mini ic-btn" data-act="play" data-ev="done"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 21 12 6 21 6 3"/></svg></button>
-                  <button class="mini" data-act="upload" data-ev="done" id="t-up-done">Upload…</button>
-                  <button class="mini" data-act="reset" data-ev="done" id="t-df-done" style="display:none">Default</button>
-                </span>
-              </div>
-            </div>
-            <div class="sound-block">
-              <label class="row"><span id="t-sound-waiting">When an agent needs input</span><input type="checkbox" id="sound-waiting" /></label>
-              <div class="row tight sound-sub" data-ev="waiting">
-                <span class="cap sound-name" id="sound-waiting-name">Default</span>
-                <span class="sound-btns">
-                  <button class="mini ic-btn" data-act="play" data-ev="waiting"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 21 12 6 21 6 3"/></svg></button>
-                  <button class="mini" data-act="upload" data-ev="waiting" id="t-up-waiting">Upload…</button>
-                  <button class="mini" data-act="reset" data-ev="waiting" id="t-df-waiting" style="display:none">Default</button>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="group">
-          <div class="ghead" id="t-agents">Agent integrations</div>
-          <div class="gcard" id="agents"></div>
-        </div>
-
-        <div class="group">
-          <div class="ghead" id="t-app">About</div>
-          <div class="gcard">
-            <div class="row"><span id="t-version">Version</span><span class="dim" id="app-version">0.1.0</span></div>
-            <div class="row center"><button class="quit" id="quit-btn">Quit AgentPet</button></div>
-          </div>
-        </div>
-      </div>
-
       <!-- ================================ PET ================================ -->
-      <div class="page" data-page="pet">
+      <div class="page sel" data-page="pet">
         <div class="group">
           <div class="gcard hero">
             <canvas id="hero-thumb" width="84" height="84"></canvas>
@@ -145,7 +67,7 @@
         <div class="group">
           <div class="ghead"><span id="t-extra">Extra pets on desktop</span></div>
           <div class="gcard pad">
-            <div class="cap" id="t-extra-sub" style="padding: 6px 0">Pure decoration pets that just float and roam. They don't track agents or earn XP.</div>
+            <div class="cap" id="t-extra-sub" style="padding: 6px 0">Pure decoration pets that just float and roam. They don't track tasks or earn XP.</div>
             <div class="extra-label" id="t-extra-pick">Tap a pet to spawn it on desktop</div>
             <div id="extra-grid" class="pet-results"></div>
             <div id="extra-empty" class="cap" style="padding: 8px 0" hidden><span id="t-extra-no">No pets in library yet. Use Browse or Create first.</span></div>
@@ -199,6 +121,50 @@
         </div>
       </div>
 
+      <!-- =============================== BUBBLE ============================== -->
+      <div class="page" data-page="bubble">
+        <div class="group">
+          <div class="ghead" id="t-appearance">Appearance</div>
+          <div class="gcard">
+            <div class="row"><span id="t-theme">Theme</span>
+              <span class="seg" id="theme" data-key="ap_theme" data-default="dark">
+                <button data-v="light" id="o-light">Light</button>
+                <button data-v="dark" id="o-dark">Dark</button>
+                <button data-v="system" id="o-theme-system">System</button>
+              </span></div>
+            <div class="row"><span id="t-fontsize">Font size</span>
+              <span class="seg" id="font-size-seg" data-key="ap_font_size" data-default="12">
+                <button data-v="10">S</button>
+                <button data-v="12">M</button>
+                <button data-v="14">L</button>
+              </span></div>
+            <div class="row"><span id="t-opacity">Opacity</span>
+              <span class="slider-wrap"><input type="range" id="opacity" min="60" max="100" /><span class="val dim" id="opacity-val"></span></span></div>
+            <label class="row"><span class="rt"><span id="t-idle">Show idle message</span>
+              <span class="cap" id="t-idle-sub">The pet's chatter while nothing is happening.</span></span>
+              <input type="checkbox" id="idle" /></label>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="ghead" id="t-style">Style</div>
+          <div class="gcard">
+            <div class="row"><span id="t-separator">Separator</span>
+              <span class="seg" id="bub-sep" data-key="ap_bub_sep" data-default="·">
+                <button data-v="·">·</button>
+                <button data-v="→">→</button>
+                <button data-v="|">|</button>
+                <button data-v=" " id="o-sep-space">space</button>
+              </span></div>
+            <div class="row"><span id="t-dotstyle">State dot</span>
+              <span class="seg" id="bub-dot" data-key="ap_bub_dot" data-default="plain">
+                <button data-v="plain" id="o-dot-plain">Plain dot</button>
+                <button data-v="claude" id="o-dot-claude">Claude style</button>
+              </span></div>
+          </div>
+        </div>
+      </div>
+
       <!-- =============================== CARE ================================ -->
       <div class="page" data-page="care">
         <div class="group">
@@ -226,53 +192,98 @@
             <div class="care-charthead"><span id="t-care-burn">Burn, last 7 days</span><span id="care-burntotal" class="dim"></span></div>
             <div class="care-chart" id="care-chart"></div>
           </div>
-          <div class="ghelp" id="t-care-help">Your pet eats the real tokens your agents burn and the sessions they finish. Feeding earns XP; it levels up through five stages.</div>
+          <div class="ghelp" id="t-care-help">Feeding earns XP; your pet levels up through five stages. Optional agent integrations can feed it tokens and finished sessions automatically.</div>
         </div>
 
       </div>
 
-      <!-- =============================== BUBBLE ============================== -->
-      <div class="page" data-page="bubble">
+      <!-- ============================== GENERAL ============================== -->
+      <div class="page" data-page="general">
         <div class="group">
-          <div class="ghead" id="t-bubmode">Bubble mode</div>
+          <div class="ghead" id="t-lang">Language</div>
           <div class="gcard">
-            <label class="row"><span class="rt"><span id="t-multi">Multi-agent bubble</span>
+            <div class="row"><span id="t-lang2">Language</span>
+              <select id="lang">
+                <option value="en">English</option>
+                <option value="vi">Tiếng Việt</option>
+                <option value="zh">中文</option>
+              </select></div>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="ghead" id="t-startup">Launch</div>
+          <div class="gcard">
+            <label class="row"><span class="rt"><span id="t-autostart">Launch at login</span>
+              <span class="cap" id="t-autostart-sub">AgentPet starts automatically when you sign in.</span></span>
+              <input type="checkbox" id="autostart" /></label>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="ghead" id="t-notif">Notifications</div>
+          <div class="gcard">
+            <label class="row"><span class="rt"><span id="t-notify">Notifications on</span>
+              <span class="cap" id="t-notify-sub">Alerts when something needs your attention.</span></span>
+              <input type="checkbox" id="notify" /></label>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="ghead" id="t-sounds">Sounds</div>
+          <div class="gcard">
+            <div class="sound-block">
+              <label class="row"><span id="t-sound-done">When a task finishes</span><input type="checkbox" id="sound-done" /></label>
+              <div class="row tight sound-sub" data-ev="done">
+                <span class="cap sound-name" id="sound-done-name">Default</span>
+                <span class="sound-btns">
+                  <button class="mini ic-btn" data-act="play" data-ev="done"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 21 12 6 21 6 3"/></svg></button>
+                  <button class="mini" data-act="upload" data-ev="done" id="t-up-done">Upload…</button>
+                  <button class="mini" data-act="reset" data-ev="done" id="t-df-done" style="display:none">Default</button>
+                </span>
+              </div>
+            </div>
+            <div class="sound-block">
+              <label class="row"><span id="t-sound-waiting">When your pet needs you</span><input type="checkbox" id="sound-waiting" /></label>
+              <div class="row tight sound-sub" data-ev="waiting">
+                <span class="cap sound-name" id="sound-waiting-name">Default</span>
+                <span class="sound-btns">
+                  <button class="mini ic-btn" data-act="play" data-ev="waiting"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 21 12 6 21 6 3"/></svg></button>
+                  <button class="mini" data-act="upload" data-ev="waiting" id="t-up-waiting">Upload…</button>
+                  <button class="mini" data-act="reset" data-ev="waiting" id="t-df-waiting" style="display:none">Default</button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="ghead" id="t-app">About</div>
+          <div class="gcard">
+            <div class="row"><span id="t-version">Version</span><span class="dim" id="app-version">0.1.0</span></div>
+            <div class="row center"><button class="quit" id="quit-btn">Quit AgentPet</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =============================== ADVANCED ============================ -->
+      <div class="page" data-page="advanced">
+        <div class="group">
+          <div class="ghead" id="t-agents">Agent integrations</div>
+          <div class="gcard" id="agents"></div>
+          <div class="cap gfoot" id="t-agents-foot">Install a hook so AgentPet can mirror your coding agents in the bubble.</div>
+        </div>
+
+        <div class="group">
+          <div class="ghead" id="t-bubmode">Multi-agent bubble</div>
+          <div class="gcard">
+            <label class="row"><span class="rt"><span id="t-multi">Enable multi-agent bubble</span>
               <span class="cap" id="t-multi-sub">Structured rows with icons, state dots, and activity messages.</span></span>
               <input type="checkbox" id="multi" /></label>
           </div>
         </div>
 
-        <div class="group">
-          <div class="ghead" id="t-appearance">Appearance</div>
-          <div class="gcard">
-            <div class="row"><span id="t-theme">Theme</span>
-              <span class="seg" id="theme" data-key="ap_theme" data-default="dark">
-                <button data-v="light" id="o-light">Light</button>
-                <button data-v="dark" id="o-dark">Dark</button>
-                <button data-v="system" id="o-theme-system">System</button>
-              </span></div>
-            <div class="row"><span id="t-fontsize">Font size</span>
-              <span class="seg" id="font-size-seg" data-key="ap_font_size" data-default="12">
-                <button data-v="10">S</button>
-                <button data-v="12">M</button>
-                <button data-v="14">L</button>
-              </span></div>
-            <div class="row"><span id="t-opacity">Opacity</span>
-              <span class="slider-wrap"><input type="range" id="opacity" min="60" max="100" /><span class="val dim" id="opacity-val"></span></span></div>
-            <label class="row"><span class="rt"><span id="t-idle">Show idle message</span>
-              <span class="cap" id="t-idle-sub">The pet's chatter while no agent is running.</span></span>
-              <input type="checkbox" id="idle" /></label>
-            <label class="row"><span class="rt"><span id="t-reactive">Reactive comments</span>
-              <span class="cap" id="t-reactive-sub">The pet reacts to token usage, streaks, hunger, and busy sessions.</span></span>
-              <input type="checkbox" id="reactive" /></label>
-            <label class="row"><span class="rt"><span id="t-split">Split pets by project</span>
-              <span class="cap" id="t-split-sub">Give a project its own pet window; the rest stay on the main pet.</span></span>
-              <input type="checkbox" id="split" /></label>
-            <div id="split-list" style="display:none"></div>
-          </div>
-        </div>
-
-        <div class="group">
+        <div class="group" id="multi-bubble-config">
           <div class="ghead" id="t-display">Display</div>
           <div class="gcard">
             <div class="row col"><span class="stack-label" id="t-rows">Rows</span>
@@ -301,12 +312,12 @@
           </div>
         </div>
 
-        <div class="group">
+        <div class="group" id="visible-agents-group">
           <div class="ghead" id="t-visible">Visible agents</div>
           <div class="gcard" id="bub-visible"></div>
         </div>
 
-        <div class="group">
+        <div class="group" id="row-content-group">
           <div class="ghead" id="t-rowcontent">Row content</div>
           <div class="gcard pad">
             <div class="cap" id="t-preview-cap" style="margin-bottom:5px">Preview</div>
@@ -323,29 +334,30 @@
         </div>
 
         <div class="group">
+          <div class="ghead" id="t-split">Project pets</div>
+          <div class="gcard">
+            <label class="row"><span class="rt"><span id="t-split-label">Split pets by project</span>
+              <span class="cap" id="t-split-sub">Give a project its own pet window; the rest stay on the main pet.</span></span>
+              <input type="checkbox" id="split" /></label>
+            <div id="split-list" style="display:none"></div>
+          </div>
+        </div>
+
+        <div class="group" id="agent-icons-group">
           <div class="ghead" id="t-agenticons">Agent icons</div>
           <div class="gcard" id="agent-icons"></div>
         </div>
 
-        <div class="group">
-          <div class="ghead" id="t-style">Style</div>
+        <div class="group" id="reactive-group">
+          <div class="ghead" id="t-reactive-head">Reactive comments</div>
           <div class="gcard">
-            <div class="row"><span id="t-separator">Separator</span>
-              <span class="seg" id="bub-sep" data-key="ap_bub_sep" data-default="·">
-                <button data-v="·">·</button>
-                <button data-v="→">→</button>
-                <button data-v="|">|</button>
-                <button data-v=" " id="o-sep-space">space</button>
-              </span></div>
-            <div class="row"><span id="t-dotstyle">State dot</span>
-              <span class="seg" id="bub-dot" data-key="ap_bub_dot" data-default="plain">
-                <button data-v="plain" id="o-dot-plain">Plain dot</button>
-                <button data-v="claude" id="o-dot-claude">Claude style</button>
-              </span></div>
+            <label class="row"><span class="rt"><span id="t-reactive">React to activity</span>
+              <span class="cap" id="t-reactive-sub">The pet reacts to token usage, streaks, hunger, and busy sessions.</span></span>
+              <input type="checkbox" id="reactive" /></label>
           </div>
         </div>
 
-        <div class="group">
+        <div class="group" id="activity-group">
           <div class="ghead" id="t-activity">Activity messages</div>
           <div class="gcard">
             <div class="row"><span id="t-phrases">Vocabulary</span>
@@ -357,10 +369,10 @@
                 <option value="scientist" id="o-ph-scientist">🔬 Scientist</option>
               </select></div>
           </div>
-          <div class="cap gfoot" id="t-vocab-foot">Whimsical phrases shown while agents work, e.g. "Brewing…" or "Compiling…".</div>
+          <div class="cap gfoot" id="t-vocab-foot">Whimsical phrases shown while something is happening, e.g. "Brewing…" or "Compiling…".</div>
         </div>
 
-        <div class="group">
+        <div class="group" id="bubble-messages-group">
           <div class="ghead" id="t-messages">Bubble messages</div>
           <div class="gcard pad">
             <div class="row tight"><span id="t-msg-src">Messages</span>
@@ -377,47 +389,21 @@
           </div>
           <div class="cap gfoot" id="t-msg-foot">Per-agent overrides win over "All agents". A custom line replaces the live/theme text and the real pet honours it.</div>
         </div>
-      </div>
 
-      <!-- =============================== HISTORY ============================= -->
-      <div class="page" data-page="history">
         <div class="group">
           <div class="ghead"><span id="t-history">Session history</span><span id="history-count" class="dim"></span></div>
           <div id="history-list" class="history-list"></div>
           <div id="history-empty" class="ghelp" style="display:none">No finished sessions yet. Run an agent and they'll appear here.</div>
         </div>
-      </div>
 
-      <!-- =============================== ABOUT =============================== -->
-      <div class="page" data-page="about">
-        <div class="group">
-          <div class="gcard about-hero">
-            <svg viewBox="0 0 24 24" fill="currentColor" class="about-paw"><circle cx="5.2" cy="10.2" r="2.1"/><circle cx="9.3" cy="6.4" r="2.2"/><circle cx="14.7" cy="6.4" r="2.2"/><circle cx="18.8" cy="10.2" r="2.1"/><path d="M12 10.5c-2.6 0-5.4 2.5-5.4 5 0 1.6 1.2 2.6 2.7 2.6 1 0 1.8-.4 2.7-.4s1.7.4 2.7.4c1.5 0 2.7-1 2.7-2.6 0-2.5-2.8-5-5.4-5z"/></svg>
-            <div class="about-title">AgentPet</div>
-            <div class="cap" id="t-tagline">A desktop pet that watches your AI coding agents.</div>
-          </div>
-        </div>
         <div class="group">
           <div class="gcard pad btns">
-            <button class="prominent pill" data-url="https://github.com/Imzl-zl/desktop-pet"><span class="ui-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg></span><span id="t-star">Star on GitHub</span></button>
+            <button class="lp-btn" id="demo-toggle"><span class="ui-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.95 2.55L22.5 18.5l-2.55.95L19 22l-.95-2.55L15.5 18.5l2.55-.95z"/></svg></span><span id="t-lp">Live preview</span></button>
           </div>
-          <div class="cap gfoot" id="t-thanks">If AgentPet helps your workflow, a star means a lot. Thank you!</div>
-        </div>
-
-        <div class="group">
-          <div class="gcard">
-            <div class="row"><span id="t-version2">Version</span><span class="dim" id="app-version2">0.1.0</span></div>
-          </div>
+          <div class="cap gfoot" id="t-preview-sub">Preview your pet and bubble settings with live samples.</div>
         </div>
       </div>
     </main>
-
-    <!-- bottom bar: live preview, like the macOS app -->
-    <footer class="bottombar">
-      <button class="lp-btn" id="demo-toggle"><span class="ui-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.95 2.55L22.5 18.5l-2.55.95L19 22l-.95-2.55L15.5 18.5l2.55-.95z"/></svg></span><span id="t-lp">Live preview</span></button>
-      <span class="cap" id="t-preview-sub">Fire webhooks for many agents with your current settings</span>
-      <span class="spacer"></span>
-    </footer>
     </div><!-- /main-col -->
 
     <!-- Live-preview demo panel (the macOS SettingsDemoPanel) -->

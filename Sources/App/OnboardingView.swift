@@ -1,7 +1,8 @@
 import SwiftUI
 import AgentPetCore
 
-/// First-launch welcome: pick a pet and connect an agent in one screen.
+/// First-launch welcome: pick a pet first, then optionally enable notifications
+/// or connect coding agents from the Advanced tab later.
 struct OnboardingView: View {
     @ObservedObject private var model = SettingsModel.shared
     @ObservedObject private var pet = PetController.shared
@@ -20,8 +21,8 @@ struct OnboardingView: View {
             VStack(alignment: .leading, spacing: 22) {
                 header
                 petStep
-                agentStep
                 notificationStep
+                agentStep
                 HStack {
                     Spacer()
                     Button("Get started") { onFinish() }
@@ -59,7 +60,7 @@ struct OnboardingView: View {
                     .overlay(Image(systemName: "pawprint.fill").font(.system(size: 17)).foregroundStyle(.white))
                 Text("Welcome to AgentPet").font(.title2.bold()).foregroundStyle(.white)
             }
-            Text("A desktop pet that watches your AI coding agents. Two quick steps to get going.")
+            Text("A desktop companion that keeps you company while you work. Pick a pet to get started.")
                 .font(.callout).foregroundStyle(.white.opacity(0.7))
         }
     }
@@ -102,11 +103,34 @@ struct OnboardingView: View {
         .themedCard()
     }
 
-    // Step 2: agent
+    // Step 2: notifications (optional)
+    private var notificationStep: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Enable notifications").foregroundStyle(.white)
+                Text("Get alerted when something needs your attention.")
+                    .font(.caption).foregroundStyle(.white.opacity(0.6))
+            }
+            Spacer()
+            switch model.notificationState {
+            case .enabled: Label("On", systemImage: "checkmark.circle.fill").foregroundStyle(.green).font(.caption)
+            case .denied: Button("Open Settings") { model.openSystemNotificationSettings() }
+            case .notDetermined: Button("Enable") { model.enableNotifications() }
+            case .unavailable: Text("—").foregroundStyle(.white.opacity(0.4))
+            }
+        }
+        .themedCard()
+    }
+
+    // Step 3: coding agents (optional, advanced)
     private var agentStep: some View {
         VStack(alignment: .leading, spacing: 12) {
-            stepLabel(2, "Connect an agent")
-            Text("Install a hook so AgentPet can see when an agent works, finishes, or needs you.")
+            HStack(spacing: 8) {
+                stepLabel(3, "Connect coding agents")
+                Text("(optional)")
+                    .font(.caption).foregroundStyle(.white.opacity(0.5))
+            }
+            Text("Install a hook so AgentPet can mirror your coding agents in the bubble. You can always do this later in Advanced settings.")
                 .font(.caption).foregroundStyle(.white.opacity(0.6))
             ForEach(model.agents) { agent in
                 HStack {
@@ -120,25 +144,6 @@ struct OnboardingView: View {
                     }
                     .disabled(model.isInstalled(agent.kind))
                 }
-            }
-        }
-        .themedCard()
-    }
-
-    // Step 3: notifications (optional)
-    private var notificationStep: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 2) {
-                Text("Enable notifications").foregroundStyle(.white)
-                Text("Get alerted when an agent finishes or needs input.")
-                    .font(.caption).foregroundStyle(.white.opacity(0.6))
-            }
-            Spacer()
-            switch model.notificationState {
-            case .enabled: Label("On", systemImage: "checkmark.circle.fill").foregroundStyle(.green).font(.caption)
-            case .denied: Button("Open Settings") { model.openSystemNotificationSettings() }
-            case .notDetermined: Button("Enable") { model.enableNotifications() }
-            case .unavailable: Text("—").foregroundStyle(.white.opacity(0.4))
             }
         }
         .themedCard()

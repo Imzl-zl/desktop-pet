@@ -46,7 +46,7 @@ function initTabs() {
         p.classList.toggle("sel", p.dataset.page === b.dataset.tab);
       });
       if (b.dataset.tab === "care") { renderCare(); renderSync(); }
-      if (b.dataset.tab === "history") renderHistory();
+      if (b.dataset.tab === "advanced") renderHistory();
       if (b.dataset.tab === "pet") document.dispatchEvent(new CustomEvent("ap-pet-tab-shown"));
     };
   });
@@ -1315,7 +1315,8 @@ function applyStatic() {
   set("tab-general", "General");
   set("tab-pet", "Pet");
   set("tab-bubble", "Bubble");
-  set("tab-about", "About");
+  set("tab-care", "Care");
+  set("tab-advanced", "Advanced");
   // general
   set("t-lang", "Language");
   set("t-lang2", "Language");
@@ -1324,16 +1325,16 @@ function applyStatic() {
   set("t-autostart-sub", "AgentPet starts automatically when you sign in.");
   set("t-notif", "Notifications");
   set("t-notify", "Notifications on");
-  set("t-notify-sub", "Alerts when an agent finishes or needs input");
+  set("t-notify-sub", "Alerts when something needs your attention.");
   set("t-sounds", "Sounds");
-  set("t-sound-done", "When an agent finishes");
-  set("t-sound-waiting", "When an agent needs input");
+  set("t-sound-done", "When a task finishes");
+  set("t-sound-waiting", "When your pet needs you");
   set("t-up-done", "Upload…");
   set("t-up-waiting", "Upload…");
   set("t-df-done", "Default");
   set("t-df-waiting", "Default");
   set("t-agents", "Agent integrations");
-  set("t-app", "About");
+  set("t-agents-foot", "Install a hook so AgentPet can mirror your coding agents in the bubble.");
   set("t-version", "Version");
   set("quit-btn", "Quit AgentPet");
   // pet
@@ -1358,7 +1359,7 @@ function applyStatic() {
   set("cr-choose", "Choose image…");
   set("t-size", "Size on screen");
   set("t-extra", "Extra pets on desktop");
-  set("t-extra-sub", "Pure decoration pets that just float and roam. They don't track agents or earn XP.");
+  set("t-extra-sub", "Pure decoration pets that just float and roam. They don't track tasks or earn XP.");
   set("t-extra-pick", "Tap a pet to spawn it on desktop");
   set("t-extra-running", "On desktop");
   set("t-extra-closeall", "Close all");
@@ -1371,6 +1372,16 @@ function applyStatic() {
   set("am-waiting", "Waiting");
   set("am-done", "Done");
   set("am-celebrate", "Celebrate");
+  // care
+  set("t-care-head", "Your companion");
+  set("t-care-help", "Feeding earns XP; your pet levels up through five stages. Optional agent integrations can feed it tokens and finished sessions automatically.");
+  set("t-care-ach", "Achievements");
+  set("t-care-today", "Today");
+  set("t-care-streak-sub", "days fed");
+  set("t-care-lifetime-sub", "tokens eaten");
+  set("t-care-sessions-sub", "completed");
+  set("t-care-cost", "Est. cost (Claude)");
+  set("t-care-burn", "Burn, last 7 days");
   // bubble
   set("t-appearance", "Appearance");
   set("t-theme", "Theme");
@@ -1380,7 +1391,7 @@ function applyStatic() {
   set("o-light", "Light");
   set("o-theme-system", "System");
   set("t-idle", "Show idle message");
-  set("t-idle-sub", "The pet's chatter while no agent is running.");
+  set("t-idle-sub", "The pet's chatter while nothing is happening.");
   set("t-reactive", "Reactive comments");
   set("t-reactive-sub", "The pet reacts to token usage, streaks, hunger, and busy sessions.");
   set("t-split", "Split pets by project");
@@ -1403,7 +1414,7 @@ function applyStatic() {
   set("t-rowcontent", "Row content");
   set("t-presets", "Presets");
   set("t-preview-cap", "Preview");
-  set("t-vocab-foot", "Whimsical phrases shown while agents work, e.g. \"Brewing…\" or \"Compiling…\".");
+  set("t-vocab-foot", "Whimsical phrases shown while something is happening, e.g. \"Brewing…\" or \"Compiling…\".");
   set("t-msg-foot", "Per-agent overrides win over \"All agents\". A custom line replaces the live/theme text and the real pet honours it.");
   set("t-pr-original", "Original");
   set("t-pr-standard", "Standard");
@@ -1440,13 +1451,9 @@ function applyStatic() {
   document.querySelectorAll<HTMLElement>(".msg-label").forEach((el) => {
     if (el.dataset.label) el.textContent = t(el.dataset.label);
   });
-  // about
-  set("t-tagline", "A desktop pet that watches your AI coding agents.");
-  set("t-star", "Star on GitHub");
-  set("t-version2", "Version");
   // bottom bar + demo panel
   set("t-lp", "Live preview");
-  set("t-preview-sub", "Fire webhooks for many agents with your current settings");
+  set("t-preview-sub", "Preview your pet and bubble settings with live samples.");
   set("t-dp-title", "Live preview");
   set("t-dp-quick", "Quick scenarios");
   set("t-dp-active", "Active webhooks");

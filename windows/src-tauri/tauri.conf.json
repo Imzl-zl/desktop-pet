@@ -48,8 +48,8 @@
     ],
     "publisher": "Imzl-zl",
     "homepage": "https://github.com/Imzl-zl/desktop-pet",
-    "shortDescription": "A desktop pet that watches your AI coding agents.",
-    "longDescription": "AgentPet floats a pixel companion on your desktop that reacts in real time to your AI coding agents (Claude Code, Codex, Gemini, Cursor, ...).",
+    "shortDescription": "A desktop companion that keeps you company while you work.",
+    "longDescription": "AgentPet floats a pixel companion on your desktop. Optional coding-agent integrations (Claude Code, Codex, Gemini, Cursor, ...) let it react to your work in real time.",
     "windows": {
       "nsis": {
         "installMode": "currentUser",

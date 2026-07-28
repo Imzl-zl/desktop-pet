@@ -4,6 +4,8 @@
 "General" = "General";
 "Pet" = "Pet";
 "Bubble" = "Bubble";
+"Care" = "Care";
+"Advanced" = "Advanced";
 "About" = "About";
 
 /* General / common */
@@ -42,7 +44,8 @@
 "Font size" = "Font size";
 "Opacity" = "Opacity";
 "Show idle message" = "Show idle message";
-"The pet's chatter while no agent is running." = "The pet's chatter while no agent is running.";
+"The pet's chatter while nothing is running." = "The pet's chatter while nothing is running.";
+"The pet's chatter while no agent is running." = "The pet's chatter while nothing is running.";
 "Display" = "Display";
 "Rows" = "Rows";
 "Sessions" = "Sessions";
@@ -71,10 +74,13 @@
 "Bubble messages" = "Bubble messages";
 "Simple bubble" = "Simple bubble";
 "All agents" = "All agents";
-"Turn on multi-agent bubble above for per-agent rows with icons and activity." = "Turn on multi-agent bubble above for per-agent rows with icons and activity.";
+"Turn on multi-agent bubble above for rows with icons and activity." = "Turn on multi-agent bubble above for rows with icons and activity.";
+"Turn on multi-agent bubble above for per-agent rows with icons and activity." = "Turn on multi-agent bubble above for rows with icons and activity.";
 
 /* About & Pet tab */
-"A desktop pet that watches your AI coding agents." = "A desktop pet that watches your AI coding agents.";
+"A desktop companion that keeps you company while you work." = "A desktop companion that keeps you company while you work.";
+"A desktop pet that keeps you company while you work." = "A desktop companion that keeps you company while you work.";
+"A desktop pet that watches your AI coding agents." = "A desktop companion that keeps you company while you work.";
 "Star on GitHub" = "Star on GitHub";
 "Join the Discord" = "Join the Discord";
 "Buy me a coffee" = "Buy me a coffee";
@@ -157,12 +163,16 @@
 "Enable notifications" = "Enable notifications";
 "Available once installed as AgentPet.app" = "Available once installed as AgentPet.app";
 "Turn on in System Settings to get alerts" = "Turn on in System Settings to get alerts";
-"Alerts when an agent finishes or needs input" = "Alerts when an agent finishes or needs input";
+"Alerts when something needs your attention." = "Alerts when something needs your attention.";
+"Alerts when an agent finishes or needs input" = "Alerts when something needs your attention.";
 "Muted, the toggle turns alerts back on" = "Muted, the toggle turns alerts back on";
-"When an agent finishes" = "When an agent finishes";
-"When an agent needs input" = "When an agent needs input";
+"When a task finishes" = "When a task finishes";
+"When your pet needs you" = "When your pet needs you";
+"When an agent finishes" = "When a task finishes";
+"When an agent needs input" = "When your pet needs you";
 "Per-agent overrides win over \"All agents\". A custom line replaces the live/theme text and the real pet honours it." = "Per-agent overrides win over \"All agents\". A custom line replaces the live/theme text and the real pet honours it.";
-"Whimsical phrases shown while agents work, e.g. \"Brewing…\" or \"Compiling…\"." = "Whimsical phrases shown while agents work, e.g. \"Brewing…\" or \"Compiling…\".";
+"Whimsical phrases shown while something is happening, e.g. \"Brewing…\" or \"Compiling…\"." = "Whimsical phrases shown while something is happening, e.g. \"Brewing…\" or \"Compiling…\".";
+"Whimsical phrases shown while agents work, e.g. \"Brewing…\" or \"Compiling…\"." = "Whimsical phrases shown while something is happening, e.g. \"Brewing…\" or \"Compiling…\".";
 
 /* Pet chat & idle messages */
 "Thinking…" = "Thinking…";
@@ -202,7 +212,8 @@
 "The build is quiet. Too quiet." = "The build is quiet. Too quiet.";
 "Ship something small. Future you is watching." = "Ship something small. Future you is watching.";
 "Your TODOs are pretending not to see us." = "Your TODOs are pretending not to see us.";
-"No agents running. The keyboard has entered standby drama." = "No agents running. The keyboard has entered standby drama.";
+"Nothing running. Time for a little standby drama." = "Nothing running. Time for a little standby drama.";
+"No agents running. The keyboard has entered standby drama." = "Nothing running. Time for a little standby drama.";
 "Turn coffee into code. Carefully." = "Turn coffee into code. Carefully.";
 "Open one file. Intimidate it professionally." = "Open one file. Intimidate it professionally.";
 "The repo is calm. Suspicious, but calm." = "The repo is calm. Suspicious, but calm.";
@@ -216,7 +227,8 @@
 "Language" = "Language";
 
 /* App: onboarding, create-pet, browser, menu */
-"A desktop pet that watches your AI coding agents. Two quick steps to get going." = "A desktop pet that watches your AI coding agents. Two quick steps to get going.";
+"A desktop companion that keeps you company while you work. Pick a pet to get started." = "A desktop companion that keeps you company while you work. Pick a pet to get started.";
+"A desktop pet that watches your AI coding agents. Two quick steps to get going." = "A desktop companion that keeps you company while you work. Pick a pet to get started.";
 "Added" = "Added";
 "Browse pets" = "Browse pets";
 "Cancel" = "Cancel";
@@ -225,9 +237,11 @@
 "Community" = "Community";
 "Create" = "Create";
 "Create pet" = "Create pet";
-"Get alerted when an agent finishes or needs input." = "Get alerted when an agent finishes or needs input.";
+"Get alerted when something needs your attention." = "Get alerted when something needs your attention.";
+"Get alerted when an agent finishes or needs input." = "Get alerted when something needs your attention.";
 "Get started" = "Get started";
-"Install a hook so AgentPet can see when an agent works, finishes, or needs you." = "Install a hook so AgentPet can see when an agent works, finishes, or needs you.";
+"Install a hook so AgentPet can mirror your coding agents in the bubble. You can always do this later in Advanced settings." = "Install a hook so AgentPet can mirror your coding agents in the bubble. You can always do this later in Advanced settings.";
+"Install a hook so AgentPet can see when an agent works, finishes, or needs you." = "Install a hook so AgentPet can mirror your coding agents in the bubble. You can always do this later in Advanced settings.";
 "Loading pets…" = "Loading pets…";
 "Nothing running right now." = "Nothing running right now.";
 "Pet info" = "Pet info";
@@ -237,6 +251,10 @@
 "Spritesheet" = "Spritesheet";
 "Use the same 8×9 transparent spritesheet format as downloaded pets." = "Use the same 8×9 transparent spritesheet format as downloaded pets.";
 "Welcome to AgentPet" = "Welcome to AgentPet";
+"Connect coding agents" = "Connect coding agents";
+"Pick a pet to get started." = "Pick a pet to get started.";
+"Pick your pet" = "Pick your pet";
+"Preview your pet and bubble settings with live samples." = "Preview your pet and bubble settings with live samples.";
 
 /* Codex connection help */
 "Connect Codex" = "Connect Codex";
@@ -253,7 +271,6 @@
 "Installed , needs a one-time trust (tap ?)" = "Installed , needs a one-time trust (tap ?)";
 
 /* Care (tamagotchi) */
-"Care" = "Care";
 "Companion" = "Companion";
 "Hunger" = "Hunger";
 "Today" = "Today";
@@ -270,7 +287,8 @@
 "Starving" = "Starving";
 "Last fed %@" = "Last fed %@";
 "%@ / %@ XP to next level" = "%@ / %@ XP to next level";
-"The pet eats real work: tokens burnt by your agents and finished sessions." = "The pet eats real work: tokens burnt by your agents and finished sessions.";
+"The pet eats real work: tokens burnt by your coding agents and finished sessions." = "The pet eats real work: tokens burnt by your coding agents and finished sessions.";
+"The pet eats real work: tokens burnt by your agents and finished sessions." = "The pet eats real work: tokens burnt by your coding agents and finished sessions.";
 "Tokens eaten" = "Tokens eaten";
 "Full! The daily bowl is empty." = "Full! The daily bowl is empty.";
 "Sessions finished" = "Sessions finished";
@@ -289,7 +307,8 @@
 "Get it" = "Get it";
 "left" = "left";
 "Level up! Lv %d ⭐" = "Level up! Lv %d ⭐";
-"Getting hungry… run an agent?" = "Getting hungry… run an agent?";
+"Getting hungry… do a little work?" = "Getting hungry… do a little work?";
+"Getting hungry… run an agent?" = "Getting hungry… do a little work?";
 "A little snack? One small task?" = "A little snack? One small task?";
 "My tummy is rumbling…" = "My tummy is rumbling…";
 "Feed me some tokens, please." = "Feed me some tokens, please.";
