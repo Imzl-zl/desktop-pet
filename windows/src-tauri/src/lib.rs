@@ -800,6 +800,13 @@ pub fn run() {
                 .and_then(|p| std::fs::read_to_string(p).ok())
                 .map(|s| s.trim() != "0")
                 .unwrap_or(true);
+            // Respect the last hidden state on startup so users who turned off
+            // the main pet don't see it reappear after a relaunch.
+            if !pet_visible {
+                if let Some(win) = app.get_webview_window("pet") {
+                    let _ = win.hide();
+                }
+            }
             let show_pet_i = tauri::menu::CheckMenuItem::with_id(
                 app, "show_pet", p_lbl, true, pet_visible, None::<&str>)?;
             let settings_i = MenuItem::with_id(app, "settings", s_lbl, true, None::<&str>)?;

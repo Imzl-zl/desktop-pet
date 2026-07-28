@@ -435,6 +435,20 @@ function drawThumb(cv: HTMLCanvasElement, url: string) {
   img.src = url;
 }
 
+// Toggle for showing/hiding the main pet window (so users can run only extra decoration pets).
+async function initMainPetVisibility() {
+  const box = document.getElementById("show-main-pet") as HTMLInputElement | null;
+  if (!box) return;
+  try {
+    box.checked = await invoke("get_pet_visible");
+  } catch {
+    box.checked = true;
+  }
+  box.addEventListener("change", () => {
+    invoke("set_pet_visible", { visible: box.checked }).catch(() => {});
+  });
+}
+
 async function initPet() {
   search.addEventListener("input", () => { page = 0; renderPage(); });
   document.getElementById("pet-deselect")?.addEventListener("click", deselectPet);
@@ -1496,6 +1510,8 @@ function applyStatic() {
   set("quit-btn", "Quit AgentPet");
   // pet
   set("t-pet-sub", "Pick the companion that floats on your desktop.");
+  set("t-show-main", "Show main pet");
+  set("t-show-main-sub", "The pet that tracks your agents and earns XP. Uncheck to hide it and use only extra decoration pets.");
   set("t-choose", "Choose pet");
   set("t-lib-empty", "No pets yet. Tap Browse to add one.");
   set("t-browse", "Browse pets…");
@@ -1747,6 +1763,7 @@ initTabs();
 initLang();
 loadAgents();
 initPet();
+initMainPetVisibility();
 initPetControls();
 initBubble();
 initBubbleDisplay();
