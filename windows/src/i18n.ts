@@ -254,6 +254,10 @@ const DICT: Record<Exclude<Lang, "en">, Record<string, string>> = {
     "seconds": "giây",
     "Launch": "Khởi chạy",
     "Notifications on": "Thông báo đang bật",
+    "Motion": "Chuyển động",
+    "Reduce motion": "Giảm chuyển động",
+    "Disable idle animations and visual effects to lower GPU usage.":
+      "Tắt hiệu ứng khi rảnh để giảm tiêu thụ GPU.",
     "AGENTS": "AGENT",
     "No agents running": "Không có agent nào chạy",
     "running": "đang chạy",
@@ -613,6 +617,10 @@ const DICT: Record<Exclude<Lang, "en">, Record<string, string>> = {
     "seconds": "秒",
     "Launch": "启动",
     "Notifications on": "通知已开启",
+    "Motion": "动效",
+    "Reduce motion": "减少动效",
+    "Disable idle animations and visual effects to lower GPU usage.":
+      "禁用空闲动画和视觉效果，以降低 GPU 占用。",
     "AGENTS": "AGENT",
     "No agents running": "没有运行中的 agent",
     "running": "运行中",
@@ -968,6 +976,10 @@ const DICT: Record<Exclude<Lang, "en">, Record<string, string>> = {
     "seconds": "秒",
     "Launch": "啟動",
     "Notifications on": "通知已開啟",
+    "Motion": "動效",
+    "Reduce motion": "減少動效",
+    "Disable idle animations and visual effects to lower GPU usage.":
+      "停用閒置動畫與視覺效果，以降低 GPU 使用率。",
     "AGENTS": "AGENT",
     "No agents running": "沒有執行中的 agent",
     "running": "執行中",

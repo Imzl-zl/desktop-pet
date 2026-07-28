@@ -512,9 +512,7 @@ body.settings {
   gap: 4px;
   padding: 24px 14px 18px;
   border-right: 1px solid var(--hair);
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.04);
 }
 .brand {
   display: flex;
@@ -620,7 +618,6 @@ body.settings {
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-card);
-  backdrop-filter: blur(12px);
 }
 .gcard.pad { padding: 12px 14px; }
 
@@ -1275,3 +1272,28 @@ body.pop {
 .hist-agent { font-size: 10px; text-transform: uppercase; opacity: .6; min-width: 54px; }
 .hist-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .hist-meta { font-size: 11px; white-space: nowrap; }
+
+/* ---- reduced motion / performance mode -----------------------------------
+   Continuous animations on transparent WebView2 windows keep the compositor
+   awake and raise GPU usage. Disable them when the user opts in or when the
+   OS requests reduced motion.
+---------------------------------------------------------------------------- */
+body.reduce-motion #ball,
+body.reduce-motion #pet.bob,
+body.reduce-motion .bubble .brow.waiting .amsg,
+body.reduce-motion .bubble .amsg.shimmer,
+body.reduce-motion .bubble .sdot.plain.spin::after,
+body.reduce-motion .bubble .sdot.claude.spin::after {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #ball,
+  #pet.bob,
+  .bubble .brow.waiting .amsg,
+  .bubble .amsg.shimmer,
+  .bubble .sdot.plain.spin::after,
+  .bubble .sdot.claude.spin::after {
+    animation: none !important;
+  }
+}

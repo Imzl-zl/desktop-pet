@@ -262,6 +262,12 @@ window.addEventListener("keydown", (e) => { if (e.key === "Escape" && !menu.hidd
 window.addEventListener("blur", () => { if (!menu.hidden) hideMenu(); });
 
 // ---- live updates ----------------------------------------------------------
+function applyReduceMotion() {
+  document.body.classList.toggle("reduce-motion", localStorage.getItem("ap_reduce_motion") === "1");
+}
+applyReduceMotion();
+window.addEventListener("storage", (e) => { if (e.key === "ap_reduce_motion") applyReduceMotion(); });
+
 applyLangStrings();
 syncTargetButtons();
 paintPresets();

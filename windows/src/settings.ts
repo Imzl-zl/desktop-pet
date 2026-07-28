@@ -1477,6 +1477,19 @@ async function initAutostart() {
   });
 }
 
+// --------------------------------------------------------------- motion ----
+function initReduceMotion() {
+  const box = document.getElementById("reduce-motion") as HTMLInputElement;
+  const apply = () => {
+    const on = box.checked;
+    localStorage.setItem("ap_reduce_motion", on ? "1" : "0");
+    document.body.classList.toggle("reduce-motion", on);
+  };
+  box.checked = localStorage.getItem("ap_reduce_motion") === "1";
+  box.addEventListener("change", apply);
+  apply();
+}
+
 // ----------------------------------------------------------------- icons ----
 /// Fill every `<span class="ui-ic" data-icon="name">` with the matching SVG.
 function initIcons() {
@@ -1518,6 +1531,9 @@ function applyStatic() {
   set("t-notif", "Notifications");
   set("t-notify", "Notifications on");
   set("t-notify-sub", "Alerts when something needs your attention.");
+  set("t-motion", "Motion");
+  set("t-reduce-motion", "Reduce motion");
+  set("t-reduce-motion-sub", "Disable idle animations and visual effects to lower GPU usage.");
   set("t-sounds", "Sounds");
   set("t-sound-done", "When a task finishes");
   set("t-sound-waiting", "When your pet needs you");
@@ -1801,6 +1817,7 @@ initAnimations();
 initSounds();
 initNotify();
 initAutostart();
+initReduceMotion();
 initSliders();
 initSegs();
 initMisc();

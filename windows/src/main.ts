@@ -764,4 +764,11 @@ new ResizeObserver(reportHitRect).observe(petRoot);
 window.addEventListener("resize", reportHitRect);
 reportHitRect();
 
+// Respect the in-app / OS reduced-motion preference on transparent pet windows.
+function applyReduceMotion() {
+  document.body.classList.toggle("reduce-motion", localStorage.getItem("ap_reduce_motion") === "1");
+}
+applyReduceMotion();
+window.addEventListener("storage", (e) => { if (e.key === "ap_reduce_motion") applyReduceMotion(); });
+
 render();
