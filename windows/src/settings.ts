@@ -3,7 +3,7 @@ import { emit, listen } from "@tauri-apps/api/event";
 import { getVersion } from "@tauri-apps/api/app";
 import { exit } from "@tauri-apps/plugin-process";
 import { enable, disable, isEnabled } from "@tauri-apps/plugin-autostart";
-import { loadCatalog, savedSlug, saveSlug, getLibrary, addToLibrary, removeFromLibrary, petDisplayName, renamePet, type Pet, type LibPet } from "./catalog";
+import { loadCatalog, savedSlug, saveSlug, clearSlug, getLibrary, addToLibrary, removeFromLibrary, petDisplayName, renamePet, type Pet, type LibPet } from "./catalog";
 import { t, getLang, setLang, type Lang } from "./i18n";
 import { agentIconUrl, uiIcon } from "./icons";
 import { LAYOUT_PRESETS, readBubbleConfig, type TokenItem, type BubbleToken } from "./bubble";
@@ -284,7 +284,8 @@ let catalog: Pet[] = [];
 
 function selectedPet(): LibPet | undefined {
   const slug = savedSlug();
-  return getLibrary().find((p) => p.slug === slug) ?? getLibrary()[0];
+  if (!slug) return undefined;
+  return getLibrary().find((p) => p.slug === slug);
 }
 
 async function pick(p: LibPet) {
@@ -298,10 +299,32 @@ async function pick(p: LibPet) {
 
 function showCurrent() {
   const sel = selectedPet();
-  current.textContent = sel ? sel.name : t("No pet selected");
+  const deselectBtn = document.getElementById("pet-deselect") as HTMLButtonElement | null;
+  if (sel) {
+    current.textContent = sel.name;
+    if (deselectBtn) {
+      deselectBtn.textContent = t("Use default pet");
+      deselectBtn.style.display = "";
+    }
+  } else {
+    current.textContent = t("Default pet");
+    if (deselectBtn) deselectBtn.style.display = "none";
+  }
   const hero = document.getElementById("hero-thumb") as HTMLCanvasElement;
+  const ctx = hero.getContext("2d");
+  if (ctx) ctx.clearRect(0, 0, hero.width, hero.height);
   if (sel) drawThumb(hero, sel.url);
   loadHeroDescription(sel);
+}
+
+/// Clear the user's explicit pet choice and fall back to the catalog default.
+function deselectPet() {
+  clearSlug();
+  localStorage.removeItem("ap_pet_url");
+  localStorage.removeItem("ap_pet_custom");
+  emit("set-pet", { slug: null, url: null });
+  showCurrent();
+  renderPage();
 }
 
 // The pet's own description (from its pet.json on the CDN), like the macOS
@@ -359,8 +382,13 @@ function renderPage() {
       ev.stopPropagation();
       removeFromLibrary(p.slug);
       if (p.slug === savedSlug()) {
-        const next = getLibrary()[0];
-        if (next) void pick(next);
+        // Removing the active pet clears the explicit choice so the main window
+        // falls back to the catalog default instead of silently switching to
+        // whatever happens to be library[0].
+        clearSlug();
+        localStorage.removeItem("ap_pet_url");
+        localStorage.removeItem("ap_pet_custom");
+        emit("set-pet", { slug: null, url: null });
       }
       showCurrent();
       renderPage();
@@ -409,6 +437,7 @@ function drawThumb(cv: HTMLCanvasElement, url: string) {
 
 async function initPet() {
   search.addEventListener("input", () => { page = 0; renderPage(); });
+  document.getElementById("pet-deselect")?.addEventListener("click", deselectPet);
   renderPage();
   showCurrent();
   initBrowse();
@@ -426,7 +455,10 @@ async function initPet() {
     const c = catalog.find((p) => p.slug === slug) ?? catalog[Math.floor(catalog.length / 2)];
     if (c) {
       addToLibrary({ slug: c.slug, name: c.name, url: c.spritesheetUrl, petJsonUrl: c.petJsonUrl });
-      if (!localStorage.getItem("ap_pet_url")) localStorage.setItem("ap_pet_url", c.spritesheetUrl);
+      // Keep the three selection stores in sync so the Settings hero, the main
+      // window, and the per-project fallback all agree on the default pet.
+      saveSlug(c.slug);
+      localStorage.setItem("ap_pet_url", c.spritesheetUrl);
     }
   }
   renderPage();

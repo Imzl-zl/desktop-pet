@@ -4,7 +4,7 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import { Pet } from "./pet";
 import { SessionStore, aggregateMood, basename, type AgentEventPayload } from "./state";
 import { BubbleRenderer } from "./bubble";
-import { loadCatalog, savedSlug, saveSlug, getLibrary } from "./catalog";
+import { loadCatalog, savedSlug, saveSlug, getLibrary, libraryUrlForSlug } from "./catalog";
 import { t, setLang, type Lang } from "./i18n";
 import { bubbleLines, PET_CHAT } from "./activity";
 import * as care from "./care";
@@ -164,9 +164,12 @@ function chime(event: "done" | "waiting") {
     if (url) { pet.load(url); return; }
   }
   // Library selection (Browse/Create) wins; legacy ap_pet_custom still honoured.
-  const url = localStorage.getItem("ap_pet_custom") || localStorage.getItem("ap_pet_url");
-  if (url) { pet.load(url); return; }
-  // First run: no selection yet , pick a starter from the catalog.
+  const customUrl = localStorage.getItem("ap_pet_custom");
+  if (customUrl) { pet.load(customUrl); return; }
+  const explicitUrl = localStorage.getItem("ap_pet_url") || libraryUrlForSlug(savedSlug());
+  if (explicitUrl) { pet.load(explicitUrl); return; }
+  // First run / user cleared selection: pick a starter from the catalog and
+  // persist it so Settings shows the same default instead of a blank choice.
   for (;;) {
     const pets = await loadCatalog();
     if (pets.length) {
@@ -479,10 +482,29 @@ listen("sessions-request", () => {
   for (const s of store.snapshot()) emit("session-snapshot", s);
 });
 // Pet changed from the Settings window.
-listen<{ slug: string; url: string }>("set-pet", (e) => {
-  pet.load(e.payload.url);
-  saveSlug(e.payload.slug);
-  localStorage.setItem("ap_pet_url", e.payload.url);
+listen<{ slug: string | null; url: string | null }>("set-pet", async (e) => {
+  if (e.payload.url) {
+    pet.load(e.payload.url);
+    if (e.payload.slug) saveSlug(e.payload.slug);
+    localStorage.setItem("ap_pet_url", e.payload.url);
+    return;
+  }
+  // User cleared the explicit choice: reload the catalog default so the window
+  // never ends up with no sprite.
+  localStorage.removeItem("ap_pet_url");
+  localStorage.removeItem("ap_pet_custom");
+  for (;;) {
+    const pets = await loadCatalog();
+    if (pets.length) {
+      const slug = savedSlug();
+      const chosen = pets.find((p) => p.slug === slug) ?? pets[Math.floor(pets.length / 2)];
+      saveSlug(chosen.slug);
+      localStorage.setItem("ap_pet_url", chosen.spritesheetUrl);
+      pet.load(chosen.spritesheetUrl);
+      return;
+    }
+    await new Promise((r) => setTimeout(r, 15000));
+  }
 });
 } // end if (!IS_EXTRA)
 // Language changed from Settings , re-render the bubble in the new language.

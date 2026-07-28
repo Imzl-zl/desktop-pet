@@ -34,6 +34,9 @@ export function savedSlug(): string | null {
 export function saveSlug(slug: string) {
   try { localStorage.setItem(KEY, slug); } catch {}
 }
+export function clearSlug() {
+  try { localStorage.removeItem(KEY); } catch {}
+}
 
 // ---- Installed-pet library (the macOS ImagePetStore equivalent) -------------
 // Pets the user "downloaded" (Get) or created. The Pet tab pager shows ONLY
@@ -54,6 +57,11 @@ export function getLibrary(): LibPet[] {
     const v = JSON.parse(localStorage.getItem(LIB_KEY) || "[]");
     return Array.isArray(v) ? v : [];
   } catch { return []; }
+}
+
+export function libraryUrlForSlug(slug: string | null): string | null {
+  if (!slug) return null;
+  return getLibrary().find((p) => p.slug === slug)?.url || null;
 }
 
 export function saveLibrary(lib: LibPet[]) {
