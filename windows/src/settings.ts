@@ -1156,9 +1156,15 @@ function initAgentIcons() {
 
 // ------------------------------------------------------------ animations ----
 // The macOS AnimationPicker: a segmented mood selector over a grid of clip
-// thumbnails sliced from the current pet's sheet. Hover = animated preview,
-// click = bind that clip to the selected mood (ap_bind_<mood>).
+// thumbnails sliced from the current pet's sheet. Hover = animated preview.
+// Non-idle moods use single-select binding (ap_bind_<mood>). The idle mood
+// uses multi-select: the checked clips form a playlist cycled while idle.
 const MOOD_DEFAULT_ROW: Record<string, number> = { idle: 0, working: 7, waiting: 6, done: 3, celebrate: 4 };
+
+const IDLE_CLIPS_KEY = "ap_idle_clips";
+const IDLE_MODE_KEY = "ap_idle_mode";
+const IDLE_INTERVAL_KEY = "ap_idle_interval";
+const DEFAULT_IDLE_INTERVAL = 5;
 
 function initAnimations() {
   const grid = document.getElementById("anim-grid")!;
@@ -1168,9 +1174,32 @@ function initAnimations() {
   let clips: Rect[][] = [];
   let hoverTimer: number | null = null;
 
+  // Container for idle-only controls (mode + interval); injected below the grid.
+  const idleWrap = document.createElement("div");
+  idleWrap.className = "idle-playlist-wrap";
+  grid.parentElement!.appendChild(idleWrap);
+
   const boundClip = (m: string) => {
     const v = parseInt(localStorage.getItem(`ap_bind_${m}`) ?? "", 10);
     return Number.isFinite(v) && v >= 0 ? Math.min(v, Math.max(0, clips.length - 1)) : Math.min(MOOD_DEFAULT_ROW[m] ?? 0, Math.max(0, clips.length - 1));
+  };
+
+  const readIdleClips = (): number[] => {
+    try {
+      const v = JSON.parse(localStorage.getItem(IDLE_CLIPS_KEY) || "[]");
+      if (Array.isArray(v) && v.length) return v.filter((x) => Number.isFinite(x) && x >= 0).map((x) => Number(x));
+    } catch {}
+    return clips.length ? [boundClip("idle")] : [];
+  };
+  const saveIdleClips = (vals: number[]) => {
+    const clean = vals.filter((x) => Number.isFinite(x) && x >= 0).map((x) => Number(x));
+    localStorage.setItem(IDLE_CLIPS_KEY, JSON.stringify(clean));
+    emit("bubble-changed", null);
+  };
+  const readIdleMode = () => localStorage.getItem(IDLE_MODE_KEY) || "random";
+  const readIdleInterval = () => {
+    const n = Number.parseFloat(localStorage.getItem(IDLE_INTERVAL_KEY) ?? "");
+    return Number.isFinite(n) && n >= 1 ? n : DEFAULT_IDLE_INTERVAL;
   };
 
   const drawFrame = (cv: HTMLCanvasElement, clip: Rect[], frame: number) => {
@@ -1187,11 +1216,16 @@ function initAnimations() {
 
   const paint = () => {
     grid.innerHTML = "";
-    if (!clips.length) return;
-    const current = boundClip(mood);
+    if (!clips.length) { idleWrap.style.display = "none"; return; }
+
+    const isIdle = mood === "idle";
+    const idleSelected = new Set(readIdleClips());
+    const currentBinding = boundClip(mood);
+
     clips.forEach((clip, i) => {
       const cell = document.createElement("button");
-      cell.className = "anim-cell" + (i === current ? " sel" : "");
+      const selected = isIdle ? idleSelected.has(i) : i === currentBinding;
+      cell.className = "anim-cell" + (selected ? " sel" : "");
       const cv = document.createElement("canvas");
       cv.width = 54; cv.height = 44;
       drawFrame(cv, clip, 0);
@@ -1201,7 +1235,15 @@ function initAnimations() {
       cell.appendChild(cv);
       cell.appendChild(label);
       cell.onclick = () => {
-        localStorage.setItem(`ap_bind_${mood}`, String(i));
+        if (isIdle) {
+          // Multi-select playlist; never leave it empty.
+          if (idleSelected.has(i) && idleSelected.size <= 1) return;
+          if (idleSelected.has(i)) idleSelected.delete(i);
+          else idleSelected.add(i);
+          saveIdleClips(Array.from(idleSelected).sort((a, b) => a - b));
+        } else {
+          localStorage.setItem(`ap_bind_${mood}`, String(i));
+        }
         emit("bubble-changed", null);
         paint();
       };
@@ -1218,6 +1260,88 @@ function initAnimations() {
       };
       grid.appendChild(cell);
     });
+    paintIdleControls();
+  };
+
+  const paintIdleControls = () => {
+    idleWrap.innerHTML = "";
+    idleWrap.style.display = mood === "idle" && clips.length ? "block" : "none";
+    if (mood !== "idle" || !clips.length) return;
+
+    const title = document.createElement("div");
+    title.className = "idle-title";
+    title.textContent = t("Idle animations");
+    idleWrap.appendChild(title);
+
+    const note = document.createElement("div");
+    note.className = "cap";
+    note.style.cssText = "margin: 0 0 8px; color: rgba(255,255,255,0.55);";
+    note.textContent = t("Pick clips to cycle while idle.");
+    idleWrap.appendChild(note);
+
+    const toolbar = document.createElement("div");
+    toolbar.className = "idle-toolbar";
+
+    const allBtn = document.createElement("button");
+    allBtn.className = "link";
+    allBtn.textContent = t("Select all");
+    allBtn.onclick = () => { saveIdleClips(clips.map((_, i) => i)); paint(); };
+
+    const clearBtn = document.createElement("button");
+    clearBtn.className = "link";
+    clearBtn.textContent = t("Clear");
+    clearBtn.onclick = () => { saveIdleClips([boundClip("idle")]); paint(); };
+
+    toolbar.appendChild(allBtn);
+    toolbar.appendChild(clearBtn);
+    idleWrap.appendChild(toolbar);
+
+    const modeRow = document.createElement("div");
+    modeRow.className = "idle-mode-row";
+    const modeLabel = document.createElement("span");
+    modeLabel.className = "cap";
+    modeLabel.textContent = t("Mode");
+    modeRow.appendChild(modeLabel);
+
+    const modeSeg = document.createElement("span");
+    modeSeg.className = "seg";
+    for (const [v, label] of [["random", t("Random")], ["sequential", t("Sequential")]] as const) {
+      const b = document.createElement("button");
+      b.textContent = label;
+      b.classList.toggle("sel", readIdleMode() === v);
+      b.onclick = () => {
+        localStorage.setItem(IDLE_MODE_KEY, v);
+        paintIdleControls();
+      };
+      modeSeg.appendChild(b);
+    }
+    modeRow.appendChild(modeSeg);
+    idleWrap.appendChild(modeRow);
+
+    const intRow = document.createElement("div");
+    intRow.className = "idle-interval-row";
+    const intLabel = document.createElement("span");
+    intLabel.className = "cap";
+    intLabel.textContent = t("Interval");
+    intRow.appendChild(intLabel);
+
+    const intInput = document.createElement("input");
+    intInput.type = "number";
+    intInput.min = "1";
+    intInput.step = "1";
+    intInput.value = String(readIdleInterval());
+    intInput.onchange = () => {
+      const n = Number.parseFloat(intInput.value);
+      localStorage.setItem(IDLE_INTERVAL_KEY, String(Number.isFinite(n) && n >= 1 ? n : DEFAULT_IDLE_INTERVAL));
+      emit("bubble-changed", null);
+    };
+    intRow.appendChild(intInput);
+
+    const intUnit = document.createElement("span");
+    intUnit.className = "cap";
+    intUnit.textContent = t("seconds");
+    intRow.appendChild(intUnit);
+    idleWrap.appendChild(intRow);
   };
 
   moodSeg.querySelectorAll<HTMLButtonElement>("button").forEach((b) => {

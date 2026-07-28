@@ -32,6 +32,35 @@ const STATE_FPS: Record<string, number> = {
 
 export interface Rect { x: number; y: number; w: number; h: number }
 
+// ---- Idle animation playlist (for agent-less / decoration-only use) --------
+// When the pet sits in the "idle" mood with no agent sessions, cycle through
+// a user-configured set of clips instead of looping one action forever.
+
+const IDLE_CLIPS_KEY = "ap_idle_clips";
+const IDLE_MODE_KEY = "ap_idle_mode";
+const IDLE_INTERVAL_KEY = "ap_idle_interval";
+const DEFAULT_IDLE_INTERVAL_S = 5;
+
+function readIdleClips(): number[] | null {
+  try {
+    const raw = localStorage.getItem(IDLE_CLIPS_KEY);
+    if (!raw) return null;
+    const v = JSON.parse(raw);
+    if (Array.isArray(v) && v.length) {
+      return v.filter((x) => Number.isFinite(x) && x >= 0).map((x) => Number(x));
+    }
+  } catch {}
+  return null;
+}
+
+function readIdleIntervalMs(): number {
+  try {
+    const n = Number.parseFloat(localStorage.getItem(IDLE_INTERVAL_KEY) ?? "");
+    if (Number.isFinite(n) && n >= 1) return Math.round(n * 1000);
+  } catch {}
+  return DEFAULT_IDLE_INTERVAL_S * 1000;
+}
+
 /// Contiguous runs of `true` in an occupancy array → [start, end) pairs.
 function segments(occ: Uint8Array): Array<[number, number]> {
   const out: Array<[number, number]> = [];
@@ -89,6 +118,13 @@ export class Pet {
   private frame = 0;
   private row = 0;
   private overrideRow: number | null = null;
+  /// Idle-playlist row. Separate from overrideRow so roaming sleep overrides
+  /// can still take precedence, and the playlist resumes cleanly after wake.
+  private idleRow: number | null = null;
+  private idleTimer: number | null = null;
+  private idleIntervalMs = 0;
+  private idleClips: number[] = [];
+  private idleIndex = 0;
   private lastDrawnRow = 0;
   private lastTick = 0;
   private fps = 3;
@@ -169,6 +205,45 @@ export class Pet {
     const bound = parseInt(localStorage.getItem(`ap_bind_${state}`) ?? "", 10);
     const row = Number.isFinite(bound) && bound >= 0 ? bound : (STATE_ROW[state] ?? 0);
     if (row !== this.row) { this.row = row; }
+
+    if (state === "idle") this.startIdleCycling();
+    else this.stopIdleCycling();
+  }
+
+  private startIdleCycling() {
+    const clips = readIdleClips();
+    const interval = readIdleIntervalMs();
+    if (!clips) { this.stopIdleCycling(); return; }
+    // Avoid restarting if the playlist is already running with the same clips
+    // and interval. This matters because setState("idle") is called every 500ms.
+    if (this.idleTimer && interval === this.idleIntervalMs && JSON.stringify(clips) === JSON.stringify(this.idleClips)) return;
+    this.stopIdleCycling();
+    this.idleClips = clips;
+    this.idleIntervalMs = interval;
+    this.idleIndex = 0;
+    this.idleRow = clips[0];
+    this.frame = 0;
+    this.idleTimer = window.setInterval(() => this.advanceIdleClip(), interval);
+  }
+
+  private advanceIdleClip() {
+    if (!this.idleClips.length) return;
+    const mode = localStorage.getItem(IDLE_MODE_KEY) ?? "random";
+    if (mode === "random") {
+      this.idleIndex = Math.floor(Math.random() * this.idleClips.length);
+    } else {
+      this.idleIndex = (this.idleIndex + 1) % this.idleClips.length;
+    }
+    this.idleRow = this.idleClips[this.idleIndex];
+    this.frame = 0;
+  }
+
+  private stopIdleCycling() {
+    if (this.idleTimer) { clearInterval(this.idleTimer); this.idleTimer = null; }
+    this.idleIntervalMs = 0;
+    this.idleClips = [];
+    this.idleIndex = 0;
+    this.idleRow = null;
   }
 
   /// Override the spritesheet row while roaming. setState still updates the
@@ -202,7 +277,7 @@ export class Pet {
     const { width: W, height: H } = this.canvas;
     this.ctx.clearRect(0, 0, W, H);
 
-    const activeRow = this.overrideRow ?? this.row;
+    const activeRow = this.overrideRow ?? this.idleRow ?? this.row;
     if (activeRow !== this.lastDrawnRow) { this.lastDrawnRow = activeRow; this.frame = 0; }
 
     let r: Rect;
