@@ -1498,6 +1498,17 @@ function applyStatic() {
   set("tab-bubble", "Bubble");
   set("tab-care", "Care");
   set("tab-advanced", "Advanced");
+  // page titles / subtitles
+  set("t-pet-title", "Your companion");
+  set("t-pet-subtitle", "Choose, dress up, and animate your desktop pet.");
+  set("t-bubble-title", "Bubble");
+  set("t-bubble-subtitle", "Appearance, style, and quick messages.");
+  set("t-care-title", "Care");
+  set("t-care-subtitle", "Feed, level up, and check in on your companion.");
+  set("t-general-title", "General");
+  set("t-general-subtitle", "Language, launch, notifications, and app info.");
+  set("t-advanced-title", "Advanced");
+  set("t-advanced-subtitle", "Integrations, multi-agent bubble, and history.");
   // general
   set("t-lang", "Language");
   set("t-lang2", "Language");
@@ -1561,9 +1572,12 @@ function applyStatic() {
   set("t-care-help", "Feeding earns XP; your pet levels up through five stages. Optional agent integrations can feed it tokens and finished sessions automatically.");
   set("t-care-ach", "Achievements");
   set("t-care-today", "Today");
-  set("t-care-streak-sub", "days fed");
-  set("t-care-lifetime-sub", "tokens eaten");
-  set("t-care-sessions-sub", "completed");
+  set("t-care-streak", "Streak");
+  set("t-care-lifetime", "Lifetime");
+  set("t-care-sessions", "Sessions");
+  set("care-streak-sub", "days fed");
+  set("care-lifetime-sub", "tokens eaten");
+  set("care-sessions-sub", "completed");
   set("t-care-cost", "Est. cost (Claude)");
   set("t-care-burn", "Burn, last 7 days");
   // bubble
@@ -1576,9 +1590,11 @@ function applyStatic() {
   set("o-theme-system", "System");
   set("t-idle", "Show idle message");
   set("t-idle-sub", "The pet's chatter while nothing is happening.");
-  set("t-reactive", "Reactive comments");
+  set("t-reactive-head", "Reactive comments");
+  set("t-reactive", "React to activity");
   set("t-reactive-sub", "The pet reacts to token usage, streaks, hunger, and busy sessions.");
-  set("t-split", "Split pets by project");
+  set("t-split", "Project pets");
+  set("t-split-label", "Split pets by project");
   set("t-split-sub", "Give a project its own pet window; the rest stay on the main pet.");
   set("t-display", "Display");
   set("t-rows", "Rows");
@@ -1659,9 +1675,10 @@ function applyStatic() {
   set("dp-finish", "Finish all");
   set("dp-clear", "Clear all");
   set("dp-empty", "No webhooks yet. Add one from the right →");
-  set("t-bubmode", "Bubble mode");
-  set("t-multi", "Multi-agent bubble");
+  set("t-bubmode", "Multi-agent bubble");
+  set("t-multi", "Enable multi-agent bubble");
   set("t-multi-sub", "Structured rows with icons, state dots, and activity messages.");
+  set("t-history", "Session history");
   set("t-fontsize", "Font size");
   search.placeholder = t("Search your pets");
   (document.getElementById("bw-search") as HTMLInputElement).placeholder = t("Search pets");

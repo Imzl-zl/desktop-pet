@@ -287,6 +287,85 @@ const DICT: Record<Exclude<Lang, "en">, Record<string, string>> = {
     "Type a bubble message…": "Nhập câu bong bóng…",
     "Left-click: bubble · Right-click: settings · Drag to move":
       "Trái: bong bóng · Phải: cài đặt · Kéo để di chuyển",
+    // ---- refactor: page titles / subtitles ----
+    "Your companion": "Người bạn đồng hành",
+    "Choose, dress up, and animate your desktop pet.":
+      "Chọn, trang phục và tạo hoạt ảnh cho pet desktop.",
+    "Appearance, style, and quick messages.":
+      "Giao diện, kiểu dáng và tin nhắn nhanh.",
+    "Feed, level up, and check in on your companion.":
+      "Cho ăn, lên cấp và xem tình trạng pet.",
+    "Language, launch, notifications, and app info.":
+      "Ngôn ngữ, khởi động, thông báo và thông tin ứng dụng.",
+    "Integrations, multi-agent bubble, and history.":
+      "Tích hợp, bubble đa agent và lịch sử.",
+    // ---- refactor: new section headers / labels ----
+    "Project pets": "Pet theo dự án",
+    "Reactive comments": "Phản ứng hoạt động",
+    "Session history": "Lịch sử phiên",
+    "React to activity": "Phản ứng theo hoạt động",
+    "The pet reacts to token usage, streaks, hunger, and busy sessions.":
+      "Pet phản ứng với token dùng, chuỗi ngày, độ đói và phiên đang chạy.",
+    "Split pets by project": "Tách pet theo dự án",
+    "Give a project its own pet window; the rest stay on the main pet.":
+      "Cấp cho một dự án cửa sổ pet riêng; phần còn lại giữ ở pet chính.",
+    "Enable multi-agent bubble": "Bật bubble đa agent",
+    "Streak": "Chuỗi",
+    "Lifetime": "Tổng cộng",
+    "Achievements": "Thành tựu",
+    "Est. cost (Claude)": "Chi phí ước tính (Claude)",
+    "Burn, last 7 days": "Tiêu hao, 7 ngày qua",
+    "Agent": "Agent",
+    "Preview": "Xem trước",
+    "Engineer": "Kỹ sư",
+    "No finished sessions yet. Run an agent and they'll appear here.":
+      "Chưa có phiên nào hoàn thành. Chạy agent và chúng sẽ hiển thị ở đây.",
+    "Per-agent overrides win over \"All agents\". A custom line replaces the live/theme text and the real pet honours it.":
+      "Ghi đè theo agent ưu tiên hơn \"Tất cả agent\". Dòng tùy chỉnh thay thế văn bản trực tiếp/chủ đề và pet thực tế sẽ tuân theo.",
+    "One message per line; a random one is shown.":
+      "Mỗi dòng một câu; một câu ngẫu nhiên được hiển thị.",
+    "days fed": "ngày cho ăn",
+    "tokens eaten": "token đã ăn",
+    "completed": "đã xong",
+    // ---- pre-existing: care stages / hunger / achievements ----
+    "Hatchling": "Mới nở",
+    "Companion": "Bạn đồng hành",
+    "Scout": "Do thám",
+    "Hero": "Anh hùng",
+    "Legend": "Huyền thoại",
+    "full": "no",
+    "satisfied": "hài lòng",
+    "peckish": "hơi đói",
+    "hungry": "đói",
+    "starving": "rất đói",
+    "Lv": "Lv",
+    "First Meal": "Bữa đầu",
+    "100 Sessions": "100 phiên",
+    "500 Sessions": "500 phiên",
+    "1M Tokens": "1M token",
+    "10M Tokens": "10M token",
+    "50M Tokens": "50M token",
+    "Level 5": "Cấp 5",
+    "Level 10": "Cấp 10",
+    "Level 20": "Cấp 20",
+    "Level 35": "Cấp 35",
+    "7-Day Streak": "Chuỗi 7 ngày",
+    "14-Day Streak": "Chuỗi 14 ngày",
+    "30-Day Streak": "Chuỗi 30 ngày",
+    "Night Owl": "Cú đêm",
+    "sessions": "phiên",
+    // ---- misc: sync / care / split ----
+    "tokens to next level": "token đến cấp tiếp theo",
+    "Connected as": "Đã kết nối với tư cách",
+    "Connected to your profile": "Đã kết nối đến profile của bạn",
+    "Restoring…": "Đang khôi phục…",
+    "Restored": "Đã khôi phục",
+    "Already up to date.": "Đã đồng bộ mới nhất.",
+    "Code expired, get a new one.": "Mã hết hạn, hãy lấy mã mới.",
+    "Could not connect.": "Không thể kết nối.",
+    "Connecting…": "Đang kết nối…",
+    "Merged": "Gộp chung",
+    "No projects yet. Use an agent in a project first.": "Chưa có dự án. Hãy dùng agent trong một dự án trước.",
   },
   zh: {
     "Today": "今天",
@@ -567,6 +646,85 @@ const DICT: Record<Exclude<Lang, "en">, Record<string, string>> = {
     "Type a bubble message…": "输入气泡文字…",
     "Left-click: bubble · Right-click: settings · Drag to move":
       "左键：气泡 · 右键：设置 · 拖动移动",
+    // ---- refactor: page titles / subtitles ----
+    "Your companion": "你的伙伴",
+    "Choose, dress up, and animate your desktop pet.":
+      "选择、装扮并设置桌面宠物的动画。",
+    "Appearance, style, and quick messages.":
+      "外观、样式和快捷消息。",
+    "Feed, level up, and check in on your companion.":
+      "喂食、升级并查看伙伴状态。",
+    "Language, launch, notifications, and app info.":
+      "语言、启动、通知和应用信息。",
+    "Integrations, multi-agent bubble, and history.":
+      "集成、多 agent 气泡和历史记录。",
+    // ---- refactor: new section headers / labels ----
+    "Project pets": "项目宠物",
+    "Reactive comments": "反应评论",
+    "Session history": "会话历史",
+    "React to activity": "对活动做出反应",
+    "The pet reacts to token usage, streaks, hunger, and busy sessions.":
+      "宠物会对 token 用量、连续天数、饥饿状态和繁忙会话做出反应。",
+    "Split pets by project": "按项目拆分宠物",
+    "Give a project its own pet window; the rest stay on the main pet.":
+      "为某个项目分配独立的宠物窗口；其余仍由主宠物显示。",
+    "Enable multi-agent bubble": "启用多 agent 气泡",
+    "Streak": "连续天数",
+    "Lifetime": "累计",
+    "Achievements": "成就",
+    "Est. cost (Claude)": "估算花费 (Claude)",
+    "Burn, last 7 days": "最近 7 天消耗",
+    "Agent": "Agent",
+    "Preview": "预览",
+    "Engineer": "工程师",
+    "No finished sessions yet. Run an agent and they'll appear here.":
+      "还没有已完成的会话。运行一个 agent 后会显示在这里。",
+    "Per-agent overrides win over \"All agents\". A custom line replaces the live/theme text and the real pet honours it.":
+      "针对单个 agent 的覆盖优先于\"所有 agent\"。自定义内容会替换实时/主题文本，真实宠物会遵循此设置。",
+    "One message per line; a random one is shown.":
+      "每行一条消息；将随机显示一条。",
+    "days fed": "天喂食",
+    "tokens eaten": "tokens 已消耗",
+    "completed": "已完成",
+    // ---- pre-existing: care stages / hunger / achievements ----
+    "Hatchling": "幼崽",
+    "Companion": "伙伴",
+    "Scout": "侦察兵",
+    "Hero": "英雄",
+    "Legend": "传奇",
+    "full": "饱",
+    "satisfied": "满足",
+    "peckish": "微饿",
+    "hungry": "饿",
+    "starving": "很饿",
+    "Lv": "等级",
+    "First Meal": "第一顿",
+    "100 Sessions": "100 个会话",
+    "500 Sessions": "500 个会话",
+    "1M Tokens": "1M Tokens",
+    "10M Tokens": "10M Tokens",
+    "50M Tokens": "50M Tokens",
+    "Level 5": "5 级",
+    "Level 10": "10 级",
+    "Level 20": "20 级",
+    "Level 35": "35 级",
+    "7-Day Streak": "连续 7 天",
+    "14-Day Streak": "连续 14 天",
+    "30-Day Streak": "连续 30 天",
+    "Night Owl": "夜猫子",
+    "sessions": "个会话",
+    // ---- misc: sync / care / split ----
+    "tokens to next level": "升到下一级所需 token",
+    "Connected as": "已连接为",
+    "Connected to your profile": "已连接到你的档案",
+    "Restoring…": "正在恢复…",
+    "Restored": "已恢复",
+    "Already up to date.": "已是最新。",
+    "Code expired, get a new one.": "验证码过期，请重新获取。",
+    "Could not connect.": "无法连接。",
+    "Connecting…": "连接中…",
+    "Merged": "合并",
+    "No projects yet. Use an agent in a project first.": "还没有项目。请先在某个项目中使用 agent。",
   },
     "zh-TW": {
     "Today": "今天",
@@ -843,6 +1001,85 @@ const DICT: Record<Exclude<Lang, "en">, Record<string, string>> = {
     "Type a bubble message…": "輸入氣泡文字…",
     "Left-click: bubble · Right-click: settings · Drag to move":
       "左鍵：氣泡 · 右鍵：設定 · 拖動移動",
+    // ---- refactor: page titles / subtitles ----
+    "Your companion": "你的夥伴",
+    "Choose, dress up, and animate your desktop pet.":
+      "選擇、裝扮並設定桌面寵物的動畫。",
+    "Appearance, style, and quick messages.":
+      "外觀、樣式和快捷訊息。",
+    "Feed, level up, and check in on your companion.":
+      "餵食、升級並查看夥伴狀態。",
+    "Language, launch, notifications, and app info.":
+      "語言、啟動、通知和應用資訊。",
+    "Integrations, multi-agent bubble, and history.":
+      "整合、多 agent 氣泡和歷史記錄。",
+    // ---- refactor: new section headers / labels ----
+    "Project pets": "專案寵物",
+    "Reactive comments": "反應評論",
+    "Session history": "會話歷史",
+    "React to activity": "對活動做出反應",
+    "The pet reacts to token usage, streaks, hunger, and busy sessions.":
+      "寵物會對 token 用量、連續天數、飢餓狀態和繁忙會話做出反應。",
+    "Split pets by project": "按專案拆分寵物",
+    "Give a project its own pet window; the rest stay on the main pet.":
+      "為某個專案分配獨立的寵物視窗；其餘仍由主寵物顯示。",
+    "Enable multi-agent bubble": "啟用多 agent 氣泡",
+    "Streak": "連續天數",
+    "Lifetime": "累計",
+    "Achievements": "成就",
+    "Est. cost (Claude)": "估算花費 (Claude)",
+    "Burn, last 7 days": "最近 7 天消耗",
+    "Agent": "Agent",
+    "Preview": "預覽",
+    "Engineer": "工程師",
+    "No finished sessions yet. Run an agent and they'll appear here.":
+      "還沒有已完成的會話。執行一個 agent 後會顯示在這裡。",
+    "Per-agent overrides win over \"All agents\". A custom line replaces the live/theme text and the real pet honours it.":
+      "針對單個 agent 的覆蓋優先於\"所有 agent\"。自定義內容會替換即時/主題文字，真實寵物會遵循此設定。",
+    "One message per line; a random one is shown.":
+      "每行一條訊息；將隨機顯示一條。",
+    "days fed": "天餵食",
+    "tokens eaten": "tokens 已消耗",
+    "completed": "已完成",
+    // ---- pre-existing: care stages / hunger / achievements ----
+    "Hatchling": "幼崽",
+    "Companion": "夥伴",
+    "Scout": "偵察兵",
+    "Hero": "英雄",
+    "Legend": "傳奇",
+    "full": "飽",
+    "satisfied": "滿足",
+    "peckish": "微餓",
+    "hungry": "餓",
+    "starving": "很餓",
+    "Lv": "等級",
+    "First Meal": "第一頓",
+    "100 Sessions": "100 個會話",
+    "500 Sessions": "500 個會話",
+    "1M Tokens": "1M Tokens",
+    "10M Tokens": "10M Tokens",
+    "50M Tokens": "50M Tokens",
+    "Level 5": "5 級",
+    "Level 10": "10 級",
+    "Level 20": "20 級",
+    "Level 35": "35 級",
+    "7-Day Streak": "連續 7 天",
+    "14-Day Streak": "連續 14 天",
+    "30-Day Streak": "連續 30 天",
+    "Night Owl": "夜貓子",
+    "sessions": "個會話",
+    // ---- misc: sync / care / split ----
+    "tokens to next level": "升到下一級所需 token",
+    "Connected as": "已連接為",
+    "Connected to your profile": "已連接到你的檔案",
+    "Restoring…": "正在恢復…",
+    "Restored": "已恢復",
+    "Already up to date.": "已是最新。",
+    "Code expired, get a new one.": "驗證碼過期，請重新取得。",
+    "Could not connect.": "無法連接。",
+    "Connecting…": "連接中…",
+    "Merged": "合併",
+    "No projects yet. Use an agent in a project first.": "還沒有專案。請先在某個專案中使用 agent。",
   },
 };
 
