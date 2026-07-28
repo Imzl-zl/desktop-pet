@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AgentPet</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body class="overlay floating-ball-body">
+    <!-- The draggable ball itself. -->
+    <div id="ball" class="ball" title="">
+      <img id="ball-icon" src="/appicon.png" alt="" draggable="false" />
+    </div>
+
+    <!-- Left-click menu: type a message or pick from presets, choose target. -->
+    <div id="ball-menu" class="ball-menu" hidden>
+      <div class="bm-target" id="bm-target">
+        <button data-v="all" class="sel" id="bm-target-all">All</button>
+        <button data-v="main" id="bm-target-main">Main</button>
+        <button data-v="extra" id="bm-target-extra">Extra</button>
+      </div>
+      <input id="bm-input" type="text" maxlength="120" autocomplete="off"
+             placeholder="Type a bubble message…" />
+      <div class="bm-presets" id="bm-presets"></div>
+      <div class="bm-foot">
+        <button class="linklike" id="bm-cancel">Cancel</button>
+        <button class="prominent" id="bm-send" disabled>Send</button>
+      </div>
+    </div>
+
+    <script type="module" src="/src/floating-ball.ts"></script>
+  </body>
+</html>

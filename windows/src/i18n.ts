@@ -256,6 +256,25 @@ const DICT: Record<Exclude<Lang, "en">, Record<string, string>> = {
     "Tiny commit, tiny dopamine.": "Commit nhỏ, dopamine nhỏ.",
     "The build is quiet. Too quiet.": "Build im ắng quá.",
     "Ship something small.": "Ship cái gì nhỏ nhỏ đi.",
+    "Floating ball": "Khung nổi",
+    "Show floating ball": "Hiện khung nổi",
+    "A draggable ball on your desktop. Left-click for a bubble, right-click for settings. Snaps to screen edges.":
+      "Một khung nổi trên màn hình. Chuột trái = bong bóng, chuột phải = cài đặt. Tự dap vào cạnh màn hình.",
+    "Left-click pet": "Chạm pet",
+    "Action": "Hành động",
+    "What happens when you left-click a pet without dragging. Uses a random line from your quick bubbles below.":
+      "Chạm pet (không kéo) sẽ làm gì. Lấy ngẫu nhiên một câu từ danh sách bên dưới.",
+    "This pet": "Pet này",
+    "All pets": "Mọi pet",
+    "Quick bubbles": "Câu nhanh",
+    "One message per line. Left-click a pet or send from the floating ball to show one at random.":
+      "Mỗi dòng một câu. Chạm pet hoặc gửi từ khung nổi để hiện ngẫu nhiên.",
+    "Shift-click a preset on the floating ball to delete it.":
+      "Shift+chạm một câu trên khung nổi để xoá.",
+    "Send": "Gửi",
+    "Type a bubble message…": "Nhập câu bong bóng…",
+    "Left-click: bubble · Right-click: settings · Drag to move":
+      "Trái: bong bóng · Phải: cài đặt · Kéo để di chuyển",
   },
   zh: {
     "Today": "今天",
@@ -505,6 +524,25 @@ const DICT: Record<Exclude<Lang, "en">, Record<string, string>> = {
     "Tiny commit, tiny dopamine.": "小提交，小多巴胺。",
     "The build is quiet. Too quiet.": "构建太安静了。",
     "Ship something small.": "发布点小东西吧。",
+    "Floating ball": "悬浮球",
+    "Show floating ball": "显示悬浮球",
+    "A draggable ball on your desktop. Left-click for a bubble, right-click for settings. Snaps to screen edges.":
+      "桌面上的可拖动小球。左键发气泡，右键开设置，靠近屏幕边缘自动吸边。",
+    "Left-click pet": "左击宠物",
+    "Action": "行为",
+    "What happens when you left-click a pet without dragging. Uses a random line from your quick bubbles below.":
+      "左击宠物（不拖动）时的行为。会从下方快捷气泡中随机选一条显示。",
+    "This pet": "仅该宠物",
+    "All pets": "所有宠物",
+    "Quick bubbles": "快捷气泡",
+    "One message per line. Left-click a pet or send from the floating ball to show one at random.":
+      "每行一条。左击宠物或从悬浮球发送时随机显示一条。",
+    "Shift-click a preset on the floating ball to delete it.":
+      "在悬浮球上按住 Shift 点击预设可以删除。",
+    "Send": "发送",
+    "Type a bubble message…": "输入气泡文字…",
+    "Left-click: bubble · Right-click: settings · Drag to move":
+      "左键：气泡 · 右键：设置 · 拖动移动",
   },
     "zh-TW": {
     "Today": "今天",
@@ -750,6 +788,25 @@ const DICT: Record<Exclude<Lang, "en">, Record<string, string>> = {
     "Tiny commit, tiny dopamine.": "小提交，小多巴胺。",
     "The build is quiet. Too quiet.": "構建太安靜了。",
     "Ship something small.": "釋出點小東西吧。",
+    "Floating ball": "懸浮球",
+    "Show floating ball": "顯示懸浮球",
+    "A draggable ball on your desktop. Left-click for a bubble, right-click for settings. Snaps to screen edges.":
+      "桌面上的可拖動小球。左鍵發氣泡，右鍵開設定，靠近螢幕邊緣自動吸邊。",
+    "Left-click pet": "左擊寵物",
+    "Action": "行為",
+    "What happens when you left-click a pet without dragging. Uses a random line from your quick bubbles below.":
+      "左擊寵物（不拖動）時的行為。會從下方快捷氣泡中隨機選一條顯示。",
+    "This pet": "僅該寵物",
+    "All pets": "所有寵物",
+    "Quick bubbles": "快捷氣泡",
+    "One message per line. Left-click a pet or send from the floating ball to show one at random.":
+      "每行一條。左擊寵物或從懸浮球發送時隨機顯示一條。",
+    "Shift-click a preset on the floating ball to delete it.":
+      "在懸浮球上按住 Shift 點擊預設可以刪除。",
+    "Send": "傳送",
+    "Type a bubble message…": "輸入氣泡文字…",
+    "Left-click: bubble · Right-click: settings · Drag to move":
+      "左鍵：氣泡 · 右鍵：設定 · 拖動移動",
   },
 };
 

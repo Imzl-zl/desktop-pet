@@ -193,6 +193,40 @@ let moodLine = ""; // the single-bubble line for idle/done/celebrate
 let reactiveLine = "";
 let reactiveUntil = 0;
 
+// Quick bubble: a short-lived message shown when the user clicks a pet or
+// sends from the floating ball. Overrides the mood bubble for ~4s, then the
+// normal render loop takes over again.
+const QUICK_BUBBLE_MS = 4000;
+const QUICK_KEY = "ap_quick_bubbles";
+let quickBubbleText = "";
+let quickBubbleUntil = 0;
+
+function readQuickPresets(): string[] {
+  try {
+    const v = JSON.parse(localStorage.getItem(QUICK_KEY) || "[]");
+    return Array.isArray(v) ? v.filter((x: unknown) => typeof x === "string" && x.trim()) : [];
+  } catch { return []; }
+}
+function randomPreset(): string | null {
+  const list = readQuickPresets();
+  if (!list.length) return null;
+  return list[Math.floor(Math.random() * list.length)];
+}
+function showQuickBubble(text: string) {
+  quickBubbleText = text;
+  quickBubbleUntil = Date.now() + QUICK_BUBBLE_MS;
+  render();
+}
+/// Does this pet window belong to the given broadcast target?
+/// - "all": every pet window (main, project-split, extra)
+/// - "main": non-extra windows (the agent-tracking pets)
+/// - "extra": pure-decoration extra pet windows only
+function matchesTarget(target: "all" | "main" | "extra"): boolean {
+  if (target === "all") return true;
+  if (target === "extra") return IS_EXTRA;
+  return !IS_EXTRA;
+}
+
 /// Show a reactive comment for a few seconds (mac PetController.flashReactiveLine).
 function flashReactive(line: string | null) {
   if (!line) return;
@@ -221,6 +255,14 @@ function pickMoodLine(mood: string) {
 
 function render() {
   if (IS_EXTRA) { renderExtra(); return; }
+  // Quick bubble overrides everything for a few seconds after the user sends
+  // a message from the floating ball or clicks the pet.
+  if (Date.now() < quickBubbleUntil) {
+    bubble.renderLine(quickBubbleText);
+    snugBubble();
+    reportHitRect();
+    return;
+  }
   const sessions = store.active().filter((s) => ownsProject(s.project));
   const resolved = aggregateMood(sessions);
 
@@ -287,7 +329,11 @@ function render() {
 function renderExtra(): void {
   pet.setState("idle");
   setMood("idle");
-  bubble.hide();
+  if (Date.now() < quickBubbleUntil) {
+    bubble.renderLine(quickBubbleText);
+  } else {
+    bubble.hide();
+  }
   snugBubble();
   reportHitRect();
 }
@@ -444,22 +490,61 @@ listen<Lang>("lang-changed", (e) => { setLang(e.payload); render(); });
 // Bubble theme / opacity / messages changed from Settings.
 listen("bubble-changed", () => { applyBubble(); applyPet(); moodLine = ""; render(); });
 
+// Floating ball broadcast: show the same message on every matching pet window
+// for a few seconds. target=all/main/extra filters which pets respond.
+listen<{ text: string; target: "all" | "main" | "extra" }>("quick-bubble", (e) => {
+  if (!matchesTarget(e.payload.target)) return;
+  showQuickBubble(e.payload.text);
+});
+
 // --- interactions ------------------------------------------------------------
 // Drag works only when grabbing the PET SPRITE itself or the bubble , clicks
 // on the transparent area beside the pet fall through (like the macOS panel,
 // where transparent pixels never catch the mouse).
-canvas.addEventListener("mousedown", async (e) => {
+//
+// Click vs drag: we don't startDragging on mousedown immediately. Instead we
+// wait for the cursor to move > 4px , only then start the OS drag. If the
+// mouse is released before moving, it's a click and we trigger a quick bubble
+// (configurable via `ap_left_click_action`). This is necessary because Tauri's
+// startDragging swallows the mouseup, so a `click` event never fires.
+const LEFT_CLICK_KEY = "ap_left_click_action";
+let pendingDrag = false;
+let downX = 0;
+let downY = 0;
+
+function onPetClick() {
+  const action = (localStorage.getItem(LEFT_CLICK_KEY) || "none") as "none" | "self" | "all";
+  if (action === "none") return;
+  const text = randomPreset();
+  if (!text) return;
+  if (action === "self") {
+    showQuickBubble(text);
+  } else {
+    emit("quick-bubble", { text, target: "all" });
+  }
+}
+
+canvas.addEventListener("mousedown", (e) => {
   if (e.button !== 0) return;
   // While the sheet is still loading there is no sprite rect yet , allow the
   // drag anyway so the pet is never untouchable.
   if (pet.spriteRect && !pet.hitTest(e.offsetX, e.offsetY)) return;
   emit("popover-close", null);
+  pendingDrag = true;
+  downX = e.screenX;
+  downY = e.screenY;
+});
+window.addEventListener("mousemove", (e) => {
+  if (!pendingDrag) return;
+  if (Math.abs(e.screenX - downX) <= 4 && Math.abs(e.screenY - downY) <= 4) return;
+  pendingDrag = false;
   setDragging(true);
-  try {
-    await getCurrentWindow().startDragging();
-  } finally {
-    setDragging(false);
-  }
+  getCurrentWindow().startDragging().finally(() => setDragging(false));
+});
+window.addEventListener("mouseup", () => {
+  if (!pendingDrag) return;
+  pendingDrag = false;
+  onPetClick();
 });
 bubbleEl.addEventListener("mousedown", async (e) => {
   if (e.button !== 0) return;
@@ -473,7 +558,10 @@ bubbleEl.addEventListener("mousedown", async (e) => {
 });
 canvas.addEventListener("contextmenu", (e) => {
   e.preventDefault();
-  if (!pet.hitTest(e.offsetX, e.offsetY)) return;
+  // No hitTest here: if the event fired at all, the cursor is on an opaque
+  // region (Rust's click-through makes transparent areas pass-through). The
+  // sprite may have moved during roaming, so hitTest would be unreliable and
+  // would make right-click miss while the pet is wandering.
   if (IS_EXTRA) showExtraCtxMenu(e.clientX, e.clientY);
   else invoke("open_popover").catch(() => {});
 });

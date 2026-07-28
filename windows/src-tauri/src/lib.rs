@@ -304,6 +304,139 @@ fn sync_project_windows(app: tauri::AppHandle, projects: Vec<String>) {
 /// Label prefix for pure-decoration pet windows (no agent/care/tray logic).
 const EXTRA_PREFIX: &str = "pet-extra-";
 
+/// The floating ball window label. A single instance lives on the desktop as a
+/// stable click target (left = bubble menu, right = Settings) so the user
+/// doesn't have to chase a roaming pet.
+const FLOATING_BALL_LABEL: &str = "floating-ball";
+const BALL_W: f64 = 56.0;
+const BALL_H: f64 = 56.0;
+const SNAP_MARGIN: f64 = 4.0; // gap from the screen edge after snapping
+
+fn ball_pos_file() -> Option<std::path::PathBuf> {
+    dirs::config_dir().map(|d| d.join("AgentPet").join("ball-pos"))
+}
+fn read_ball_pos() -> Option<(f64, f64)> {
+    let s = std::fs::read_to_string(ball_pos_file()?).ok()?;
+    let (a, b) = s.trim().split_once(',')?;
+    Some((a.trim().parse().ok()?, b.trim().parse().ok()?))
+}
+fn write_ball_pos(x: f64, y: f64) {
+    if let Some(p) = ball_pos_file() {
+        if let Some(d) = p.parent() { let _ = std::fs::create_dir_all(d); }
+        let _ = std::fs::write(p, format!("{x},{y}"));
+    }
+}
+fn ball_visible_file() -> Option<std::path::PathBuf> {
+    dirs::config_dir().map(|d| d.join("AgentPet").join("ball-visible"))
+}
+fn read_ball_visible() -> bool {
+    ball_visible_file()
+        .and_then(|p| std::fs::read_to_string(p).ok())
+        .map(|s| s.trim() != "0")
+        .unwrap_or(true)
+}
+fn write_ball_visible(on: bool) {
+    if let Some(p) = ball_visible_file() {
+        if let Some(d) = p.parent() { let _ = std::fs::create_dir_all(d); }
+        let _ = std::fs::write(p, if on { "1" } else { "0" });
+    }
+}
+
+/// Spawn the floating ball window if it doesn't exist yet. Position is restored
+/// from disk (clamped onto a monitor) or defaulted to the bottom-right corner.
+/// Must be called from a worker thread, like open_settings_impl.
+fn spawn_floating_ball_impl(app: tauri::AppHandle) {
+    if app.get_webview_window(FLOATING_BALL_LABEL).is_some() {
+        return;
+    }
+    let (sw, sh) = primary_work_area(&app);
+    let (x, y) = read_ball_pos()
+        .filter(|&(x, y)| x >= 0.0 && x <= sw && y >= 0.0 && y <= sh)
+        .unwrap_or_else(|| (sw - BALL_W - 24.0, sh - BALL_H - 80.0));
+    let _ = WebviewWindowBuilder::new(
+        &app,
+        FLOATING_BALL_LABEL,
+        WebviewUrl::App("floating-ball.html".into()),
+    )
+    .title("AgentPet")
+    .inner_size(BALL_W, BALL_H)
+    .position(x.max(0.0), y.max(0.0))
+    .transparent(true)
+    .decorations(false)
+    .always_on_top(true)
+    .skip_taskbar(true)
+    .resizable(false)
+    .shadow(false)
+    .focused(false)
+    .build();
+}
+
+/// Snap the floating ball to the nearest screen edge and persist the position.
+/// Called by the frontend right after the OS-level drag ends. The ball stays
+/// where the user dropped it vertically (when snapping left/right) or
+/// horizontally (when snapping top/bottom), so it doesn't jump wildly.
+#[tauri::command]
+fn snap_floating_ball(app: tauri::AppHandle) {
+    let Some(win) = app.get_webview_window(FLOATING_BALL_LABEL) else { return };
+    let Ok(pos) = win.outer_position() else { return };
+    let Ok(Some(mon)) = win.current_monitor() else { return };
+    let sf = mon.scale_factor();
+    let mp = mon.position();
+    let ms = mon.size();
+    // Logical coordinates: physical px / scale_factor.
+    let wx = pos.x as f64 / sf;
+    let wy = pos.y as f64 / sf;
+    let mon_left = mp.x as f64 / sf;
+    let mon_top = mp.y as f64 / sf;
+    let mon_w = ms.width as f64 / sf;
+    let mon_h = ms.height as f64 / sf;
+    let mon_right = mon_left + mon_w;
+    let mon_bottom = mon_top + mon_h;
+
+    // Distance to each edge (negative = past the edge).
+    let d_left = wx - mon_left;
+    let d_right = mon_right - (wx + BALL_W);
+    let d_top = wy - mon_top;
+    let d_bottom = mon_bottom - (wy + BALL_H);
+
+    let (nx, ny) = if d_left <= d_right && d_left <= d_top && d_left <= d_bottom {
+        // Snap left, keep y (clamped).
+        (mon_left + SNAP_MARGIN, wy.max(mon_top).min(mon_bottom - BALL_H))
+    } else if d_right <= d_top && d_right <= d_bottom {
+        // Snap right, keep y.
+        (mon_right - BALL_W - SNAP_MARGIN, wy.max(mon_top).min(mon_bottom - BALL_H))
+    } else if d_top <= d_bottom {
+        // Snap top, keep x.
+        (wx.max(mon_left).min(mon_right - BALL_W), mon_top + SNAP_MARGIN)
+    } else {
+        // Snap bottom, keep x.
+        (wx.max(mon_left).min(mon_right - BALL_W), mon_bottom - BALL_H - SNAP_MARGIN)
+    };
+
+    let _ = win.set_position(PhysicalPosition::new((nx * sf) as i32, (ny * sf) as i32));
+    write_ball_pos(nx, ny);
+}
+
+#[tauri::command]
+fn set_floating_ball_visible(app: tauri::AppHandle, visible: bool) {
+    write_ball_visible(visible);
+    if visible {
+        // Spawn lazily if missing (e.g. re-enabled after startup with it off).
+        if app.get_webview_window(FLOATING_BALL_LABEL).is_none() {
+            spawn_floating_ball_impl(app);
+        } else if let Some(w) = app.get_webview_window(FLOATING_BALL_LABEL) {
+            let _ = w.show();
+        }
+    } else if let Some(w) = app.get_webview_window(FLOATING_BALL_LABEL) {
+        let _ = w.hide();
+    }
+}
+
+#[tauri::command]
+fn get_floating_ball_visible() -> bool {
+    read_ball_visible()
+}
+
 /// Spawn a pure-decoration pet window that only roams. The frontend loads
 /// `index.html?extra=<slug>` and short-circuits all agent/care/tray wiring.
 /// Same slug may be spawned multiple times (each call opens a new window).
@@ -528,6 +661,9 @@ pub fn run() {
             open_popover,
             log_debug,
             set_hit_rect,
+            snap_floating_ball,
+            set_floating_ball_visible,
+            get_floating_ball_visible,
             sys_windows::list_system_windows
         ])
         .setup(|app| {
@@ -726,6 +862,15 @@ pub fn run() {
                     }
                     let _ = std::fs::write(&m, "1");
                 }
+            }
+
+            // Floating ball: a stable click target that doesn't run away with
+            // the pet. Hidden by config (applies on next launch); spawned in a
+            // worker thread because window creation must not run on the event
+            // loop on Windows (same reason as open_settings_impl).
+            if read_ball_visible() {
+                let app2 = app.handle().clone();
+                std::thread::spawn(move || spawn_floating_ball_impl(app2));
             }
             Ok(())
         })

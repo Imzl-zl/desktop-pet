@@ -216,6 +216,176 @@ body.overlay, body.overlay * {
 }
 
 /* ---------------------------------------------------------------------------
+   Floating ball: a small draggable circle that sits on the desktop as a stable
+   click target. Left-click opens the bubble menu, right-click opens Settings.
+   The ball window is 56×56 transparent; only the round ball itself is opaque.
+---------------------------------------------------------------------------- */
+body.floating-ball-body { overflow: visible; }
+.floating-ball-body #ball {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #2a2d3a, #1a1c26);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.floating-ball-body #ball:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.floating-ball-body #ball:active { cursor: grabbing; transform: scale(0.96); }
+.floating-ball-body #ball img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+/* Left-click menu anchored below the ball. */
+.ball-menu {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  width: 240px;
+  padding: 10px;
+  border-radius: 12px;
+  background: var(--bubble-bg, rgba(22, 24, 38, 0.95));
+  color: var(--bubble-fg, #fff);
+  border: 1px solid var(--bubble-border, rgba(255, 255, 255, 0.10));
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(14px);
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 12px;
+  user-select: none;
+  z-index: 9999;
+}
+.ball-menu .bm-target {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 2px;
+}
+.ball-menu .bm-target button {
+  flex: 1;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.ball-menu .bm-target button:hover { color: #fff; }
+.ball-menu .bm-target button.sel {
+  background: rgba(108, 182, 255, 0.2);
+  color: #6cb6ff;
+  font-weight: 600;
+}
+.ball-menu #bm-input {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.25);
+  color: #fff;
+  font: inherit;
+  font-size: 12px;
+  outline: none;
+  box-sizing: border-box;
+}
+.ball-menu #bm-input:focus { border-color: rgba(108, 182, 255, 0.5); }
+.ball-menu #bm-input::placeholder { color: rgba(255, 255, 255, 0.35); }
+.ball-menu .bm-presets {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 8px;
+  max-height: 132px;
+  overflow-y: auto;
+}
+.ball-menu .bm-preset {
+  text-align: left;
+  padding: 5px 9px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.8);
+  font: inherit;
+  font-size: 11.5px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.1s;
+}
+.ball-menu .bm-preset:hover { background: rgba(127, 127, 127, 0.22); }
+.ball-menu .bm-preset.sel { background: rgba(108, 182, 255, 0.18); color: #6cb6ff; }
+.ball-menu .bm-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+.ball-menu .bm-foot .linklike {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.55);
+  font: inherit;
+  cursor: pointer;
+  padding: 5px 8px;
+  border-radius: 6px;
+}
+.ball-menu .bm-foot .linklike:hover { color: #fff; background: rgba(127, 127, 127, 0.18); }
+.ball-menu .bm-foot .prominent {
+  background: #0a84ff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 14px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.12s;
+}
+.ball-menu .bm-foot .prominent:hover { opacity: 0.88; }
+.ball-menu .bm-foot .prominent:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Settings textarea for quick bubbles. */
+body.settings textarea#quick-bubbles {
+  width: 100%;
+  min-height: 110px;
+  padding: 8px 10px;
+  border: 1px solid var(--hair);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--txt);
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.5;
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+body.settings textarea#quick-bubbles:focus { border-color: var(--accent); }
+
+/* ---------------------------------------------------------------------------
    Settings window , a faithful clone of the macOS app's preferences UI:
    tab bar on top, grouped form cards, bottom live-preview bar. Dark.
 --------------------------------------------------------------------------- */

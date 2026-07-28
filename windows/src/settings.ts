@@ -1432,6 +1432,18 @@ function applyStatic() {
   set("t-dotstyle", "State dot");
   set("o-dot-plain", "Plain dot");
   set("o-dot-claude", "Claude style");
+  set("t-ball", "Floating ball");
+  set("t-ball-on", "Show floating ball");
+  set("t-ball-on-sub", "A draggable ball on your desktop. Left-click for a bubble, right-click for settings. Snaps to screen edges.");
+  set("t-click", "Left-click pet");
+  set("t-click-action", "Action");
+  set("t-click-sub", "What happens when you left-click a pet without dragging. Uses a random line from your quick bubbles below.");
+  set("o-lc-none", "Off");
+  set("o-lc-self", "This pet");
+  set("o-lc-all", "All pets");
+  set("t-quick", "Quick bubbles");
+  set("t-quick-sub", "One message per line. Left-click a pet or send from the floating ball to show one at random.");
+  set("t-quick-help", "Shift-click a preset on the floating ball to delete it.");
   set("t-activity", "Activity messages");
   set("t-phrases", "Vocabulary");
   set("t-messages", "Bubble messages");
@@ -1521,6 +1533,60 @@ function initSliders() {
   });
 }
 
+// -------------------------------------------------------- floating ball ----
+// Toggles whether the floating-ball window is visible. The state lives in a
+// Rust-side file (read at launch so the ball can spawn before Settings opens),
+// so we go through commands instead of localStorage.
+function initFloatingBall() {
+  const box = document.getElementById("ball-on") as HTMLInputElement | null;
+  if (!box) return;
+  invoke<boolean>("get_floating_ball_visible")
+    .then((v) => { box.checked = v; })
+    .catch(() => { box.checked = true; });
+  box.addEventListener("change", () => {
+    invoke("set_floating_ball_visible", { visible: box.checked }).catch(() => {});
+  });
+}
+
+// -------------------------------------------------------- quick bubbles ----
+// The quick-bubble preset pool: one message per line, shared by the floating
+// ball (send menu) and left-click-on-pet (random line). Stored in localStorage
+// as a JSON array; the textarea shows raw text for easy editing.
+const QUICK_KEY = "ap_quick_bubbles";
+const QUICK_DEFAULTS = [
+  "Hello!",
+  "Coding…",
+  "Need a break?",
+  "What's up?",
+  "Let's ship something.",
+];
+function readQuickList(): string[] {
+  try {
+    const v = JSON.parse(localStorage.getItem(QUICK_KEY) || "[]");
+    return Array.isArray(v) ? v.filter((x: unknown) => typeof x === "string") : [];
+  } catch { return []; }
+}
+function writeQuickList(list: string[]) {
+  localStorage.setItem(QUICK_KEY, JSON.stringify(list));
+  emit("bubble-changed", null); // floating ball listens and refreshes its presets
+}
+function initQuickBubbles() {
+  const ta = document.getElementById("quick-bubbles") as HTMLTextAreaElement | null;
+  const reset = document.getElementById("quick-reset") as HTMLButtonElement | null;
+  if (!ta) return;
+  const current = readQuickList();
+  ta.value = (current.length ? current : QUICK_DEFAULTS).join("\n");
+  if (!current.length) writeQuickList(QUICK_DEFAULTS);
+  ta.addEventListener("change", () => {
+    const lines = ta.value.split("\n").map((s) => s.trim()).filter(Boolean);
+    writeQuickList(lines);
+  });
+  if (reset) reset.onclick = () => {
+    ta.value = QUICK_DEFAULTS.join("\n");
+    writeQuickList(QUICK_DEFAULTS);
+  };
+}
+
 initTabs();
 initLang();
 loadAgents();
@@ -1537,4 +1603,6 @@ initSliders();
 initSegs();
 initMisc();
 initExtraPets();
+initFloatingBall();
+initQuickBubbles();
 initDemo();

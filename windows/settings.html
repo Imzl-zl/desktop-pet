@@ -36,6 +36,15 @@
       <!-- ================================ PET ================================ -->
       <div class="page sel" data-page="pet">
         <div class="group">
+          <div class="ghead"><span id="t-ball">Floating ball</span></div>
+          <div class="gcard">
+            <label class="row"><span class="rt"><span id="t-ball-on">Show floating ball</span>
+              <span class="cap" id="t-ball-on-sub">A draggable ball on your desktop. Left-click for a bubble, right-click for settings. Snaps to screen edges.</span></span>
+              <input type="checkbox" id="ball-on" /></label>
+          </div>
+        </div>
+
+        <div class="group">
           <div class="gcard hero">
             <canvas id="hero-thumb" width="84" height="84"></canvas>
             <div class="hero-meta">
@@ -161,6 +170,29 @@
                 <button data-v="plain" id="o-dot-plain">Plain dot</button>
                 <button data-v="claude" id="o-dot-claude">Claude style</button>
               </span></div>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="ghead" id="t-click">Left-click pet</div>
+          <div class="gcard">
+            <div class="row"><span id="t-click-action">Action</span>
+              <span class="seg" id="left-click" data-key="ap_left_click_action" data-default="none">
+                <button data-v="none" id="o-lc-none">Off</button>
+                <button data-v="self" id="o-lc-self">This pet</button>
+                <button data-v="all" id="o-lc-all">All pets</button>
+              </span></div>
+            <div class="cap" id="t-click-sub" style="padding: 6px 0">What happens when you left-click a pet without dragging. Uses a random line from your quick bubbles below.</div>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="ghead" id="t-quick">Quick bubbles</div>
+          <div class="gcard pad">
+            <div class="cap" id="t-quick-sub" style="padding: 6px 0">One message per line. Left-click a pet or send from the floating ball to show one at random.</div>
+            <textarea id="quick-bubbles" rows="6" placeholder="Hello!&#10;Coding…&#10;Need a break?" spellcheck="false"></textarea>
+            <div class="row tight"><span class="cap" id="t-quick-help">Shift-click a preset on the floating ball to delete it.</span>
+              <button class="mini" id="quick-reset">Reset</button></div>
           </div>
         </div>
       </div>
