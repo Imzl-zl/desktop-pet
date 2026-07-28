@@ -33,7 +33,7 @@ function sampleMessage(state: string): string {
   }
 }
 
-const BASE_W = 640, BASE_H = 620, DEMO_W = 1380;
+const BASE_W = 1000, BASE_H = 680, DEMO_W = 1380;
 
 export function initDemo() {
   const panel = document.getElementById("demo-panel") as HTMLElement;

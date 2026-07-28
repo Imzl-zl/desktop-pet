@@ -1203,32 +1203,34 @@ body.pop {
 ::-webkit-scrollbar-corner { background: transparent; }
 
 /* ---- Care tab (tamagotchi HUD) ---- */
-.care-hud { display: flex; flex-direction: column; gap: 12px; }
-.care-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
-.care-name { font-weight: 700; font-size: 16px; cursor: text; }
-.care-rename { font-weight: 700; font-size: 16px; width: 100%; max-width: 200px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; color: inherit; padding: 2px 6px; outline: none; }
-.care-stage { opacity: .7; font-size: 12px; margin-top: 2px; }
-.care-hunger { font-size: 12px; opacity: .8; white-space: nowrap; }
+.care-hud { display: flex; flex-direction: column; gap: 14px; padding: 18px; }
+.care-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.care-id { min-width: 0; }
+.care-name { font-weight: 700; font-size: 17px; cursor: text; }
+.care-rename { font-weight: 700; font-size: 17px; width: 100%; max-width: 260px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; color: inherit; padding: 2px 6px; outline: none; }
+.care-stage { opacity: .7; font-size: 12px; margin-top: 3px; }
+.care-hunger { font-size: 12px; opacity: .8; white-space: nowrap; flex: 0 0 auto; }
 .care-bar { height: 8px; border-radius: 999px; background: rgba(127,127,127,.22); overflow: hidden; }
 .care-bar-fill { height: 100%; width: 0; background: #f5a623; border-radius: 999px; transition: width .3s ease; }
-.care-xprow { display: flex; justify-content: space-between; font-size: 12px; }
-.care-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.care-stat { background: rgba(127,127,127,.10); border-radius: 10px; padding: 10px 12px; }
+.care-xprow { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; }
+.care-xprow > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.care-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.care-stat { background: rgba(127,127,127,.10); border-radius: 10px; padding: 12px 14px; }
 .cs-label { font-size: 10px; text-transform: uppercase; letter-spacing: .04em; opacity: .55; }
-.cs-val { font-size: 20px; font-weight: 700; margin-top: 2px; }
-.cs-sub { font-size: 11px; opacity: .55; }
+.cs-val { font-size: 22px; font-weight: 700; margin-top: 3px; }
+.cs-sub { font-size: 11px; opacity: .55; margin-top: 2px; }
+.care-achhead { display: flex; justify-content: space-between; font-size: 11px; opacity: .7; }
+.care-badges { display: flex; flex-wrap: wrap; gap: 7px; }
+.care-badge { font-size: 17px; line-height: 1; opacity: .25; filter: grayscale(1); transition: opacity .2s; }
+.care-badge.on { opacity: 1; filter: none; }
 .care-charthead { display: flex; justify-content: space-between; font-size: 11px; opacity: .7; margin-top: 2px; }
-.care-chart { display: flex; align-items: flex-end; gap: 6px; height: 72px; }
-.cbar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+.care-chart { display: flex; align-items: flex-end; gap: 8px; height: 80px; }
+.cbar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; min-width: 0; }
 .cbar { width: 100%; background: #f5a623; border-radius: 4px 4px 0 0; min-height: 3px; }
-.cbar-lbl { font-size: 9px; opacity: .5; margin-top: 3px; }
+.cbar-lbl { font-size: 9px; opacity: .5; margin-top: 4px; }
 .ghelp { font-size: 11px; opacity: .55; margin-top: 8px; padding: 0 2px; line-height: 1.4; }
 .code-input { font-family: ui-monospace, Menlo, monospace; text-transform: uppercase; letter-spacing: .2em; width: 120px; text-align: center; }
 #sync-out .row, #sync-in .row { margin-bottom: 8px; gap: 8px; }
-.care-achhead { display: flex; justify-content: space-between; font-size: 11px; opacity: .7; }
-.care-badges { display: flex; flex-wrap: wrap; gap: 6px; }
-.care-badge { font-size: 15px; line-height: 1; opacity: .25; filter: grayscale(1); transition: opacity .2s; }
-.care-badge.on { opacity: 1; filter: none; }
 .history-list { display: flex; flex-direction: column; gap: 2px; max-height: 420px; overflow: auto; }
 .hist-day { font-size: 10px; text-transform: uppercase; letter-spacing: .04em; opacity: .5; margin: 10px 0 4px; }
 .hist-row { display: flex; align-items: baseline; gap: 8px; padding: 5px 8px; border-radius: 8px; }

@@ -158,8 +158,8 @@ fn open_settings_impl(app: tauri::AppHandle) {
         }
         match WebviewWindowBuilder::new(&app, "settings", WebviewUrl::App("settings.html".into()))
             .title("AgentPet")
-            .inner_size(640.0, 620.0)
-            .min_inner_size(560.0, 520.0)
+            .inner_size(1000.0, 680.0)
+            .min_inner_size(760.0, 560.0)
             .resizable(true)
             .build()
         {
