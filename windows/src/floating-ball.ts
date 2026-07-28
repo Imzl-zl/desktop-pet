@@ -117,6 +117,9 @@ function shrinkToBall() {
   void win.setSize(new LogicalSize(WIN_SIZE, WIN_SIZE));
 }
 
+/// Height delta between the menu window and the ball window.
+const MENU_GROW = MENU_H - WIN_SIZE;
+
 async function showMenu() {
   if (!menu.hidden) return;
   input.value = "";
@@ -129,22 +132,52 @@ async function showMenu() {
   const sf = await win.scaleFactor();
   const mon = await currentMonitor();
   const work = mon?.workArea;
+  const logicalX = pos.x / sf;
   const logicalY = pos.y / sf;
+  const workLeft = work ? work.position.x / sf : logicalX;
+  const workTop = work ? work.position.y / sf : logicalY;
+  const workRight = work ? (work.position.x + work.size.width) / sf : logicalX + MENU_W;
   const workBottom = work ? (work.position.y + work.size.height) / sf : logicalY + MENU_H;
-  if (logicalY + MENU_H > workBottom) {
-    // Ball is too close to the bottom: slide the window up so the menu fits.
-    void win.setPosition(new LogicalPosition(pos.x / sf, workBottom - MENU_H));
-  }
 
+  // If the menu would overflow the bottom, open UPWARD: the ball sticks to
+  // the bottom of the window and the menu sits above it. The window's Y
+  // moves up by MENU_GROW so the ball's screen position is preserved.
+  const openAbove = logicalY + MENU_H > workBottom;
+  // Adjust X so the wider menu window stays on-screen.
+  let newX = logicalX;
+  if (newX + MENU_W > workRight) newX = workRight - MENU_W;
+  if (newX < workLeft) newX = workLeft;
+  let newY = logicalY;
+  if (openAbove) newY = logicalY - MENU_GROW;
+  // Clamp Y so the window never starts above the work area.
+  if (newY < workTop) newY = workTop;
+
+  document.body.classList.toggle("menu-above", openAbove);
+  if (Math.abs(newX - logicalX) > 0.5 || Math.abs(newY - logicalY) > 0.5) {
+    void win.setPosition(new LogicalPosition(newX, newY));
+  }
+  // Resize FIRST, then reveal the menu, so the menu never appears clipped
+  // inside the still-80×80 window for a frame.
+  await win.setSize(new LogicalSize(MENU_W, MENU_H));
   menu.hidden = false;
-  void win.setSize(new LogicalSize(MENU_W, MENU_H));
   requestAnimationFrame(() => input.focus());
 }
 
 function hideMenu() {
   if (menu.hidden) return;
   menu.hidden = true;
+  const wasAbove = document.body.classList.contains("menu-above");
+  document.body.classList.remove("menu-above");
   shrinkToBall();
+  if (wasAbove) {
+    // Window was shifted up by MENU_GROW to open the menu above.
+    // Move it back down so the ball returns to its original screen position.
+    void (async () => {
+      const pos = await win.outerPosition();
+      const sf = await win.scaleFactor();
+      void win.setPosition(new LogicalPosition(pos.x / sf, pos.y / sf + MENU_GROW));
+    })();
+  }
 }
 
 function send() {
@@ -190,10 +223,16 @@ window.addEventListener("mousemove", (e) => {
   });
 });
 
-window.addEventListener("mouseup", () => {
+window.addEventListener("mouseup", (e) => {
   ball.classList.remove("pressed");
   if (!mayBeClick) return;
   mayBeClick = false;
+  // Reject the click if the cursor moved beyond the drag threshold, even if
+  // mousemove didn't fire in time to start the OS drag. This prevents the
+  // menu from flashing open when the user intended to drag.
+  const dx = Math.abs(e.screenX - dragStartX);
+  const dy = Math.abs(e.screenY - dragStartY);
+  if (dx > DRAG_THRESHOLD_PX || dy > DRAG_THRESHOLD_PX) return;
   const elapsed = performance.now() - dragStartTime;
   if (elapsed <= CLICK_MAX_MS) showMenu();
 });

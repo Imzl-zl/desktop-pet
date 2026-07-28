@@ -42,7 +42,7 @@ body.overlay, body.overlay * {
   max-width: 260px;
   padding: 8px 14px;
   border-radius: 14px;
-  background: var(--bubble-bg, rgba(22, 24, 38, 0.92));
+  background: var(--bubble-bg, rgba(22, 24, 38, 0.96));
   color: var(--bubble-fg, #fff);
   border: 1px solid var(--bubble-border, rgba(255, 255, 255, 0.10));
   font-size: var(--bubble-font-size, 12px);
@@ -52,7 +52,6 @@ body.overlay, body.overlay * {
   text-align: center;
   margin-bottom: 6px; /* room for the tail */
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(14px);
   transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 /* Speech-bubble tail pointing down at the pet. */
@@ -183,11 +182,10 @@ body.overlay, body.overlay * {
   min-width: 156px;
   padding: 6px;
   border-radius: 10px;
-  background: var(--bubble-bg, rgba(22, 24, 38, 0.94));
+  background: var(--bubble-bg, rgba(22, 24, 38, 0.98));
   color: var(--bubble-fg, #fff);
   border: 1px solid var(--bubble-border, rgba(255, 255, 255, 0.10));
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(12px);
   font-family: "Segoe UI", system-ui, sans-serif;
   font-size: 12px;
   user-select: none;
@@ -322,7 +320,6 @@ body.floating-ball-body { overflow: hidden; }
   background: var(--menu-bg);
   border: 1px solid var(--menu-border);
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(18px);
   color: #fff;
   font-family: "Segoe UI", system-ui, sans-serif;
   font-size: 12px;
@@ -427,6 +424,18 @@ body.floating-ball-body { overflow: hidden; }
 }
 .floating-ball-body .ball-menu .bm-foot .prominent:hover { opacity: 0.88; }
 .floating-ball-body .ball-menu .bm-foot .prominent:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* When the ball is near the bottom of the screen, the menu opens UPWARD
+   instead of moving the whole window (and ball) up. The ball sticks to the
+   bottom of the window; the menu sits above it. The window's top-left moves
+   up by (MENU_H - WIN_SIZE) so the ball's screen position is preserved. */
+.floating-ball-body.menu-above #ball {
+  top: auto;
+  bottom: var(--ball-margin);
+}
+.floating-ball-body.menu-above .ball-menu {
+  top: var(--ball-margin);
+}
 
 /* Settings textarea for quick bubbles. */
 body.settings textarea#quick-bubbles {

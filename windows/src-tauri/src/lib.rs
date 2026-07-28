@@ -714,7 +714,11 @@ pub fn run() {
                 let mut last_saved = read_pos();
                 let mut tick: u32 = 0;
                 loop {
-                    std::thread::sleep(Duration::from_millis(30));
+                    // 60ms (≈16Hz): click-through detection doesn't need 33Hz
+                    // polling. The cursor rarely traverses a pet's opaque rect
+                    // in <60ms, and halving the tick rate halves the Win32
+                    // GetCursorPos + GetWindowRect calls per second.
+                    std::thread::sleep(Duration::from_millis(60));
 
                     // Single cursor read per tick (shared across all pet windows).
                     let cur = handle.cursor_position();
@@ -768,7 +772,7 @@ pub fn run() {
                     // Prune orphan entries for closed windows + save main pet
                     // position, both throttled to ~1/sec to reduce overhead.
                     tick = tick.wrapping_add(1);
-                    if tick % 33 == 0 {
+                    if tick % 17 == 0 {
                         let active: std::collections::HashSet<&String> =
                             wins.iter().map(|(l, _)| l).collect();
                         if let Some(state) = handle.try_state::<Mutex<HitRectMap>>() {

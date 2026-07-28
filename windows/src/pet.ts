@@ -126,7 +126,6 @@ export class Pet {
   private idleClips: number[] = [];
   private idleIndex = 0;
   private lastDrawnRow = 0;
-  private lastTick = 0;
   private fps = 3;
   /// Unused space above the sprite, as a fraction of canvas height. The bubble
   /// uses it to sit right above the pet's head instead of the canvas top.
@@ -155,7 +154,7 @@ export class Pet {
     if (!c) throw new Error("no 2d context");
     this.ctx = c;
     this.ctx.imageSmoothingEnabled = false;
-    requestAnimationFrame((t) => this.loop(t));
+    this.scheduleFrame();
   }
 
   /// Widest frame of each clip , scale is computed per CLIP (not per frame)
@@ -264,13 +263,19 @@ export class Pet {
     return this.clips[Math.min(activeRow, this.clips.length - 1)];
   }
 
-  private loop(t: number) {
-    if (this.loaded && t - this.lastTick > 1000 / this.fps) {
-      this.lastTick = t;
-      this.frame++;
-      this.draw();
-    }
-    requestAnimationFrame((n) => this.loop(n));
+  /// Frame loop driven by setTimeout (not requestAnimationFrame). The pet
+  /// only needs 3-8 fps, so rAF's 60Hz wakeups were pure waste — each tick
+  /// rescheduled the next one ~16ms later even when 300ms of idle time was
+  /// available. setTimeout lets the event loop sleep between frames.
+  private scheduleFrame() {
+    const delay = Math.max(80, 1000 / this.fps);
+    setTimeout(() => {
+      if (this.loaded) {
+        this.frame++;
+        this.draw();
+      }
+      this.scheduleFrame();
+    }, delay);
   }
 
   private draw() {
