@@ -39,7 +39,7 @@ export const GET: APIRoute = async ({ request, cookies }) => {
   if (!tok?.access_token) return new Response("Token exchange failed.", { status: 401 });
 
   const ghRes = await fetch("https://api.github.com/user", {
-    headers: { authorization: `Bearer ${tok.access_token}`, "user-agent": "AgentPet", accept: "application/vnd.github+json" },
+    headers: { authorization: `Bearer ${tok.access_token}`, "user-agent": "DesktopPet", accept: "application/vnd.github+json" },
   });
   const gh: any = await ghRes.json().catch(() => ({}));
   if (!gh?.id) return new Response("Could not load your GitHub profile.", { status: 401 });

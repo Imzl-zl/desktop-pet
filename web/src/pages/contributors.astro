@@ -4,7 +4,7 @@ import Icon from "../components/Icon.astro";
 
 export const prerender = false;
 
-const REPO = "ntd4996/agentpet";
+const REPO = "ntd4996/desktoppet";
 
 // Founders are listed first; everyone is shown with the same card.
 const FOUNDERS = [
@@ -36,7 +36,7 @@ const ROLES: Record<string, string> = {
 let rest: any[] = [...KNOWN];
 try {
   const res = await fetch(`https://api.github.com/repos/${REPO}/contributors?per_page=100`, {
-    headers: { "User-Agent": "agentpet-site", Accept: "application/vnd.github+json" },
+    headers: { "User-Agent": "desktoppet-site", Accept: "application/vnd.github+json" },
   });
   if (res.ok) {
     const data: any = await res.json();
@@ -66,19 +66,19 @@ const people = [
   })),
 ];
 ---
-<Base title="Contributors · AgentPet" description="The team and community behind AgentPet." active="contributors">
+<Base title="Contributors · DesktopPet" description="The team and community behind DesktopPet." active="contributors">
   <!-- Honour-roll header (extra top room so the floating nav never overlaps it) -->
   <section class="px-4 pt-20 pb-4 text-center sm:pt-24">
     <span class="chip"><Icon name="star" class="h-4 w-4" /> Hall of fame</span>
     <h1 class="mx-auto mt-5 max-w-3xl font-display text-4xl font-bold leading-[1.1] text-ink sm:text-5xl">
-      The people who build <span class="text-brand-600">AgentPet</span>
+      The people who build <span class="text-brand-600">DesktopPet</span>
     </h1>
     <p class="mx-auto mt-4 max-w-xl text-lg text-[#3f4a6b]">
       Open source, made with love by a small team and a growing community. Thank you to everyone who ships code, art, and ideas.
     </p>
     <div class="mt-7 flex flex-wrap justify-center gap-3">
-      <a href="https://github.com/ntd4996/agentpet" target="_blank" rel="noopener" class="btn-primary !px-6 !py-3"><Icon name="grid" class="h-5 w-5" /> View on GitHub</a>
-      <a href="https://github.com/ntd4996/agentpet/issues" target="_blank" rel="noopener" class="btn-ghost !px-6 !py-3"><Icon name="sparkles" class="h-5 w-5" /> Find an issue to fix</a>
+      <a href="https://github.com/Imzl-zl/desktop-pet" target="_blank" rel="noopener" class="btn-primary !px-6 !py-3"><Icon name="grid" class="h-5 w-5" /> View on GitHub</a>
+      <a href="https://github.com/Imzl-zl/desktop-pet/issues" target="_blank" rel="noopener" class="btn-ghost !px-6 !py-3"><Icon name="sparkles" class="h-5 w-5" /> Find an issue to fix</a>
     </div>
   </section>
 
@@ -101,8 +101,8 @@ const people = [
       ))}
     </div>
     <p class="mx-auto mt-12 max-w-2xl text-center text-muted">
-      {people.length} people and counting. Want your face here? AgentPet is open source , send a pull request on
-      <a class="font-semibold text-brand-700 hover:underline" href="https://github.com/ntd4996/agentpet">GitHub</a>.
+      {people.length} people and counting. Want your face here? DesktopPet is open source , send a pull request on
+      <a class="font-semibold text-brand-700 hover:underline" href="https://github.com/Imzl-zl/desktop-pet">GitHub</a>.
     </p>
   </section>
 </Base>

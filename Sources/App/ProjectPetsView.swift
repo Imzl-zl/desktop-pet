@@ -1,6 +1,6 @@
 import AppKit
 import SwiftUI
-import AgentPetCore
+import DesktopPetCore
 
 /// Edits the project→pet mappings stored in `ProjectPetSettings`.
 /// Listed in `PetTab` under the "Project pets" sub-tab.

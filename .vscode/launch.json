@@ -4,21 +4,21 @@
       "type": "swift",
       "request": "launch",
       "args": [],
-      "cwd": "${workspaceFolder:agentpet}",
-      "name": "Debug agentpet",
-      "target": "agentpet",
+      "cwd": "${workspaceFolder:desktoppet}",
+      "name": "Debug desktoppet",
+      "target": "desktoppet",
       "configuration": "debug",
-      "preLaunchTask": "swift: Build Debug agentpet"
+      "preLaunchTask": "swift: Build Debug desktoppet"
     },
     {
       "type": "swift",
       "request": "launch",
       "args": [],
-      "cwd": "${workspaceFolder:agentpet}",
-      "name": "Release agentpet",
-      "target": "agentpet",
+      "cwd": "${workspaceFolder:desktoppet}",
+      "name": "Release desktoppet",
+      "target": "desktoppet",
       "configuration": "release",
-      "preLaunchTask": "swift: Build Release agentpet"
+      "preLaunchTask": "swift: Build Release desktoppet"
     }
   ]
 }

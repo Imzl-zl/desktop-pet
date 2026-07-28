@@ -6,7 +6,7 @@ import { adminUser } from "../../lib/admin";
 export const prerender = false;
 const user = await adminUser(Astro.cookies);
 ---
-<Base title="Collections · Admin · AgentPet" description="Manage curated collections." active="">
+<Base title="Collections · Admin · DesktopPet" description="Manage curated collections." active="">
   {!user ? (
     <section class="px-4 py-24"><div class="card mx-auto max-w-md p-8 text-center"><h1 class="font-display text-2xl font-bold text-ink">Admin only</h1><a href="/api/auth/login?returnTo=/admin/collections" class="btn-primary mt-6 !px-6 !py-3"><Icon name="users" class="h-5 w-5" /> Sign in</a></div></section>
   ) : (

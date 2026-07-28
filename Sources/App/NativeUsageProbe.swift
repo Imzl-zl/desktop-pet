@@ -141,7 +141,7 @@ final class NativeUsageProbe: ObservableObject {
         request.timeoutInterval = 8
         request.setValue("Bearer \(auth.token)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
-        request.setValue("AgentPet", forHTTPHeaderField: "User-Agent")
+        request.setValue("DesktopPet", forHTTPHeaderField: "User-Agent")
         if let account = auth.accountId {
             request.setValue(account, forHTTPHeaderField: "ChatGPT-Account-Id")
         }

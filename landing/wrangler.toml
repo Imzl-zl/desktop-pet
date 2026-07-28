@@ -1,22 +1,22 @@
-# Cloudflare Pages config for the AgentPet landing + community pet gallery.
-# NOT deployed yet. Fill `database_id` after `wrangler d1 create agentpet-pets`,
-# then deploy with: wrangler pages deploy . --project-name=agentpet-landing
-name = "agentpet-landing"
+# Cloudflare Pages config for the DesktopPet landing + community pet gallery.
+# NOT deployed yet. Fill `database_id` after `wrangler d1 create desktoppet-pets`,
+# then deploy with: wrangler pages deploy . --project-name=desktoppet-landing
+name = "desktoppet-landing"
 # account: thenightwatcherteam@proton.me (4dfa59a6cf1ecb9cb737c205fb06e3ce)
 # Pages config rejects account_id; pass CLOUDFLARE_ACCOUNT_ID as env when deploying.
 compatibility_date = "2026-06-01"
 pages_build_output_dir = "."
 
-# D1 (pet metadata). Create: wrangler d1 create agentpet-pets ; paste the id below.
+# D1 (pet metadata). Create: wrangler d1 create desktoppet-pets ; paste the id below.
 [[d1_databases]]
 binding = "DB"
-database_name = "agentpet-pets"
+database_name = "desktoppet-pets"
 database_id = "78a69519-11b2-4fea-8061-2588f6f5b779"
 
-# R2 (pet files). Create: wrangler r2 bucket create agentpet-pets
+# R2 (pet files). Create: wrangler r2 bucket create desktoppet-pets
 [[r2_buckets]]
 binding = "PETS"
-bucket_name = "agentpet-pets"
+bucket_name = "desktoppet-pets"
 
 # Non-secret vars. Secrets (set via `wrangler pages secret put <NAME>`):
 #   ADMIN_KEY            - bearer key for the admin delete endpoint

@@ -5,13 +5,13 @@ import Hero from "../components/Hero.astro";
 
 export const prerender = false;
 ---
-<Base title="My pets · AgentPet" description="Your raised companions: levels, experience and feeding stats synced from the AgentPet app." active="">
+<Base title="My pets · DesktopPet" description="Your raised companions: levels, experience and feeding stats synced from the DesktopPet app." active="">
   <Hero
     eyebrow="Profile"
     icon="paw"
     title="My"
     accent="pets"
-    lead="Every companion you raise keeps its own experience. Stats sync from the AgentPet app on your machine."
+    lead="Every companion you raise keeps its own experience. Stats sync from the DesktopPet app on your machine."
   />
 
   <section class="px-4 pt-8 pb-16">
@@ -24,7 +24,7 @@ export const prerender = false;
           <h3 class="mt-5 font-display text-2xl font-bold text-ink">Sign in to see your pets</h3>
           <p class="mx-auto mt-3 max-w-md text-muted">Your companions' levels and feeding stats live on your profile once you connect the app.</p>
           <a href="/api/auth/login?returnTo=/profile" class="btn-primary mt-6 !px-6 !py-3"><Icon name="github" class="h-5 w-5" /> Sign in with GitHub</a>
-          <p class="mx-auto mt-4 max-w-md text-xs text-faint">This is optional. AgentPet runs fully offline, your pet, its level and stats stay on your machine whether or not you ever sign in. Connecting only adds the web profile and leaderboard.</p>
+          <p class="mx-auto mt-4 max-w-md text-xs text-faint">This is optional. DesktopPet runs fully offline, your pet, its level and stats stay on your machine whether or not you ever sign in. Connecting only adds the web profile and leaderboard.</p>
         </div>
       </div>
 
@@ -39,7 +39,7 @@ export const prerender = false;
             <div id="prof-pets" class="mt-5 grid gap-4 sm:grid-cols-2"></div>
             <div id="prof-empty" class="card hidden p-8 text-center">
               <p class="font-display text-lg font-semibold text-ink">No companions yet</p>
-              <p class="mx-auto mt-2 max-w-sm text-sm text-muted">Connect the AgentPet app and your pets will appear here with their levels, the moment they are fed.</p>
+              <p class="mx-auto mt-2 max-w-sm text-sm text-muted">Connect the DesktopPet app and your pets will appear here with their levels, the moment they are fed.</p>
             </div>
           </div>
 
@@ -47,8 +47,8 @@ export const prerender = false;
           <aside id="prof-connect" class="w-full shrink-0 lg:w-80">
             <div class="card p-6">
               <h3 class="font-display text-lg font-semibold text-ink">Connect the app</h3>
-              <p class="mt-2 text-sm text-muted">In AgentPet open <b class="text-ink">Settings → Care → Web profile</b> and click <b class="text-ink">Sign in with GitHub</b>. The app links itself, no codes to copy.</p>
-              <p class="mt-3 text-xs text-faint">Stats refresh automatically while the app runs. Connecting is optional, AgentPet works fully offline without it.</p>
+              <p class="mt-2 text-sm text-muted">In DesktopPet open <b class="text-ink">Settings → Care → Web profile</b> and click <b class="text-ink">Sign in with GitHub</b>. The app links itself, no codes to copy.</p>
+              <p class="mt-3 text-xs text-faint">Stats refresh automatically while the app runs. Connecting is optional, DesktopPet works fully offline without it.</p>
             </div>
           </aside>
         </div>

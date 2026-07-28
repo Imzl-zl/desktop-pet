@@ -21,9 +21,9 @@ final class BreakReminderSettings: ObservableObject {
     /// Invoked on any change so `BreakReminderController` can react.
     var onChange: (() -> Void)?
 
-    private static let enabledKey = "agentpet.breakReminder.enabled"
-    private static let workKey = "agentpet.breakReminder.workIntervalMinutes"
-    private static let breakKey = "agentpet.breakReminder.breakLengthMinutes"
+    private static let enabledKey = "desktoppet.breakReminder.enabled"
+    private static let workKey = "desktoppet.breakReminder.workIntervalMinutes"
+    private static let breakKey = "desktoppet.breakReminder.breakLengthMinutes"
 
     init() {
         let d = UserDefaults.standard

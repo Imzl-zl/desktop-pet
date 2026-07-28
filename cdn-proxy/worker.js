@@ -1,4 +1,4 @@
-// AgentPet pet mirror: serves the community pet library from our own R2 so the
+// DesktopPet pet mirror: serves the community pet library from our own R2 so the
 // app/web are independent of any upstream CDN. Two upstream sources, each tagged
 // with `source`:
 //   - OpenPets  (openpets.dev catalog)
@@ -16,7 +16,7 @@ const CATALOG_INDEX = "https://openpets.dev/pets/catalog.v3.json";
 const OPENPETS = "https://openpets.dev";
 const PETDEX_MANIFEST = "https://petdex.dev/api/manifest";
 const PETDEX_REFERER = "https://petdex.dev/"; // hotlink protection on assets.petdex.dev
-const UA = "Mozilla/5.0 (AgentPet pet mirror)";
+const UA = "Mozilla/5.0 (DesktopPet pet mirror)";
 // R2 bucket's public custom domain. Assets are served from here (CF-cached,
 // egress-free, off the Worker request quota) instead of through this Worker.
 const R2_PUBLIC = "https://pets.thenightwatcher.online";
@@ -46,7 +46,7 @@ export default {
       return json(await mirrorBatch(url, env));
     }
     if (path.startsWith("/a/")) return asset(decodeURIComponent(path.slice(3)), env, ctx);
-    if (path === "/") return new Response("AgentPet pet mirror.", { status: 200 });
+    if (path === "/") return new Response("DesktopPet pet mirror.", { status: 200 });
     return new Response("Not found", { status: 404 });
   },
 };

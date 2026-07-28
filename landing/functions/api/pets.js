@@ -2,7 +2,7 @@ import { json, slugify, shortId, validateSheet, fileUrl, telegram, clientIp, get
 
 const KINDS = new Set(["character", "creature", "object"]);
 
-// GET /api/pets — manifest used by both the web gallery and the AgentPet app.
+// GET /api/pets — manifest used by both the web gallery and the DesktopPet app.
 // App-facing fields stay stable; web-only stats (downloads/likes/creator) are extra.
 export async function onRequestGet({ env, request }) {
   const origin = new URL(request.url).origin;

@@ -2,7 +2,7 @@
 // derive a dominant colour (like petdex's COLOR facet) + vibrance. Writes
 // scripts/seed-colors.sql (pet_meta rows + auto-color-* collections). Long job
 // (downloads every sprite); run in background, then apply with:
-//   npx wrangler d1 execute agentpet-web --remote --file=scripts/seed-colors.sql
+//   npx wrangler d1 execute desktoppet-web --remote --file=scripts/seed-colors.sql
 import sharp from "sharp";
 import { writeFileSync } from "node:fs";
 

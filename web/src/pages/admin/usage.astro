@@ -6,7 +6,7 @@ import { adminUser } from "../../lib/admin";
 export const prerender = false;
 const user = await adminUser(Astro.cookies);
 ---
-<Base title="Usage · Admin · AgentPet" description="Community token usage by project, agent and user." active="">
+<Base title="Usage · Admin · DesktopPet" description="Community token usage by project, agent and user." active="">
   {!user ? (
     <section class="px-4 py-24">
       <div class="card mx-auto max-w-md p-8 text-center">

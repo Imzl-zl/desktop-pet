@@ -17,7 +17,7 @@ const AGENTS = ["claude", "codex", "gemini", "cursor", "opencode", "windsurf", "
 const EDITABLE_STATES = ["working", "waiting", "done", "idle"];
 
 const SAMPLE_PROJECT: Record<string, string> = {
-  claude: "agentpet", codex: "api-server", gemini: "ml-pipeline", cursor: "web-app",
+  claude: "desktoppet", codex: "api-server", gemini: "ml-pipeline", cursor: "web-app",
   opencode: "cli-tools", windsurf: "dashboard", antigravity: "mobile-app",
 };
 const SAMPLE_TITLE: Record<string, string> = {

@@ -1,5 +1,5 @@
 import SwiftUI
-import AgentPetCore
+import DesktopPetCore
 
 /// First-launch welcome: pick a pet first, then optionally enable notifications
 /// or connect coding agents from the Advanced tab later.
@@ -63,7 +63,7 @@ struct OnboardingView: View {
                 .frame(width: 34, height: 34)
                 .shadow(color: Theme.accentGlow, radius: 10, y: 2)
 
-                Text("Welcome to AgentPet")
+                Text("Welcome to DesktopPet")
                     .font(.title2.bold())
                     .foregroundStyle(Theme.textPrimary)
             }
@@ -162,7 +162,7 @@ struct OnboardingView: View {
                     .font(.caption)
                     .foregroundStyle(Theme.textMuted)
             }
-            Text("Install a hook so AgentPet can mirror your coding agents in the bubble. You can always do this later in Advanced settings.")
+            Text("Install a hook so DesktopPet can mirror your coding agents in the bubble. You can always do this later in Advanced settings.")
                 .font(.caption)
                 .foregroundStyle(Theme.textMuted)
             ForEach(model.agents) { agent in

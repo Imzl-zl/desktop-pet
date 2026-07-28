@@ -1,5 +1,5 @@
 import Foundation
-import AgentPetCore
+import DesktopPetCore
 
 /// Custom messages for the multi-agent bubble, editable per agent kind (with an
 /// "All agents" default). When the source is `.custom`, a non-empty line for a
@@ -22,8 +22,8 @@ final class BubbleMessages: ObservableObject {
         didSet { save() }
     }
 
-    private static let sourceKey = "agentpet.bubbleMsgSource"
-    private static let customKey = "agentpet.bubbleMsgCustom"
+    private static let sourceKey = "desktoppet.bubbleMsgSource"
+    private static let customKey = "desktoppet.bubbleMsgCustom"
 
     static let allKey = "all"
     static let editableMoods: [PetMood] = [.working, .waiting, .done, .celebrate, .idle]

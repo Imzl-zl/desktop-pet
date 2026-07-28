@@ -41,7 +41,7 @@ extension UpdaterController: SPUUpdaterDelegate {
         let ns = error as NSError
         // SUNoUpdateError (1000) and user-cancellation (1001) are not real failures.
         guard ns.domain == "SUSparkleErrorDomain" && (ns.code == 1000 || ns.code == 1001) else {
-            print("[AgentPet] Update check aborted (\(ns.domain) \(ns.code)): \(error.localizedDescription)")
+            print("[DesktopPet] Update check aborted (\(ns.domain) \(ns.code)): \(error.localizedDescription)")
             return
         }
     }
@@ -65,7 +65,7 @@ extension UpdaterController: SPUUpdaterDelegate {
             }
             guard busy else { return }
             NotificationManager.shared.notify(
-                title: "AgentPet Updated",
+                title: "DesktopPet Updated",
                 body: "Active agent sessions were cleared because the app restarted to apply an update."
             )
         }
@@ -75,7 +75,7 @@ extension UpdaterController: SPUUpdaterDelegate {
 // MARK: - SPUStandardUserDriverDelegate
 
 extension UpdaterController: SPUStandardUserDriverDelegate {
-    /// AgentPet runs as a menu-bar accessory, so Sparkle's update window/alert
+    /// DesktopPet runs as a menu-bar accessory, so Sparkle's update window/alert
     /// would otherwise appear behind other apps without focus. Bring the app to
     /// the front (and give it a Dock icon for the duration) so the user can act
     /// on the prompt; AppKit hands the update window key focus once activated.

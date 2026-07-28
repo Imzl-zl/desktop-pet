@@ -58,7 +58,7 @@ const rings = [0.25, 0.5, 0.75, 1].map((fr) => AXES.map((a) => rpt(a.ang, RADAR.
 const spokes = AXES.map((a) => rpt(a.ang, RADAR.r));
 const axisLabels = AXES.map((a) => ({ ...a, p: rpt(a.ang, RADAR.r + 18) }));
 ---
-<Base title={`${displayName} · AgentPet`} description={description} active="gallery">
+<Base title={`${displayName} · DesktopPet`} description={description} active="gallery">
   <section class="px-4 pt-8 pb-4">
     <div class="mx-auto max-w-6xl">
       <!-- top nav: back + prev/next/shuffle -->
@@ -120,7 +120,7 @@ const axisLabels = AXES.map((a) => ({ ...a, p: rpt(a.ang, RADAR.r + 18) }));
             <button type="button" id="copyName" data-name={displayName} class="btn-ghost !px-5 !py-2.5 text-sm"><Icon name="copy" class="h-4 w-4" /> <span id="copyNameLabel">Copy name</span></button>
             <a href={`/api/download/${slug}?kind=json`} class="dl-link btn-ghost !px-5 !py-2.5 text-sm"><Icon name="terminal" class="h-4 w-4" /> pet.json</a>
           </div>
-          <p class="mt-2 text-xs text-faint">Downloads a .zip (pet.json + spritesheet). Or copy the name to find it in the AgentPet app.</p>
+          <p class="mt-2 text-xs text-faint">Downloads a .zip (pet.json + spritesheet). Or copy the name to find it in the DesktopPet app.</p>
         </div>
       </div>
 
@@ -197,7 +197,7 @@ const axisLabels = AXES.map((a) => ({ ...a, p: rpt(a.ang, RADAR.r + 18) }));
           <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600"><Icon name="bolt" class="h-5 w-5" /></span>
           <div>
             <div class="font-display font-semibold text-ink">One-click adopt</div>
-            <p class="mt-0.5 text-sm text-muted">Open this pet in AgentPet to install it on your desktop instantly.</p>
+            <p class="mt-0.5 text-sm text-muted">Open this pet in DesktopPet to install it on your desktop instantly.</p>
           </div>
         </div>
         <div class="card flex items-start gap-3 p-5">

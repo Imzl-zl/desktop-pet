@@ -5,7 +5,7 @@ import Hero from "../components/Hero.astro";
 const DISCORD = "https://discord.gg/kzFJKsZav";
 const steps = [
   { icon: "wand", title: "Design a spritesheet", body: "One transparent PNG. Each row is an animation (idle, running, waving…), each column a frame, with clear transparent gaps between frames." },
-  { icon: "sparkles", title: "Add a pet.json", body: "A tiny manifest: id, displayName, and description, packed next to the spritesheet. AgentPet maps each row to a state." },
+  { icon: "sparkles", title: "Add a pet.json", body: "A tiny manifest: id, displayName, and description, packed next to the spritesheet. DesktopPet maps each row to a state." },
   { icon: "paw", title: "Share it", body: "Upload your spritesheet on the Submit page. Once approved it joins the gallery, credited to you. The pet-pack format is open; artwork stays with its creator." },
 ];
 const prompt = `Draw a chibi pixel-art character as ONE transparent PNG spritesheet, laid out as a grid I can auto-slice.
@@ -30,7 +30,7 @@ Character: [describe your pet here].
 
 Output one single transparent PNG.`;
 ---
-<Base title="Make a pet · AgentPet" description="Create and share your own pixel companion." active="make">
+<Base title="Make a pet · DesktopPet" description="Create and share your own pixel companion." active="make">
   <Hero
     eyebrow="Open format · Community-made"
     icon="wand"

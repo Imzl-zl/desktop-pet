@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Assembles AgentPet.app from a release build so it runs as a proper menu bar
+# Assembles DesktopPet.app from a release build so it runs as a proper menu bar
 # app (bundle id, LSUIElement, working notifications). Ad-hoc signed for local
 # testing. Notarization + DMG + Homebrew are issue #13.
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 ROOT="$(pwd)"
-APP="$ROOT/build/AgentPet.app"
+APP="$ROOT/build/DesktopPet.app"
 CONFIG="${1:-release}"
 
 # Build a universal binary (Apple Silicon + Intel) so the app runs on both.
@@ -21,7 +21,7 @@ echo "Assembling $APP ..."
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 
-cp "$BINDIR/agentpet" "$APP/Contents/MacOS/agentpet"
+cp "$BINDIR/desktoppet" "$APP/Contents/MacOS/desktoppet"
 cp "$ROOT/scripts/AppInfo.plist" "$APP/Contents/Info.plist"
 # Sparkle compares the appcast's sparkle:version against the installed
 # CFBundleVersion, and the appcast publishes the marketing version. Force
@@ -39,10 +39,10 @@ if [ -d "$ROOT/Localizations" ]; then
     done
 fi
 
-# The agentpet target now ships a resource (the donate QR), so SwiftPM emits
-# AgentPet_agentpet.bundle. Copy it so Bundle.module resolves inside the .app.
-if [ -d "$BINDIR/AgentPet_agentpet.bundle" ]; then
-    cp -R "$BINDIR/AgentPet_agentpet.bundle" "$APP/Contents/Resources/"
+# The desktoppet target now ships a resource (the donate QR), so SwiftPM emits
+# DesktopPet_desktoppet.bundle. Copy it so Bundle.module resolves inside the .app.
+if [ -d "$BINDIR/DesktopPet_desktoppet.bundle" ]; then
+    cp -R "$BINDIR/DesktopPet_desktoppet.bundle" "$APP/Contents/Resources/"
 fi
 
 # Bundle Sparkle.framework (auto-update). SwiftPM links it via @rpath but does
@@ -50,7 +50,7 @@ fi
 # point the binary's rpath there. ditto preserves the framework symlinks.
 mkdir -p "$APP/Contents/Frameworks"
 ditto "$BINDIR/Sparkle.framework" "$APP/Contents/Frameworks/Sparkle.framework"
-install_name_tool -add_rpath "@executable_path/../Frameworks" "$APP/Contents/MacOS/agentpet" 2>/dev/null || true
+install_name_tool -add_rpath "@executable_path/../Frameworks" "$APP/Contents/MacOS/desktoppet" 2>/dev/null || true
 
 # Ad-hoc sign for local testing (release.sh re-signs with a Developer ID).
 # Sign the framework first (inside-out) so the outer app signature is valid.
@@ -58,4 +58,4 @@ codesign --force --sign - "$APP/Contents/Frameworks/Sparkle.framework" || true
 codesign --force --sign - "$APP" || echo "warning: codesign failed (continuing unsigned)"
 
 echo "Done: $APP"
-echo "Run with: open \"$APP\"   (or: \"$APP/Contents/MacOS/agentpet\")"
+echo "Run with: open \"$APP\"   (or: \"$APP/Contents/MacOS/desktoppet\")"

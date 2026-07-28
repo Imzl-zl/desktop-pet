@@ -3,7 +3,7 @@ import Base from "../layouts/Base.astro";
 import Icon from "../components/Icon.astro";
 import Hero from "../components/Hero.astro";
 
-const GITHUB_ISSUES = "https://github.com/ntd4996/agentpet/issues/new";
+const GITHUB_ISSUES = "https://github.com/Imzl-zl/desktop-pet/issues/new";
 const DISCORD = "https://discord.gg/kzFJKsZav";
 const UPDATED = "June 6, 2026";
 
@@ -16,19 +16,19 @@ const checklist = [
 ];
 
 const policies = [
-  { title: "Naming something is not endorsement", body: "Mentioning a character, brand, game, show, app, or community anywhere on AgentPet is purely descriptive. It does not signal a partnership, sponsorship, or any kind of official approval." },
+  { title: "Naming something is not endorsement", body: "Mentioning a character, brand, game, show, app, or community anywhere on DesktopPet is purely descriptive. It does not signal a partnership, sponsorship, or any kind of official approval." },
   { title: "For your desktop, nothing more", body: "Pets exist so you can decorate your own machine. Downloading one gives you no rights over the characters, logos, artwork, or trademarks it may be inspired by." },
   { title: "What creators promise when they share", body: "If you submit or share a pet, please only upload art you made yourself, art you have a licence for, or art you otherwise have permission to share. We will pull anything with unclear rights, a misleading name, or an open complaint." },
   { title: "\"Fan-made\" is not a free pass", body: "Labelling a pet fan-made or non-commercial does not make it lawful on its own. It describes intent; it is not permission from the people who own the original work." },
 ];
 ---
-<Base title="Legal & Takedown Policy · AgentPet" description="How AgentPet handles fan-made pets, third-party references, and rights owner takedown requests." active="">
+<Base title="Legal & Takedown Policy · DesktopPet" description="How DesktopPet handles fan-made pets, third-party references, and rights owner takedown requests." active="">
   <Hero
     eyebrow="Legal"
     icon="scale"
     title="Legal &"
     accent="Takedown Policy"
-    lead="AgentPet is a free, open-source desktop companion project. The community gallery is made by many people, and some pets are fan creations that nod to characters, brands, or artwork owned by others."
+    lead="DesktopPet is a free, open-source desktop companion project. The community gallery is made by many people, and some pets are fan creations that nod to characters, brands, or artwork owned by others."
   />
 
   <section class="px-4 pt-2">
@@ -41,7 +41,7 @@ const policies = [
           <span class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-sun-400/25 text-amber-600"><Icon name="alert" class="h-6 w-6" /></span>
           <div>
             <h2 class="font-display text-xl font-semibold text-ink">Fan-made, not official</h2>
-            <p class="mt-2 text-muted">Unless a pet clearly states otherwise, everything in the gallery is a fan-made desktop toy. AgentPet is not affiliated with, sponsored by, or endorsed by any company or rights holder a pet might reference, and we make no claim to own that underlying material.</p>
+            <p class="mt-2 text-muted">Unless a pet clearly states otherwise, everything in the gallery is a fan-made desktop toy. DesktopPet is not affiliated with, sponsored by, or endorsed by any company or rights holder a pet might reference, and we make no claim to own that underlying material.</p>
             <div class="mt-4 flex flex-wrap gap-3">
               <a href={GITHUB_ISSUES} target="_blank" rel="noopener" class="btn-primary !px-5 !py-2.5"><Icon name="github" class="h-4 w-4" /> Open an issue</a>
               <a href={DISCORD} target="_blank" rel="noopener" class="btn-ghost !px-5 !py-2.5"><Icon name="discord" class="h-4 w-4" /> Ask on Discord</a>
@@ -54,7 +54,7 @@ const policies = [
       <div class="mt-6 grid gap-5 md:grid-cols-2">
         <article class="card p-7 md:col-span-2">
           <h2 class="font-display text-2xl font-bold text-ink">Are you a rights holder?</h2>
-          <p class="mt-3 text-muted">If something in AgentPet uses your work and you would like it taken down, renamed, re-credited, or corrected, open a GitHub issue or reach us on Discord. Including the details below helps us act quickly:</p>
+          <p class="mt-3 text-muted">If something in DesktopPet uses your work and you would like it taken down, renamed, re-credited, or corrected, open a GitHub issue or reach us on Discord. Including the details below helps us act quickly:</p>
           <ul class="mt-4 grid gap-2.5 sm:grid-cols-2">
             {checklist.map((c) => (
               <li class="flex items-start gap-3 text-muted">
@@ -78,8 +78,8 @@ const policies = [
         ))}
       </div>
 
-      <p class="mx-auto mt-8 max-w-3xl text-center text-sm text-faint">The pet gallery is mirrored from <a href="https://github.com/crafter-station/petdex" target="_blank" rel="noopener" class="font-semibold text-brand-600 hover:text-brand-700">Petdex</a> and OpenPets, alongside pets submitted by the community. AgentPet's idea and pet-pack format come from Petdex; every pet asset belongs to its respective creator.</p>
-      <p class="mx-auto mt-3 max-w-3xl text-center text-sm text-faint">Some pets may be unofficial fan creations. AgentPet is not affiliated with or endorsed by third-party rights holders. Rights owners can request changes any time via <a href={GITHUB_ISSUES} target="_blank" rel="noopener" class="font-semibold text-brand-600 hover:text-brand-700">GitHub</a> or <a href={DISCORD} target="_blank" rel="noopener" class="font-semibold text-brand-600 hover:text-brand-700">Discord</a>.</p>
+      <p class="mx-auto mt-8 max-w-3xl text-center text-sm text-faint">The pet gallery is mirrored from <a href="https://github.com/crafter-station/petdex" target="_blank" rel="noopener" class="font-semibold text-brand-600 hover:text-brand-700">Petdex</a> and OpenPets, alongside pets submitted by the community. DesktopPet's idea and pet-pack format come from Petdex; every pet asset belongs to its respective creator.</p>
+      <p class="mx-auto mt-3 max-w-3xl text-center text-sm text-faint">Some pets may be unofficial fan creations. DesktopPet is not affiliated with or endorsed by third-party rights holders. Rights owners can request changes any time via <a href={GITHUB_ISSUES} target="_blank" rel="noopener" class="font-semibold text-brand-600 hover:text-brand-700">GitHub</a> or <a href={DISCORD} target="_blank" rel="noopener" class="font-semibold text-brand-600 hover:text-brand-700">Discord</a>.</p>
     </div>
   </section>
 </Base>

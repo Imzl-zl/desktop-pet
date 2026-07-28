@@ -3,7 +3,7 @@ import { getDB, ensureSchema, incrementInstall } from "../../lib/db";
 
 export const prerender = false;
 
-// Records a pet install. The AgentPet desktop app posts here (fire-and-forget) after
+// Records a pet install. The DesktopPet desktop app posts here (fire-and-forget) after
 // it successfully downloads a pet pack, so install counts are real (not derived).
 // Body: { slug }. CORS-open so the app can call it cross-origin.
 const CORS = {

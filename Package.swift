@@ -2,31 +2,31 @@
 import PackageDescription
 
 let package = Package(
-    name: "AgentPet",
+    name: "DesktopPet",
     platforms: [.macOS(.v13)],
     dependencies: [
         .package(url: "https://github.com/sparkle-project/Sparkle", from: "2.6.0"),
     ],
     targets: [
         .target(
-            name: "AgentPetCore",
-            path: "Sources/AgentPetCore"
+            name: "DesktopPetCore",
+            path: "Sources/DesktopPetCore"
         ),
         .executableTarget(
-            name: "agentpet",
-            dependencies: ["AgentPetCore", .product(name: "Sparkle", package: "Sparkle")],
+            name: "desktoppet",
+            dependencies: ["DesktopPetCore", .product(name: "Sparkle", package: "Sparkle")],
             path: "Sources/App",
             resources: [.copy("Resources/donate-vietqr.png")]
         ),
         .testTarget(
-            name: "AgentPetCoreTests",
-            dependencies: ["AgentPetCore"],
-            path: "Tests/AgentPetCoreTests"
+            name: "DesktopPetCoreTests",
+            dependencies: ["DesktopPetCore"],
+            path: "Tests/DesktopPetCoreTests"
         ),
         .testTarget(
-            name: "AgentPetAppTests",
-            dependencies: ["agentpet"],
-            path: "Tests/AgentPetAppTests"
+            name: "DesktopPetAppTests",
+            dependencies: ["desktoppet"],
+            path: "Tests/DesktopPetAppTests"
         ),
     ]
 )

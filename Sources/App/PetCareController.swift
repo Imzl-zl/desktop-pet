@@ -1,5 +1,5 @@
 import Foundation
-import AgentPetCore
+import DesktopPetCore
 
 /// Owns the persistent tamagotchi state — one `PetCareState` PER PET, so every
 /// companion levels up on its own depending on how its owner raises it. Food
@@ -13,8 +13,8 @@ final class PetCareController: ObservableObject {
     /// were selected while care ran) appear here.
     @Published private(set) var states: [String: PetCareState] = [:]
 
-    private static let storageKey = "agentpet.care.v2"
-    private static let legacyKey = "agentpet.care.v1"
+    private static let storageKey = "desktoppet.care.v2"
+    private static let legacyKey = "desktoppet.care.v1"
 
     init() {
         if let data = UserDefaults.standard.data(forKey: Self.storageKey),
@@ -23,7 +23,7 @@ final class PetCareController: ObservableObject {
         } else if let data = UserDefaults.standard.data(forKey: Self.legacyKey),
                   let old = try? JSONDecoder().decode(PetCareState.self, from: data) {
             // v1 kept a single global state: hand it to the selected pet.
-            if let id = UserDefaults.standard.string(forKey: "agentpet.selectedPetID") {
+            if let id = UserDefaults.standard.string(forKey: "desktoppet.selectedPetID") {
                 states = [id: old]
                 persist()
             }

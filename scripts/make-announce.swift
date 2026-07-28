@@ -4,7 +4,7 @@ import AppKit
 let scale: CGFloat = 2
 let W: CGFloat = 1200, H: CGFloat = 675
 let px = NSSize(width: W * scale, height: H * scale)
-let ROOT = "/Users/datnt/Project/datnt/agentpet"
+let ROOT = "/Users/datnt/Project/datnt/desktoppet"
 
 let image = NSImage(size: px)
 image.lockFocus()
@@ -47,7 +47,7 @@ if let logo = NSImage(contentsOfFile: "\(ROOT)/web/public/logo.png") {
     logo.draw(in: r)
     NSGraphicsContext.current!.cgContext.resetClip()
 }
-text("AgentPet", x: 150, top: 56, font: rounded(30), color: .white)
+text("DesktopPet", x: 150, top: 56, font: rounded(30), color: .white)
 
 // Pixel-ish update label.
 text("UPDATE · MAC 1.7.1 · WIN 0.1.2", x: 82, top: 150, font: mono(15),
@@ -169,12 +169,12 @@ do {
 }
 
 // Footer URL.
-text("agentpet.thenightwatcher.online", x: 82, top: 650, font: sys(16, .semibold),
+text("github.com/Imzl-zl/desktop-pet", x: 82, top: 650, font: sys(16, .semibold),
      color: color(0.37, 0.89, 0.81))
 
 image.unlockFocus()
 
 guard let tiff = image.tiffRepresentation, let rep = NSBitmapImageRep(data: tiff),
       let png = rep.representation(using: .png, properties: [:]) else { exit(1) }
-try! png.write(to: URL(fileURLWithPath: "/tmp/agentpet-announce.png"))
+try! png.write(to: URL(fileURLWithPath: "/tmp/desktoppet-announce.png"))
 print("done")

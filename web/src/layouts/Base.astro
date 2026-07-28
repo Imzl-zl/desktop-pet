@@ -4,7 +4,7 @@ import Icon from "../components/Icon.astro";
 import SurprisePet from "../components/SurprisePet.astro";
 import { DICT } from "../i18n/dict";
 interface Props { title?: string; description?: string; active?: string; }
-const { title = "AgentPet", description = "Adopt, build, and share pixel companions for your AI coding agents.", active = "" } = Astro.props;
+const { title = "DesktopPet", description = "Adopt, build, and share pixel companions for your AI coding agents.", active = "" } = Astro.props;
 const nav = [
   { href: "/gallery", label: "Gallery", key: "gallery" },
   { href: "/arena", label: "Arena", key: "arena" },
@@ -23,7 +23,7 @@ const moreNav = nav
   .filter((n) => !PRIMARY.includes(n.key))
   .concat([{ href: "/contributors", label: "Contributors", key: "contributors" }]);
 const DISCORD = "https://discord.gg/kzFJKsZav";
-const GITHUB = "https://github.com/ntd4996/agentpet";
+const GITHUB = "https://github.com/Imzl-zl/desktop-pet";
 
 // Ambient clouds drifting across the whole page (denser = dreamier sky).
 const cloudSrc = ["cloud1", "cloud2", "cloud3", "cloud4", "cloud5", "cloud6"];
@@ -52,13 +52,13 @@ const clouds = Array.from({ length: N_CLOUDS }, (_, i) => ({
   <meta property="og:type" content="website" />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:image" content="https://agentpet.thenightwatcher.online/og.png?v=2" />
+  <meta property="og:image" content="https://github.com/Imzl-zl/desktop-pet/raw/main/web/public/og.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content="https://agentpet.thenightwatcher.online/og.png?v=2" />
+  <meta name="twitter:image" content="https://github.com/Imzl-zl/desktop-pet/raw/main/web/public/og.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Baloo+2:wght@500;600;700&family=Pixelify+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -175,7 +175,7 @@ const clouds = Array.from({ length: N_CLOUDS }, (_, i) => ({
     <div class="grid gap-8 px-8 py-10 sm:grid-cols-2 md:grid-cols-4">
       <div class="sm:col-span-2 md:col-span-1">
         <div class="flex items-center gap-2 font-display text-lg font-bold text-ink">
-          <img src="/logo.png" alt="" class="h-8 w-8 rounded-lg" /> AgentPet
+          <img src="/logo.png" alt="" class="h-8 w-8 rounded-lg" /> DesktopPet
         </div>
         <p class="mt-3 max-w-xs text-sm text-muted">A desktop pet that reacts while your AI coding agents work. Free and open source.</p>
         <div class="mt-4 flex gap-2">
@@ -209,12 +209,12 @@ const clouds = Array.from({ length: N_CLOUDS }, (_, i) => ({
       </div>
       <div>
         <h4 class="font-display text-sm font-semibold text-ink" data-i18n="Get started">Get started</h4>
-        <p class="mt-3 text-sm text-muted" data-i18n="Download AgentPet and pick a companion.">Download AgentPet and pick a companion.</p>
+        <p class="mt-3 text-sm text-muted" data-i18n="Download DesktopPet and pick a companion.">Download DesktopPet and pick a companion.</p>
         <a href="/install" class="btn-primary mt-4 !px-4 !py-2"><Icon name="download" class="h-4 w-4" /> <span data-i18n="Get the app">Get the app</span></a>
       </div>
     </div>
     <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t border-line/70 px-8 py-5">
-      <p class="text-xs text-faint">© 2026 AgentPet · Open source (MIT) · Made for terminal dwellers.</p>
+      <p class="text-xs text-faint">© 2026 DesktopPet · Open source (MIT) · Made for terminal dwellers.</p>
       <a href="/legal" class="text-xs font-medium text-faint transition hover:text-brand-700">Legal &amp; takedown</a>
     </div>
   </footer>

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
     <channel>
-        <title>AgentPet</title>
+        <title>DesktopPet</title>
         <link>https://ntd4996.github.io/agentpet/appcast.xml</link>
-        <description>Updates for AgentPet</description>
+        <description>Updates for DesktopPet</description>
         <language>en</language>
         <item>
             <title>1.14.0</title>
             <sparkle:version>1.14.0</sparkle:version>
             <sparkle:shortVersionString>1.14.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.14.0/AgentPet-1.14.0.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.14.0/DesktopPet-1.14.0.dmg"
                        sparkle:edSignature="VpWhnATqmVkfxcGnOkq/3RppGAeelf0oVvJc6rKlX6V3BUfmTrWI0NeHUgxD1FwTJgJm3h0v0OSQ0595pMGPAw==" length="5415284" type="application/octet-stream" />
         </item>
         <item>
@@ -18,7 +18,7 @@
             <sparkle:version>1.13.0</sparkle:version>
             <sparkle:shortVersionString>1.13.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.13.0/AgentPet-1.13.0.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.13.0/DesktopPet-1.13.0.dmg"
                        sparkle:edSignature="lrYCfpIVtBYZoiJPZi5PpMgHhdPCym5j8vimssIZSzAzGyJpO5jyEMIXSKmKRCkMVLdkQMbAxgDx1sIDb3KWCw==" length="5405685" type="application/octet-stream" />
         </item>
         <item>
@@ -26,7 +26,7 @@
             <sparkle:version>1.12.0</sparkle:version>
             <sparkle:shortVersionString>1.12.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.12.0/AgentPet-1.12.0.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.12.0/DesktopPet-1.12.0.dmg"
                        sparkle:edSignature="twCdmX6J/AQkGhi9kYu+olNlY/QXyTHruLC62lKw4z4W4kAOR5I7qkiUcuq5+qclAU4IsiEbTf3TDv5l3KXmCg==" length="5376525" type="application/octet-stream" />
         </item>
         <item>
@@ -34,7 +34,7 @@
             <sparkle:version>1.11.0</sparkle:version>
             <sparkle:shortVersionString>1.11.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.11.0/AgentPet-1.11.0.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.11.0/DesktopPet-1.11.0.dmg"
                        sparkle:edSignature="TNwE5DQLn2OQlSaIxu2XY4aS3xk//cRKMEr6jf80KsNgx7CpRCiQrQ10iuCHRx4v29thnp1YrI0GgnrF6Hu4Bw==" length="5293271" type="application/octet-stream" />
         </item>
         <item>
@@ -42,7 +42,7 @@
             <sparkle:version>1.10.1</sparkle:version>
             <sparkle:shortVersionString>1.10.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.10.1/AgentPet-1.10.1.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.10.1/DesktopPet-1.10.1.dmg"
                        sparkle:edSignature="f8tAMVOgsDLbRMLHYprnU/KFWBhcvhN2G7fvyljWMbpouT1c+fewRXlYtFUCRKKMwLzHN17/tQBahKh7B92dDw==" length="5253581" type="application/octet-stream" />
         </item>
         <item>
@@ -50,7 +50,7 @@
             <sparkle:version>1.10.0</sparkle:version>
             <sparkle:shortVersionString>1.10.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.10.0/AgentPet-1.10.0.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.10.0/DesktopPet-1.10.0.dmg"
                        sparkle:edSignature="vgDPFPQG59M9c2PicbJmBDljDt0O+n668c7/4OZHGQrrhe8RXTOCiMhyClLLox8qPDkKiFUDMMNlMUYN3nR6BA==" length="5250378" type="application/octet-stream" />
         </item>
         <item>
@@ -58,7 +58,7 @@
             <sparkle:version>1.9.2</sparkle:version>
             <sparkle:shortVersionString>1.9.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.9.2/AgentPet-1.9.2.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.9.2/DesktopPet-1.9.2.dmg"
                        sparkle:edSignature="T9dm6cMeivmaMehassvJeJ8QbP8uuZrJ/Nimf9OxACjwQZlb+w9QJ5zm6F3q3BI1+RTsNgD5hBUWOs2YM68bCA==" type="application/octet-stream" length="5197750" />
         </item>
         <item>
@@ -66,7 +66,7 @@
             <sparkle:version>1.9.1</sparkle:version>
             <sparkle:shortVersionString>1.9.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.9.1/AgentPet-1.9.1.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.9.1/DesktopPet-1.9.1.dmg"
                        sparkle:edSignature="cjawjUCca0btnKi36nP6BSm/dU47hOXczcxcBIJTbM27koqWKpOQ/BQBVNAwXwnchlkdTAPeOTBG7L5OZ/bwDw==" length="5188078" type="application/octet-stream" />
         </item>
         <item>
@@ -74,7 +74,7 @@
             <sparkle:version>1.9.0</sparkle:version>
             <sparkle:shortVersionString>1.9.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.9.0/AgentPet-1.9.0.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.9.0/DesktopPet-1.9.0.dmg"
                        sparkle:edSignature="A5H/qMVVKrig2vAPpyNk2Um9XTxIbtTLpIbAs4BE+1w3Hkkapef0zyqFyfTEz2rGYO//7JjO7WjbCvUffEzKCA==" length="5170566" type="application/octet-stream" />
         </item>
         <item>
@@ -82,7 +82,7 @@
             <sparkle:version>1.8.0</sparkle:version>
             <sparkle:shortVersionString>1.8.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.8.0/AgentPet-1.8.0.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.8.0/DesktopPet-1.8.0.dmg"
                        sparkle:edSignature="+Q7P48RAAYpiucbmyYD1eIILFmBlGEMyVvwO0zFgn16q3/V6Gq0K7pdigjbKE+6WeN58RyQqZeJixc2NWAKzDw==" length="4886540" type="application/octet-stream" />
         </item>
         <item>
@@ -90,7 +90,7 @@
             <sparkle:version>1.7.3</sparkle:version>
             <sparkle:shortVersionString>1.7.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.7.3/AgentPet-1.7.3.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.7.3/DesktopPet-1.7.3.dmg"
                        sparkle:edSignature="MTB07T9pshmDRkkPRqpZ/cqyavcek7gVIPY5JOIzh2fTxlX7Vs5wsptUDr3XE01sz8QXPhmnSMqrVClWObZLAw==" length="4783241" type="application/octet-stream" />
         </item>
         <item>
@@ -98,7 +98,7 @@
             <sparkle:version>1.7.2</sparkle:version>
             <sparkle:shortVersionString>1.7.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.7.2/AgentPet-1.7.2.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.7.2/DesktopPet-1.7.2.dmg"
                        sparkle:edSignature="P40/BNZwzymSmKoCmOvTOCd9udnZAzvST5Ne00Br1MTyjs1bOE3ZcDCA/nEnrIC3dIvNC63Lp6CV4MS1t3KmAg==" length="4795260" type="application/octet-stream" />
         </item>
         <item>
@@ -106,7 +106,7 @@
             <sparkle:version>1.7.1</sparkle:version>
             <sparkle:shortVersionString>1.7.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.7.1/AgentPet-1.7.1.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.7.1/DesktopPet-1.7.1.dmg"
                        sparkle:edSignature="GMQezib7bqFdv9cz2KJIG2E+28nECHMAke2ehT/S0C75QtFqKa66glaf7MDGoG4YIcPNtTfssWwKa1R5cGUAAg==" length="4792060" type="application/octet-stream" />
         </item>
         <item>
@@ -114,7 +114,7 @@
             <sparkle:version>1.7.0</sparkle:version>
             <sparkle:shortVersionString>1.7.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.7.0/AgentPet-1.7.0.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.7.0/DesktopPet-1.7.0.dmg"
                        sparkle:edSignature="J2eGzIH6dyWVdavoUNJAkxyVpF+KWmOseyqY8CYysXNJvgsrsAr8j8Zutxs+MW4fFrhPCIsvgPd/D2gBzRFZDg==" length="4785884" type="application/octet-stream" />
         </item>
         <item>
@@ -122,7 +122,7 @@
             <sparkle:version>1.6.0</sparkle:version>
             <sparkle:shortVersionString>1.6.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.6.0/AgentPet-1.6.0.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.6.0/DesktopPet-1.6.0.dmg"
                        sparkle:edSignature="ptfRatmYoirQX3VKv6aCtq4eKI53RZhCDv2zuGZko8tQFgIbYROAZT0Ol5TfFdye+WKr4vJIRCtV9Q8PJs4FBA==" length="4770373" type="application/octet-stream" />
         </item>
         <item>
@@ -130,7 +130,7 @@
             <sparkle:version>1.5.0</sparkle:version>
             <sparkle:shortVersionString>1.5.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.5.0/AgentPet-1.5.0.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.5.0/DesktopPet-1.5.0.dmg"
                        sparkle:edSignature="GLqTchZLif4H+eyjFyk9TJZGoZmTWawFrwfzAAnC+AFAB/PR8/K9AceAWeDJ+iYXA/90XVlLi6qZzr9dlgEGDw==" length="4769154" type="application/octet-stream" />
         </item>
         <item>
@@ -138,7 +138,7 @@
             <sparkle:version>1.4.3</sparkle:version>
             <sparkle:shortVersionString>1.4.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.4.3/AgentPet-1.4.3.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.4.3/DesktopPet-1.4.3.dmg"
                        sparkle:edSignature="MM+DrQo5xIzPPclQ9U6sGoBO2E4yboJRjuz/K6eeZKSZBOuV2HtAhcRhWr92jTbxmYNgLUyNTG/DvwfIHEdaDA==" length="4728651" type="application/octet-stream" />
         </item>
         <item>
@@ -146,7 +146,7 @@
             <sparkle:version>1.4.2</sparkle:version>
             <sparkle:shortVersionString>1.4.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.4.2/AgentPet-1.4.2.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.4.2/DesktopPet-1.4.2.dmg"
                        sparkle:edSignature="QGukW+l2sE92PnXrdJ3wa2BpLz8YgZTYzBqj7MC6ET5dFjKp5FaXWLP3tN1u92OUvt1eP29fAQwjPcBR0M/HCA==" length="4584473" type="application/octet-stream" />
         </item>
         <item>
@@ -154,7 +154,7 @@
             <sparkle:version>1.4.1</sparkle:version>
             <sparkle:shortVersionString>1.4.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.4.1/AgentPet-1.4.1.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.4.1/DesktopPet-1.4.1.dmg"
                        sparkle:edSignature="ex4YXUGArfe2WKGbdZ2xvvFigTDaigLebGUfn9rTgDget6xwMOs80ou3Er47FIaoZUAelEY6+yG/Y8HoQJEWDw==" length="4555062" type="application/octet-stream" />
         </item>
         <item>
@@ -162,7 +162,7 @@
             <sparkle:version>1.4.0</sparkle:version>
             <sparkle:shortVersionString>1.4.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.4.0/AgentPet-1.4.0.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.4.0/DesktopPet-1.4.0.dmg"
                        sparkle:edSignature="IPgeWzZjU+zKy9n8o54xMzso7ru8Fro8keQhWcSPB9cbTM902aT9YXhKy189SEp/n7y0rbDoQRZTclBkdvj7BQ==" length="4532220" type="application/octet-stream" />
         </item>
         <item>
@@ -170,7 +170,7 @@
             <sparkle:version>1.3.0</sparkle:version>
             <sparkle:shortVersionString>1.3.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.3.0/AgentPet-1.3.0.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.3.0/DesktopPet-1.3.0.dmg"
                        sparkle:edSignature="oGBU2p098dsgd7C8Vv5+2/7HoUvOUEgThWeeCU5GpQsa4m9rTnB+N2qpzRSMBeZOz8bj6R1JjVhBgVQbLTouDA==" length="3981524" type="application/octet-stream" />
         </item>
         <item>
@@ -178,7 +178,7 @@
             <sparkle:version>1.2.2</sparkle:version>
             <sparkle:shortVersionString>1.2.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.2.2/AgentPet-1.2.2.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.2.2/DesktopPet-1.2.2.dmg"
                        sparkle:edSignature="d0rrVYeqLOQcc+IhcXusHnkmEYzStNFnLegQ7Nbi+6xMxKMbsFLc6SwAwOCvVax1RBaxmFa1g3KIIJ9O3BcmCA==" length="3891374" type="application/octet-stream" />
         </item>
         <item>
@@ -186,7 +186,7 @@
             <sparkle:version>1.2.1</sparkle:version>
             <sparkle:shortVersionString>1.2.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.2.1/AgentPet-1.2.1.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.2.1/DesktopPet-1.2.1.dmg"
                        sparkle:edSignature="xeM+CMnycieCBGSV6AmeqJocsh6GAF9/scQZ8aZKKE7gTq2KsjdWG5bc4isMwuVubjXItsOY2q4sq8S5cGuzCg==" length="3891148" type="application/octet-stream" />
         </item>
         <item>
@@ -194,7 +194,7 @@
             <sparkle:version>1.2.0</sparkle:version>
             <sparkle:shortVersionString>1.2.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.2.0/AgentPet-1.2.0.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.2.0/DesktopPet-1.2.0.dmg"
                        sparkle:edSignature="2Q0pmqo+Fsk+wHTn83C2bFBN+qJb2ci3rRr6dOUHGh3QyGVtrNCsG98kkpN8M76GTFi6GCj8dl4PordWX91lAQ==" length="3812672" type="application/octet-stream" />
         </item>
         <item>
@@ -202,7 +202,7 @@
             <sparkle:version>1.1.11</sparkle:version>
             <sparkle:shortVersionString>1.1.11</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.11/AgentPet-1.1.11.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.11/DesktopPet-1.1.11.dmg"
                        sparkle:edSignature="TBxEmILj4ZPlo055sWn5biuODeNEGYUmBpfyfwBkEihM4aOzyeIHHM6mx9m/cjR5Jq9DKmhjTgZ63s96Xui3DA==" length="2877946" type="application/octet-stream" />
         </item>
         <item>
@@ -210,7 +210,7 @@
             <sparkle:version>1.1.10</sparkle:version>
             <sparkle:shortVersionString>1.1.10</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.10/AgentPet-1.1.10.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.10/DesktopPet-1.1.10.dmg"
                        sparkle:edSignature="j1y/Nf9406E61Sf17pqyVOf0KqqE5ONRR7/DEQ+eb7eIZIB+7WWFYzB1RfQeWGPg4LZnhyI+uN7GYmycpFMsAA==" length="2870810" type="application/octet-stream" />
         </item>
         <item>
@@ -218,7 +218,7 @@
             <sparkle:version>1.1.9</sparkle:version>
             <sparkle:shortVersionString>1.1.9</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.9/AgentPet-1.1.9.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.9/DesktopPet-1.1.9.dmg"
                        sparkle:edSignature="L4RkB9EmTVseSk9KpQwbrWWRCR9sFSGLvGx/FbMLBj460QPWseWM1F2LoitE0Hjg1nZggKRORUGMtGGB5Mf3BQ==" length="2866144" type="application/octet-stream" />
         </item>
         <item>
@@ -226,7 +226,7 @@
             <sparkle:version>1.1.8</sparkle:version>
             <sparkle:shortVersionString>1.1.8</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.8/AgentPet-1.1.8.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.8/DesktopPet-1.1.8.dmg"
                        sparkle:edSignature="NTgZ4heBVoft9ubB8iRnaMku6cOlBOTeUUNI/Oyiv2z2AMVUO7Q+asjA2pT/ufSwRM3uo0EeVUr+ggwZvaRDDQ==" length="2780331" type="application/octet-stream" />
         </item>
         <item>
@@ -234,7 +234,7 @@
             <sparkle:version>1.1.7</sparkle:version>
             <sparkle:shortVersionString>1.1.7</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.7/AgentPet-1.1.7.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.7/DesktopPet-1.1.7.dmg"
                        sparkle:edSignature="l4lVF8QAdI99Y3jLfgeim96U92TMud9IklfCzajqqmteImGtG7vai1miRCDoEwtUvwoXlrWnbIRgJbV/d4qlDQ==" length="2768778" type="application/octet-stream" />
         </item>
         <item>
@@ -242,7 +242,7 @@
             <sparkle:version>1.1.6</sparkle:version>
             <sparkle:shortVersionString>1.1.6</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.6/AgentPet-1.1.6.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.6/DesktopPet-1.1.6.dmg"
                        sparkle:edSignature="wt6CYrcrF/I+4L1rNljh50Fw14IOvgzTQw7qkIiLBKXlPwowbGpUlsAJBthKte17qEYLr+16pRsaqvPIKsfzCQ==" length="2757887" type="application/octet-stream" />
         </item>
         <item>
@@ -250,7 +250,7 @@
             <sparkle:version>1.1.5</sparkle:version>
             <sparkle:shortVersionString>1.1.5</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.5/AgentPet-1.1.5.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.5/DesktopPet-1.1.5.dmg"
                        sparkle:edSignature="wL9H6AvBnd8aulUxN64lguQKlRBmQsxiygbLxQm+aKcTzgbY2y5DsSeirZBt6Ac0Iffv0Qixe89CITLjlFaWCw==" length="2753507" type="application/octet-stream" />
         </item>
         <item>
@@ -258,7 +258,7 @@
             <sparkle:version>1.1.4</sparkle:version>
             <sparkle:shortVersionString>1.1.4</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.4/AgentPet-1.1.4.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.4/DesktopPet-1.1.4.dmg"
                        sparkle:edSignature="gbeZC9Hc1xMH1WeEq404acipSOkyhYwWe10SsfoCcpFbELiBsN5QkYrXgtF0iPRZQ3Md7edHTJonpgt2zgnEAg==" length="2753550" type="application/octet-stream" />
         </item>
         <item>
@@ -266,7 +266,7 @@
             <sparkle:version>1.1.3</sparkle:version>
             <sparkle:shortVersionString>1.1.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.3/AgentPet-1.1.3.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.3/DesktopPet-1.1.3.dmg"
                        sparkle:edSignature="axvs50OXNLLoqTUFGEqL9Cl39mi4yPzT1ySz7MwmGDqaFiEt7773dZsOvbSGBt5CC5WFiUn9s8qDuJMoPbp1BA==" length="2753268" type="application/octet-stream" />
         </item>
         <item>
@@ -274,7 +274,7 @@
             <sparkle:version>1.1.2</sparkle:version>
             <sparkle:shortVersionString>1.1.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.2/AgentPet-1.1.2.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.2/DesktopPet-1.1.2.dmg"
                        sparkle:edSignature="QYXw8qRBciKzXy2iIOjs7mIcXvJeQryOKfsT5O08OXyzF6omsSOLn0fMoqIBt/900j4HTmN1+5ds9G/s1o9EAQ==" length="2750978" type="application/octet-stream" />
         </item>
         <item>
@@ -282,7 +282,7 @@
             <sparkle:version>1.1.1</sparkle:version>
             <sparkle:shortVersionString>1.1.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.1/AgentPet-1.1.1.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.1/DesktopPet-1.1.1.dmg"
                        sparkle:edSignature="46UJzacgf8M1lAnRCvAz7kKAxGne5Sm+Tmde46Fi4asBM/mmCLKAk6fVOcsVO7yYj/rlgnpd6owaIhXGuGzeDA==" length="2750063" type="application/octet-stream" />
         </item>
         <item>
@@ -290,7 +290,7 @@
             <sparkle:version>1.1.0</sparkle:version>
             <sparkle:shortVersionString>1.1.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.0/AgentPet-1.1.0.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.1.0/DesktopPet-1.1.0.dmg"
                        sparkle:edSignature="syeFSimJHOWpkvU6rJmr+e7ZMS1wm4JXjuJ/6knLpcEV9iCh6FeF1vqzYbtUbwkdchlVaCyXs3qBjRa1rNplCQ==" length="2179171" type="application/octet-stream" />
         </item>
         <item>
@@ -298,7 +298,7 @@
             <sparkle:version>1.0.2</sparkle:version>
             <sparkle:shortVersionString>1.0.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.0.2/AgentPet-1.0.2.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.0.2/DesktopPet-1.0.2.dmg"
                        sparkle:edSignature="jfuOkNYNbzoixTZVmDa56hiGcRTiqMNOC+OK0wCOjrbasanC90Tc6SU7jB6TLNeH+TyhtcYzvFT6cHAQji8nCA==" length="2166241" type="application/octet-stream" />
         </item>
         <item>
@@ -306,7 +306,7 @@
             <sparkle:version>1.0.1</sparkle:version>
             <sparkle:shortVersionString>1.0.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.0.1/AgentPet-1.0.1.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.0.1/DesktopPet-1.0.1.dmg"
                        sparkle:edSignature="bhT/HvSXLROgWsH1/fed7v0e88yCt/rbEZIXAiaVdWttVxMaKZkGSyZImgwNM9mazlIrOG1BxQpWpwir2OB3Dg==" length="2165562" type="application/octet-stream" />
         </item>
         <item>
@@ -314,7 +314,7 @@
             <sparkle:version>1.0.0</sparkle:version>
             <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.0.0/AgentPet-1.0.0.dmg"
+            <enclosure url="https://github.com/ntd4996/agentpet/releases/download/v1.0.0/DesktopPet-1.0.0.dmg"
                        sparkle:edSignature="tZluSpvghLRcaXHO9ht+pclixRb4bIk3OcnA/Apeq12OHjtKWMZac/ZQiFdBsDuwyr9hQN1eWNDIEaClKumtCg==" length="2165854" type="application/octet-stream" />
         </item>
     </channel>

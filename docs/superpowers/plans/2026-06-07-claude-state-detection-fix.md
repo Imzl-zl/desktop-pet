@@ -2,36 +2,36 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Stop AgentPet from wrongly reporting Claude sessions as "Done" when they're actually waiting on the user (and from flickering done↔working when a subagent finishes mid-task).
+**Goal:** Stop DesktopPet from wrongly reporting Claude sessions as "Done" when they're actually waiting on the user (and from flickering done↔working when a subagent finishes mid-task).
 
 **Architecture:** Two `StateMapper` mappings are wrong for Claude: `SubagentStop` shouldn't change session state at all (it fires mid-task, not at session end), and `Stop` always means "done" even when Claude ended its turn by asking the user a question. Fix #1 is a one-line mapping change. Fix #2 needs a small pure `QuestionDetector` unit, a new transcript-reading helper, a race-safe `SessionStore.refineState` correction method, and an `AppDaemon` flow that holds the done/waiting notification until an async transcript check resolves — then fires exactly one notification reflecting the true final state.
 
-**Tech Stack:** Swift 6, XCTest, `@testable import AgentPetCore`
+**Tech Stack:** Swift 6, XCTest, `@testable import DesktopPetCore`
 
 ---
 
 ## File Structure
 
-- Modify: `Sources/AgentPetCore/StateMapper.swift` — drop the `SubagentStop → .done` mapping
-- Create: `Sources/AgentPetCore/QuestionDetector.swift` — pure text heuristic, no I/O
-- Modify: `Sources/AgentPetCore/TranscriptReader.swift` — add `latestAssistantText(at:)`
-- Modify: `Sources/AgentPetCore/SessionStore.swift` — add `refineState(id:from:to:since:)`
+- Modify: `Sources/DesktopPetCore/StateMapper.swift` — drop the `SubagentStop → .done` mapping
+- Create: `Sources/DesktopPetCore/QuestionDetector.swift` — pure text heuristic, no I/O
+- Modify: `Sources/DesktopPetCore/TranscriptReader.swift` — add `latestAssistantText(at:)`
+- Modify: `Sources/DesktopPetCore/SessionStore.swift` — add `refineState(id:from:to:since:)`
 - Modify: `Sources/App/AppDaemon.swift` — hold-and-fire-once flow for Claude `Stop → .done`
-- Test: `Tests/AgentPetCoreTests/SessionStoreTests.swift` — `StateMapperTests` + `SessionStoreTests` updates
-- Test: `Tests/AgentPetCoreTests/QuestionDetectorTests.swift` — new
-- Test: `Tests/AgentPetCoreTests/TranscriptReaderLatestAssistantTextTests.swift` — new
+- Test: `Tests/DesktopPetCoreTests/SessionStoreTests.swift` — `StateMapperTests` + `SessionStoreTests` updates
+- Test: `Tests/DesktopPetCoreTests/QuestionDetectorTests.swift` — new
+- Test: `Tests/DesktopPetCoreTests/TranscriptReaderLatestAssistantTextTests.swift` — new
 
 ---
 
 ## Task 1: Stop mapping `SubagentStop` to `.done`
 
 **Files:**
-- Modify: `Sources/AgentPetCore/StateMapper.swift:30`
-- Test: `Tests/AgentPetCoreTests/SessionStoreTests.swift:12` (existing `testClaudeEventMapping`)
+- Modify: `Sources/DesktopPetCore/StateMapper.swift:30`
+- Test: `Tests/DesktopPetCoreTests/SessionStoreTests.swift:12` (existing `testClaudeEventMapping`)
 
 - [ ] **Step 1: Update the existing test to expect `nil`**
 
-In `Tests/AgentPetCoreTests/SessionStoreTests.swift`, find this line inside `testClaudeEventMapping` (around line 12):
+In `Tests/DesktopPetCoreTests/SessionStoreTests.swift`, find this line inside `testClaudeEventMapping` (around line 12):
 
 ```swift
         XCTAssertEqual(StateMapper.state(for: .claude, eventName: "SubagentStop"), .done)
@@ -51,7 +51,7 @@ Expected: FAIL — `XCTAssertNil failed: "done"` (current mapping still returns 
 
 - [ ] **Step 3: Fix the mapping**
 
-In `Sources/AgentPetCore/StateMapper.swift`, the Claude case currently reads (around line 25-32):
+In `Sources/DesktopPetCore/StateMapper.swift`, the Claude case currently reads (around line 25-32):
 
 ```swift
         case .claude:
@@ -135,7 +135,7 @@ Expected: PASS — all tests green
 - [ ] **Step 7: Commit**
 
 ```bash
-git add Sources/AgentPetCore/StateMapper.swift Tests/AgentPetCoreTests/SessionStoreTests.swift
+git add Sources/DesktopPetCore/StateMapper.swift Tests/DesktopPetCoreTests/SessionStoreTests.swift
 git commit -m "fix(core): ignore SubagentStop instead of marking the session done
 
 A Task() subagent finishing mid-session isn't the main session finishing —
@@ -148,16 +148,16 @@ Map it to nil (no state change) like other irrelevant events."
 ## Task 2: `QuestionDetector` — pure question-phrase heuristic
 
 **Files:**
-- Create: `Sources/AgentPetCore/QuestionDetector.swift`
-- Test: `Tests/AgentPetCoreTests/QuestionDetectorTests.swift`
+- Create: `Sources/DesktopPetCore/QuestionDetector.swift`
+- Test: `Tests/DesktopPetCoreTests/QuestionDetectorTests.swift`
 
 - [ ] **Step 1: Write the failing tests**
 
-Create `Tests/AgentPetCoreTests/QuestionDetectorTests.swift`:
+Create `Tests/DesktopPetCoreTests/QuestionDetectorTests.swift`:
 
 ```swift
 import XCTest
-@testable import AgentPetCore
+@testable import DesktopPetCore
 
 final class QuestionDetectorTests: XCTestCase {
     func testEndsWithQuestionMark() {
@@ -194,7 +194,7 @@ Expected: FAIL — `cannot find 'QuestionDetector' in scope`
 
 - [ ] **Step 3: Implement `QuestionDetector`**
 
-Create `Sources/AgentPetCore/QuestionDetector.swift`:
+Create `Sources/DesktopPetCore/QuestionDetector.swift`:
 
 ```swift
 import Foundation
@@ -238,12 +238,12 @@ Expected: PASS — all 5 tests green
 - [ ] **Step 5: Commit**
 
 ```bash
-git add Sources/AgentPetCore/QuestionDetector.swift Tests/AgentPetCoreTests/QuestionDetectorTests.swift
+git add Sources/DesktopPetCore/QuestionDetector.swift Tests/DesktopPetCoreTests/QuestionDetectorTests.swift
 git commit -m "feat(core): add QuestionDetector heuristic for turn-ending questions
 
 Pure text check used to tell 'Claude is truly done' apart from 'Claude
 ended its turn by asking the user something' — Stop fires identically
-for both, so AgentPet needs its own signal."
+for both, so DesktopPet needs its own signal."
 ```
 
 ---
@@ -251,16 +251,16 @@ for both, so AgentPet needs its own signal."
 ## Task 3: `TranscriptReader.latestAssistantText` — raw last-assistant-message text
 
 **Files:**
-- Modify: `Sources/AgentPetCore/TranscriptReader.swift`
-- Test: `Tests/AgentPetCoreTests/TranscriptReaderLatestAssistantTextTests.swift`
+- Modify: `Sources/DesktopPetCore/TranscriptReader.swift`
+- Test: `Tests/DesktopPetCoreTests/TranscriptReaderLatestAssistantTextTests.swift`
 
 - [ ] **Step 1: Write the failing tests**
 
-Create `Tests/AgentPetCoreTests/TranscriptReaderLatestAssistantTextTests.swift`:
+Create `Tests/DesktopPetCoreTests/TranscriptReaderLatestAssistantTextTests.swift`:
 
 ```swift
 import XCTest
-@testable import AgentPetCore
+@testable import DesktopPetCore
 
 final class TranscriptReaderLatestAssistantTextTests: XCTestCase {
     private func tempTranscript(_ lines: [String]) throws -> String {
@@ -319,7 +319,7 @@ Expected: FAIL — `value of type 'TranscriptReader.Type' has no member 'latestA
 
 - [ ] **Step 3: Implement `latestAssistantText`**
 
-In `Sources/AgentPetCore/TranscriptReader.swift`, add this new public function. Place it directly after `latestAssistantRecap` (after line 37, before the `clearCache` method):
+In `Sources/DesktopPetCore/TranscriptReader.swift`, add this new public function. Place it directly after `latestAssistantRecap` (after line 37, before the `clearCache` method):
 
 ```swift
     /// Returns the raw, trimmed text of the most recent Claude assistant
@@ -360,7 +360,7 @@ Expected: PASS — all 4 tests green
 - [ ] **Step 5: Commit**
 
 ```bash
-git add Sources/AgentPetCore/TranscriptReader.swift Tests/AgentPetCoreTests/TranscriptReaderLatestAssistantTextTests.swift
+git add Sources/DesktopPetCore/TranscriptReader.swift Tests/DesktopPetCoreTests/TranscriptReaderLatestAssistantTextTests.swift
 git commit -m "feat(core): add TranscriptReader.latestAssistantText
 
 Raw last-assistant-message text (no recap-marker filtering), used by the
@@ -372,12 +372,12 @@ done/waiting question heuristic to inspect how Claude ended its turn."
 ## Task 4: `SessionStore.refineState` — race-safe done→waiting correction
 
 **Files:**
-- Modify: `Sources/AgentPetCore/SessionStore.swift`
-- Test: `Tests/AgentPetCoreTests/SessionStoreTests.swift`
+- Modify: `Sources/DesktopPetCore/SessionStore.swift`
+- Test: `Tests/DesktopPetCoreTests/SessionStoreTests.swift`
 
 - [ ] **Step 1: Write the failing tests**
 
-In `Tests/AgentPetCoreTests/SessionStoreTests.swift`, add these three tests inside `final class SessionStoreTests` (e.g. directly after `testApplyIgnoresUnmappedEvent`, around line 80):
+In `Tests/DesktopPetCoreTests/SessionStoreTests.swift`, add these three tests inside `final class SessionStoreTests` (e.g. directly after `testApplyIgnoresUnmappedEvent`, around line 80):
 
 ```swift
     func testRefineStateAppliesWhenStateAndSinceStillMatch() {
@@ -423,7 +423,7 @@ Expected: FAIL — `value of type 'SessionStore' has no member 'refineState'`
 
 - [ ] **Step 3: Implement `refineState`**
 
-In `Sources/AgentPetCore/SessionStore.swift`, add this method directly after `updateTitle` (after line 48, before `apply`):
+In `Sources/DesktopPetCore/SessionStore.swift`, add this method directly after `updateTitle` (after line 48, before `apply`):
 
 ```swift
     /// Corrects a session's state after the fact — used when an async check
@@ -456,7 +456,7 @@ Expected: PASS — all tests green
 - [ ] **Step 6: Commit**
 
 ```bash
-git add Sources/AgentPetCore/SessionStore.swift Tests/AgentPetCoreTests/SessionStoreTests.swift
+git add Sources/DesktopPetCore/SessionStore.swift Tests/DesktopPetCoreTests/SessionStoreTests.swift
 git commit -m "feat(core): add SessionStore.refineState for race-safe state correction
 
 Lets an async check (transcript read) correct a synchronously-applied
@@ -555,7 +555,7 @@ Expected: all suites pass (`Executed N tests, with 0 failures`)
 
 - [ ] **Step 4: Manual smoke check (optional but recommended)**
 
-Launch the app (`swift run agentpet` or via Xcode), start a Claude Code
+Launch the app (`swift run desktoppet` or via Xcode), start a Claude Code
 session in a watched project, and:
 - Ask Claude to do something simple, then have it end by asking you a
   clarifying question (e.g. "implement X, but first ask me which of two
@@ -575,7 +575,7 @@ git add Sources/App/AppDaemon.swift
 git commit -m "fix(app): correct done->waiting for Claude turns that end in a question
 
 Stop fires identically for 'truly done' and 'ended turn by asking the
-user something' — neither AgentPet nor the hook payload can tell them
+user something' — neither DesktopPet nor the hook payload can tell them
 apart without reading the transcript. Hold the notification for Claude
 Stop->done specifically, check asynchronously, correct if needed, and
 fire exactly one notification reflecting the true final state."

@@ -20,11 +20,11 @@ if (!exe || !sig) {
 }
 
 const signature = readFileSync(join(nsisDir, sig), "utf8").trim();
-const url = `https://github.com/ntd4996/agentpet/releases/download/${tag}/${encodeURIComponent(exe)}`;
+const url = `https://github.com/Imzl-zl/desktop-pet/releases/download/${tag}/${encodeURIComponent(exe)}`;
 
 const latest = {
   version,
-  notes: "AgentPet for Windows , see the release notes.",
+  notes: "DesktopPet for Windows , see the release notes.",
   pub_date: new Date().toISOString(),
   platforms: { "windows-x86_64": { signature, url } },
 };

@@ -1,6 +1,6 @@
 import SwiftUI
 import AppKit
-import AgentPetCore
+import DesktopPetCore
 
 /// Rich menu bar popover: a blurred dark card with an arrow pointing at the
 /// status item, a live agent list, and a footer bar.
@@ -54,7 +54,7 @@ struct MenuContentView: View {
             .shadow(color: Theme.accentGlow, radius: 8, y: 2)
 
             VStack(alignment: .leading, spacing: 1) {
-                Text("AgentPet")
+                Text("DesktopPet")
                     .font(.ui(size: 14, weight: .bold))
                     .foregroundStyle(Theme.textPrimary)
                 Text(subtitle)

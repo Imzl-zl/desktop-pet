@@ -31,8 +31,8 @@ function page(user, pets, totals) {
 
   return `<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${escapeHtml(user.name)} — AgentPet creator</title>
-<meta property="og:title" content="${escapeHtml(user.name)} on AgentPet">
+<title>${escapeHtml(user.name)} — DesktopPet creator</title>
+<meta property="og:title" content="${escapeHtml(user.name)} on DesktopPet">
 <meta property="og:description" content="${pets.length} pets · ${totals.d} downloads · ${totals.l} likes">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Share+Tech+Mono&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -40,7 +40,7 @@ function page(user, pets, totals) {
 <script src="/app.js" defer></script>
 </head><body><div class="wrap">
   <div class="topbar">
-    <a class="brand" href="/"><img src="/icon.png" alt="">AgentPet</a>
+    <a class="brand" href="/"><img src="/icon.png" alt="">DesktopPet</a>
     <nav class="nav"><a href="/pet/">Pets</a><a href="/make/">Make</a><a href="/creators/">Creators</a></nav>
     <span class="spacer"></span>
   </div>

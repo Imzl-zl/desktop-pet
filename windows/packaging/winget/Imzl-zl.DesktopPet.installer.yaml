@@ -1,0 +1,13 @@
+PackageIdentifier: Imzl-zl.DesktopPet
+PackageVersion: 0.1.0
+InstallerType: nullsoft
+Scope: user
+InstallModes:
+  - silent
+  - silentWithProgress
+Installers:
+  - Architecture: x64
+    InstallerUrl: https://github.com/Imzl-zl/desktop-pet/releases/download/win-v0.1.0/DesktopPet_0.1.0_x64-setup.exe
+    InstallerSha256: 7767CD24C694FB7A04ABF1DBD7DEAC138B04D353337D694CB214939999A56318
+ManifestType: installer
+ManifestVersion: 1.6.0

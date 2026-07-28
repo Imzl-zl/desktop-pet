@@ -8,7 +8,7 @@ import Foundation
 enum TerminalFocus {
     /// osascript can block for a beat while the target app comes forward; keep it
     /// off the main thread so the bubble stays responsive.
-    private static let queue = DispatchQueue(label: "agentpet.terminal-focus", qos: .userInitiated)
+    private static let queue = DispatchQueue(label: "desktoppet.terminal-focus", qos: .userInitiated)
 
     /// Bundle id per `TERM_PROGRAM`, used to activate terminals we can't script.
     private static let bundleIDs: [String: String] = [

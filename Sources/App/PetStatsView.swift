@@ -1,6 +1,6 @@
 import AppKit
 import SwiftUI
-import AgentPetCore
+import DesktopPetCore
 
 /// The pet's right-click HUD: the companion's stats plus a compact footer with
 /// Settings / Updates / Quit (the same actions as the menu bar popover).

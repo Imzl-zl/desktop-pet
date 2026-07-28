@@ -1,4 +1,4 @@
-/* AgentPet localizable strings , English (base). Keys are the English UI text. */
+/* DesktopPet localizable strings , English (base). Keys are the English UI text. */
 
 /* Tabs */
 "General" = "General";
@@ -11,7 +11,7 @@
 /* General / common */
 "Launch" = "Launch";
 "Launch at login" = "Launch at login";
-"AgentPet starts automatically when you sign in." = "AgentPet starts automatically when you sign in.";
+"DesktopPet starts automatically when you sign in." = "DesktopPet starts automatically when you sign in.";
 "Notifications" = "Notifications";
 "Show chat bubble" = "Show chat bubble";
 "Messages" = "Messages";
@@ -26,7 +26,7 @@
 "Coming soon" = "Coming soon";
 "Enable" = "Enable";
 "Open Settings" = "Open Settings";
-"Quit AgentPet" = "Quit AgentPet";
+"Quit DesktopPet" = "Quit DesktopPet";
 "Upload…" = "Upload…";
 "Default" = "Default";
 "Working" = "Working";
@@ -84,7 +84,7 @@
 "Star on GitHub" = "Star on GitHub";
 "Join the Discord" = "Join the Discord";
 "Buy me a coffee" = "Buy me a coffee";
-"If AgentPet helps your workflow, a star means a lot. Thank you!" = "If AgentPet helps your workflow, a star means a lot. Thank you!";
+"If DesktopPet helps your workflow, a star means a lot. Thank you!" = "If DesktopPet helps your workflow, a star means a lot. Thank you!";
 "Author" = "Author";
 "Version" = "Version";
 "Choose pet" = "Choose pet";
@@ -161,7 +161,7 @@
 "Notifications denied" = "Notifications denied";
 "Notifications unavailable" = "Notifications unavailable";
 "Enable notifications" = "Enable notifications";
-"Available once installed as AgentPet.app" = "Available once installed as AgentPet.app";
+"Available once installed as DesktopPet.app" = "Available once installed as DesktopPet.app";
 "Turn on in System Settings to get alerts" = "Turn on in System Settings to get alerts";
 "Alerts when something needs your attention." = "Alerts when something needs your attention.";
 "Alerts when an agent finishes or needs input" = "Alerts when something needs your attention.";
@@ -240,8 +240,8 @@
 "Get alerted when something needs your attention." = "Get alerted when something needs your attention.";
 "Get alerted when an agent finishes or needs input." = "Get alerted when something needs your attention.";
 "Get started" = "Get started";
-"Install a hook so AgentPet can mirror your coding agents in the bubble. You can always do this later in Advanced settings." = "Install a hook so AgentPet can mirror your coding agents in the bubble. You can always do this later in Advanced settings.";
-"Install a hook so AgentPet can see when an agent works, finishes, or needs you." = "Install a hook so AgentPet can mirror your coding agents in the bubble. You can always do this later in Advanced settings.";
+"Install a hook so DesktopPet can mirror your coding agents in the bubble. You can always do this later in Advanced settings." = "Install a hook so DesktopPet can mirror your coding agents in the bubble. You can always do this later in Advanced settings.";
+"Install a hook so DesktopPet can see when an agent works, finishes, or needs you." = "Install a hook so DesktopPet can mirror your coding agents in the bubble. You can always do this later in Advanced settings.";
 "Loading pets…" = "Loading pets…";
 "Nothing running right now." = "Nothing running right now.";
 "Pet info" = "Pet info";
@@ -250,7 +250,7 @@
 "Sort by agent kind" = "Sort by agent kind";
 "Spritesheet" = "Spritesheet";
 "Use the same 8×9 transparent spritesheet format as downloaded pets." = "Use the same 8×9 transparent spritesheet format as downloaded pets.";
-"Welcome to AgentPet" = "Welcome to AgentPet";
+"Welcome to DesktopPet" = "Welcome to DesktopPet";
 "Connect coding agents" = "Connect coding agents";
 "Pick a pet to get started." = "Pick a pet to get started.";
 "Pick your pet" = "Pick your pet";
@@ -258,7 +258,7 @@
 
 /* Codex connection help */
 "Connect Codex" = "Connect Codex";
-"The hook is installed. Codex blocks unknown command hooks until you trust them once , a Codex security feature, not an AgentPet bug. Do this one time:" = "The hook is installed. Codex blocks unknown command hooks until you trust them once , a Codex security feature, not an AgentPet bug. Do this one time:";
+"The hook is installed. Codex blocks unknown command hooks until you trust them once , a Codex security feature, not an DesktopPet bug. Do this one time:" = "The hook is installed. Codex blocks unknown command hooks until you trust them once , a Codex security feature, not an DesktopPet bug. Do this one time:";
 "Open Terminal and run: codex (launches the Codex CLI)" = "Open Terminal and run: codex (launches the Codex CLI)";
 "Type /hooks and press Enter to list the hooks." = "Type /hooks and press Enter to list the hooks.";
 "Press t to Trust all hooks." = "Press t to Trust all hooks.";
@@ -381,7 +381,7 @@
 "resets in %dm" = "resets in %dm";
 
 /* Coffee / donate */
-"Thanks for using AgentPet" = "Thanks for using AgentPet";
+"Thanks for using DesktopPet" = "Thanks for using DesktopPet";
 "It's free and open source. If it makes your day a little nicer, a coffee is always appreciated, never expected." = "It's free and open source. If it makes your day a little nicer, a coffee is always appreciated, never expected.";
 "Quét mã bằng app ngân hàng bất kỳ" = "Scan with any banking app";
 "Sao chép số tài khoản" = "Copy account number";

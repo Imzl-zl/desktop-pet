@@ -1,7 +1,7 @@
 import AppKit
 import SwiftUI
 import Combine
-import AgentPetCore
+import DesktopPetCore
 
 /// Owns the floating pet panels. A registry keyed by group key ("default" or a
 /// project path): each entry is one borderless, always-on-top, draggable
@@ -40,7 +40,7 @@ final class PetWindowController: ObservableObject {
     private var rightClickMonitor: Any?
     private var screenObserver: Any?
 
-    private static let positionsKey = "agentpet.petPositions"
+    private static let positionsKey = "desktoppet.petPositions"
 
     func start() {
         // Create the default ("home") window up front so the pet appears at
@@ -212,7 +212,7 @@ final class PetWindowController: ObservableObject {
         managed.panel.orderOut(nil)
     }
 
-    // MARK: - Position persistence (agentpet.petPositions)
+    // MARK: - Position persistence (desktoppet.petPositions)
 
     private func loadPositions() -> [String: [Double]] {
         guard let data = UserDefaults.standard.data(forKey: Self.positionsKey),

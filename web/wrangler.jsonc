@@ -1,7 +1,7 @@
 {
 	"compatibility_date": "2026-06-06",
 	"compatibility_flags": ["global_fetch_strictly_public"],
-	"name": "agentpet-web",
+	"name": "desktoppet-web",
 	"main": "@astrojs/cloudflare/entrypoints/server",
 	"routes": [
 		{ "pattern": "agentpet.thenightwatcher.online", "custom_domain": true }
@@ -13,14 +13,14 @@
 	"d1_databases": [
 		{
 			"binding": "DB",
-			"database_name": "agentpet-web",
+			"database_name": "desktoppet-web",
 			"database_id": "13b5de60-5ac0-46bd-b493-5d5138309f6a"
 		}
 	],
 	"r2_buckets": [
 		{
 			"binding": "PETS",
-			"bucket_name": "agentpet-petcache"
+			"bucket_name": "desktoppet-petcache"
 		}
 	],
 	"observability": {

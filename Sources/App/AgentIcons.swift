@@ -1,6 +1,6 @@
 import AppKit
 import SwiftUI
-import AgentPetCore
+import DesktopPetCore
 
 /// Renders the real brand logo for each agent kind as an NSImage from embedded
 /// SVG data. No external dependency or resource bundle — the SVG strings are
@@ -24,7 +24,7 @@ enum AgentIcons {
         guard let svg = svgString(for: kind),
               let data = svg.data(using: .utf8) else { return nil }
         let url = URL(fileURLWithPath: NSTemporaryDirectory())
-            .appendingPathComponent("agentpet-icon-\(kind.rawValue).svg")
+            .appendingPathComponent("desktoppet-icon-\(kind.rawValue).svg")
         // Write and read are separate: a write failure must not fall through to
         // reading a stale file left by a previous run for a different kind.
         do { try data.write(to: url) } catch { return nil }

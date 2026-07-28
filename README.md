@@ -1,14 +1,15 @@
 <div align="center">
-  <img src="assets/banner.png" alt="AgentPet" width="100%" />
+  <img src="assets/banner.png" alt="DesktopPet" width="100%" />
+  <p><em>DesktopPet is a renamed, modified fork of <a href="https://github.com/ntd4996/agentpet">AgentPet</a>, used under the MIT License.</em></p>
   <p>
-    <a href="https://trendshift.io/repositories/46602?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-46602" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/46602/daily?language=Swift" alt="ntd4996%2Fagentpet | Trendshift" width="250" height="55"/></a>
+    <a href="https://trendshift.io/repositories/46602?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-46602" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/46602/daily?language=Swift" alt="ntd4996%2Fdesktoppet | Trendshift" width="250" height="55"/></a>
   </p>
   <p>
     <img src="https://img.shields.io/badge/platform-macOS%2013%2B%20%C2%B7%20Windows%2010%2F11%20%C2%B7%20Linux-black" alt="macOS 13+ · Windows 10/11 · Linux" />
     <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT" />
     <img src="https://img.shields.io/badge/Swift-SwiftUI-orange" alt="Swift" />
-    <a href="https://github.com/ntd4996/agentpet/actions"><img src="https://github.com/ntd4996/agentpet/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
-    <a href="https://github.com/ntd4996/agentpet"><img src="https://img.shields.io/github/stars/ntd4996/agentpet?style=social" alt="GitHub stars" /></a>
+    <a href="https://github.com/Imzl-zl/desktop-pet/actions"><img src="https://github.com/Imzl-zl/desktop-pet/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+    <a href="https://github.com/Imzl-zl/desktop-pet"><img src="https://img.shields.io/github/stars/Imzl-zl/desktop-pet?style=social" alt="GitHub stars" /></a>
     <a href="https://ko-fi.com/ntd4996"><img src="https://img.shields.io/badge/Ko--fi-FF5E5B?logo=ko-fi&logoColor=white" alt="Ko-fi" /></a>
     <a href="https://buymeacoffee.com/ntd4996"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-FFDD00?logo=buymeacoffee&logoColor=black" alt="Buy me a coffee" /></a>
   </p>
@@ -20,7 +21,7 @@
     <a href="https://agentpet.thenightwatcher.online/leaderboard">Leaderboard</a> ·
     <a href="https://discord.gg/kzFJKsZav">Discord</a>
   </p>
-  <p><b>If AgentPet brightens your workflow, please <a href="https://github.com/ntd4996/agentpet">give it a star</a> , it genuinely helps others find it.</b></p>
+  <p><b>If DesktopPet brightens your workflow, please <a href="https://github.com/Imzl-zl/desktop-pet">give it a star</a> , it genuinely helps others find it.</b></p>
   <p>
     <b>English</b> ·
     <a href="docs/readme/README.vi.md">Tiếng Việt</a> ·
@@ -31,19 +32,19 @@
 
 ---
 
-Run several coding agents at once (Claude Code, Codex, Gemini, Cursor and more) and it gets hard to tell who is **working**, who is **done**, and who is **waiting for your input**. AgentPet answers that at a glance: a menu-bar monitor shows every agent's live state, and a little pixel pet floats on your desktop and reacts to it all.
+Run several coding agents at once (Claude Code, Codex, Gemini, Cursor and more) and it gets hard to tell who is **working**, who is **done**, and who is **waiting for your input**. DesktopPet answers that at a glance: a menu-bar monitor shows every agent's live state, and a little pixel pet floats on your desktop and reacts to it all.
 
 It is also a **tamagotchi**. The pet is fed by real work , the tokens your agents burn and the sessions they finish , so it earns XP, levels up, unlocks achievements, and evolves as you code. Free, open source, and fully offline unless you choose to connect.
 
 <div align="center">
-  <h3>Enjoying AgentPet? Help keep it free.</h3>
+  <h3>Enjoying DesktopPet? Help keep it free.</h3>
   <p>It is built and given away for free. A coffee (or a star) keeps the features coming.</p>
   <p>
     <a href="https://ko-fi.com/ntd4996"><img src="https://img.shields.io/badge/Ko--fi-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white" alt="Ko-fi" height="42" /></a>
     &nbsp;
     <a href="https://buymeacoffee.com/ntd4996"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black" alt="Buy me a coffee" height="42" /></a>
     &nbsp;
-    <a href="https://github.com/ntd4996/agentpet"><img src="https://img.shields.io/badge/Star%20on%20GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Star on GitHub" height="42" /></a>
+    <a href="https://github.com/Imzl-zl/desktop-pet"><img src="https://img.shields.io/badge/Star%20on%20GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Star on GitHub" height="42" /></a>
   </p>
 </div>
 
@@ -105,7 +106,7 @@ It is also a **tamagotchi**. The pet is fed by real work , the tokens your agent
 - **Cross-device restore**: sign in on a second machine (or after a fresh install) and your pets come back at the level you raised them. Progress merges forward only, so it is never undone on either machine.
 - **Community pet gallery**: browse thousands of pets, adopt one in a click, submit your own, and request new ones.
 
-AgentPet runs completely offline. Connecting only adds the web profile, leaderboard and cross-device sync , nothing leaves your machine until you sign in.
+DesktopPet runs completely offline. Connecting only adds the web profile, leaderboard and cross-device sync , nothing leaves your machine until you sign in.
 
 ## Supported agents
 
@@ -116,7 +117,7 @@ Install a hook from **Settings** with one click, or wrap any command.
 | Claude Code, Codex, Gemini CLI, opencode, Factory Droid | working · **waiting for input** · done |
 | Cursor, Windsurf, Antigravity, GitHub Copilot, Kiro CLI, Pi | working · done |
 | GLM (Z.AI) | works through Claude Code automatically |
-| **Anything else** | `agentpet run -- <command>` , working while it runs, done when it exits |
+| **Anything else** | `desktoppet run -- <command>` , working while it runs, done when it exits |
 
 ## Screenshots
 
@@ -148,30 +149,30 @@ Install a hook from **Settings** with one click, or wrap any command.
 ### macOS , Homebrew
 
 ```bash
-brew install --cask ntd4996/tap/agentpet
+brew install --cask Imzl-zl/tap/desktoppet
 ```
 
 ### macOS , direct download
 
-Grab the latest `AgentPet.dmg` from [Releases](https://github.com/ntd4996/agentpet/releases/latest), open it, and drag AgentPet to Applications. Builds are Developer ID-signed and notarized by Apple, so they open without a Gatekeeper warning, and update themselves via the menu-bar **Updates** button.
+Grab the latest `DesktopPet.dmg` from [Releases](https://github.com/Imzl-zl/desktop-pet/releases/latest), open it, and drag DesktopPet to Applications. Builds are Developer ID-signed and notarized by Apple, so they open without a Gatekeeper warning, and update themselves via the menu-bar **Updates** button.
 
 ### Windows
 
-Download the installer or portable build from the [website](https://agentpet.thenightwatcher.online/install) or the [releases](https://github.com/ntd4996/agentpet/releases). The first launch may show a SmartScreen warning (the Windows build isn't code-signed yet); click **More info → Run anyway**. It installs per-user (no admin) and auto-updates.
+Download the installer or portable build from the [website](https://agentpet.thenightwatcher.online/install) or the [releases](https://github.com/Imzl-zl/desktop-pet/releases). The first launch may show a SmartScreen warning (the Windows build isn't code-signed yet); click **More info → Run anyway**. It installs per-user (no admin) and auto-updates.
 
 ### Linux
 
-Download an AppImage, `.deb`, or `.rpm` from the [website](https://agentpet.thenightwatcher.online/install) or the [releases](https://github.com/ntd4996/agentpet/releases):
+Download an AppImage, `.deb`, or `.rpm` from the [website](https://agentpet.thenightwatcher.online/install) or the [releases](https://github.com/Imzl-zl/desktop-pet/releases):
 
 ```bash
 # AppImage , any distro
-chmod +x AgentPet_*_amd64.AppImage && ./AgentPet_*_amd64.AppImage
+chmod +x DesktopPet_*_amd64.AppImage && ./DesktopPet_*_amd64.AppImage
 
 # Debian / Ubuntu
-sudo dpkg -i AgentPet_*_amd64.deb
+sudo dpkg -i DesktopPet_*_amd64.deb
 
 # Fedora / openSUSE
-sudo rpm -i AgentPet-*.x86_64.rpm
+sudo rpm -i DesktopPet-*.x86_64.rpm
 ```
 
 Same Tauri app as Windows, so it has full feature parity with macOS. From 0.1.5 the AppImage auto-updates in-app; still unsigned. If the tray icon is missing on GNOME, install an AppIndicator extension.
@@ -179,36 +180,36 @@ Same Tauri app as Windows, so it has full feature parity with macOS. From 0.1.5 
 Or install with one line , grabs the latest AppImage, no root:
 
 ```bash
-curl -fsSL https://agentpet.thenightwatcher.online/install.sh | sh
+curl -fsSL https://github.com/Imzl-zl/desktop-pet/raw/main/web/public/install.sh | sh
 ```
 
 ### Build from source (macOS)
 
 ```bash
-git clone https://github.com/ntd4996/agentpet.git
-cd agentpet
+git clone https://github.com/Imzl-zl/desktop-pet.git
+cd desktop-pet
 ./scripts/build-app.sh release
-open build/AgentPet.app
+open build/DesktopPet.app
 ```
 
 Requires Xcode 16 / Swift 6. The Windows app lives under [`windows/`](windows/) (Tauri + Rust).
 
 ## Getting started
 
-1. Launch AgentPet , it lives in the menu bar.
+1. Launch DesktopPet , it lives in the menu bar.
 2. Open **Settings → General** and click **Install** next to Claude Code (or your agent), then **Enable** notifications.
 3. Run an agent. The pet reacts, and the menu-bar icon shows who is working or waiting.
 4. (Optional) Open **Settings → Care → Sign in with GitHub** to sync your companions and unlock the web profile, leaderboard and cross-device restore.
 
 ### Uninstall
 
-1. In **Settings → General**, click **Remove** next to each connected agent (this strips AgentPet's hooks so the agents don't error after the app is gone).
+1. In **Settings → General**, click **Remove** next to each connected agent (this strips DesktopPet's hooks so the agents don't error after the app is gone).
 2. Remove the app and its data:
 
 ```bash
-brew uninstall --cask agentpet          # or drag /Applications/AgentPet.app to Trash
-rm -rf ~/.agentpet                        # downloaded pets + local state
-rm -f  ~/Library/Preferences/com.agentpet.app.plist
+brew uninstall --cask desktoppet          # or drag /Applications/DesktopPet.app to Trash
+rm -rf ~/.desktoppet                        # downloaded pets + local state
+rm -f  ~/Library/Preferences/com.desktoppet.app.plist
 ```
 
 ## Usage dashboard
@@ -229,7 +230,7 @@ Pets use the open Codex pet-pack format (`pet.json` + a spritesheet). You can:
 - **Map animations** to states, resize, rename, and customise chat lines.
 - **Make your own** and [submit it](https://agentpet.thenightwatcher.online/submit) to the community gallery.
 
-A starter pet is installed on first launch. **AgentPet bundles no pet art** , every pack is added at runtime, and each asset is owned by its submitter under their own license.
+A starter pet is installed on first launch. **DesktopPet bundles no pet art** , every pack is added at runtime, and each asset is owned by its submitter under their own license.
 
 ## Platforms
 
@@ -241,7 +242,7 @@ Under the hood: a Unix-socket daemon receives agent events from lightweight hook
 
 ## Community ports
 
-Alongside the official macOS, Windows, and Linux builds, the community has reimagined AgentPet with its own stack:
+Alongside the official macOS, Windows, and Linux builds, the community has reimagined DesktopPet with its own stack:
 
 - **Linux (Rust + GTK4)** , [agentpet-linux](https://github.com/tranhuuhuy297/agentpet-linux) by [@tranhuuhuy297](https://github.com/tranhuuhuy297). An independent, from-scratch GTK4 port for Ubuntu (Claude Code + Codex) , distinct from the official Tauri Linux build above.
 
@@ -249,33 +250,33 @@ These are separate community projects, not maintained here. Building one? Open a
 
 ## Contributors
 
-AgentPet is a community effort. Huge thanks to everyone who has shipped code, pets, translations and ports , see the full [Hall of Fame](https://agentpet.thenightwatcher.online/contributors).
+DesktopPet is a community effort. Huge thanks to everyone who has shipped code, pets, translations and ports , see the full [Hall of Fame](https://agentpet.thenightwatcher.online/contributors).
 
 - **[@ntd4996](https://github.com/ntd4996)** , creator and maintainer
 - **[@hoangphison](https://github.com/hoangphison)** , co-founder
-- ...and many more contributors on the [website](https://agentpet.thenightwatcher.online/contributors) and in the repo's [contributors list](https://github.com/ntd4996/agentpet/graphs/contributors).
+- ...and many more contributors on the [website](https://agentpet.thenightwatcher.online/contributors) and in the repo's [contributors list](https://github.com/Imzl-zl/desktop-pet/graphs/contributors).
 
 Contributions are welcome , features, agent integrations, pets, translations and bug fixes. Open an issue or a pull request.
 
 ## Acknowledgements
 
-AgentPet stands on the shoulders of an open community.
+DesktopPet stands on the shoulders of an open community.
 
-- **The idea and the pet-pack format come from [Petdex](https://github.com/crafter-station/petdex)** (MIT). AgentPet is an independent, interoperable client: it reads packs in Petdex's format and can adopt them from Petdex's public API.
-- **The pets themselves are the community's.** The gallery mirrors thousands of companions from **Petdex** and **OpenPets**, alongside pets **submitted directly by AgentPet users**. Every pet asset is owned by its respective creator under their own license.
-- **Contributors and community ports** (above) shaped much of what AgentPet is today.
+- **The idea and the pet-pack format come from [Petdex](https://github.com/crafter-station/petdex)** (MIT). DesktopPet is an independent, interoperable client: it reads packs in Petdex's format and can adopt them from Petdex's public API.
+- **The pets themselves are the community's.** The gallery mirrors thousands of companions from **Petdex** and **OpenPets**, alongside pets **submitted directly by DesktopPet users**. Every pet asset is owned by its respective creator under their own license.
+- **Contributors and community ports** (above) shaped much of what DesktopPet is today.
 
-AgentPet bundles no pet art of its own. If you hold rights to a character and want it removed, please see our [takedown page](https://agentpet.thenightwatcher.online/legal), and for pets sourced from Petdex, direct takedowns there.
+DesktopPet bundles no pet art of its own. If you hold rights to a character and want it removed, please see our [takedown page](https://agentpet.thenightwatcher.online/legal), and for pets sourced from Petdex, direct takedowns there.
 
 ## Support
 
-If AgentPet saves you some tab-hunting:
+If DesktopPet saves you some tab-hunting:
 
-- ⭐ **[Star the repo](https://github.com/ntd4996/agentpet)** so more people find it.
+- ⭐ **[Star the repo](https://github.com/Imzl-zl/desktop-pet)** so more people find it.
 - ☕ **[Buy me a coffee](https://buymeacoffee.com/ntd4996)** or **[support on Ko-fi](https://ko-fi.com/ntd4996)** to fuel more features.
 
 Built by **[Nguyễn Thành Đạt (@ntd4996)](https://github.com/ntd4996)** and the community.
 
 ## License
 
-MIT , see [LICENSE](LICENSE). Application code only; pet assets are not part of this repository and belong to their respective creators.
+DesktopPet is licensed under the MIT License, the same license as the original AgentPet project. See [LICENSE](LICENSE) for the full text. The original copyright notice is preserved as required by MIT. Application code only; pet assets are not part of this repository and belong to their respective creators.

@@ -1,6 +1,6 @@
 import AppKit
 import SwiftUI
-import AgentPetCore
+import DesktopPetCore
 
 // MARK: - Animations environment key
 
@@ -154,7 +154,7 @@ struct AgentBubble: View {
     var tailEdge: Edge = .bottom
     @ObservedObject private var settings = BubbleSettings.shared
 
-    // attentionPriority is internal to AgentPetCore — use local rank
+    // attentionPriority is internal to DesktopPetCore — use local rank
     private func rank(_ s: AgentState) -> Int {
         switch s { case .working: 4; case .waiting: 3; case .done: 2; case .registered: 1; case .idle: 0 }
     }

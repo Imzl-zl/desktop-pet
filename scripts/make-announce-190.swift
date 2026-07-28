@@ -4,7 +4,7 @@ import AppKit
 let scale: CGFloat = 2
 let W: CGFloat = 1200, H: CGFloat = 690
 let px = NSSize(width: W * scale, height: H * scale)
-let ROOT = "/Users/datnt/Project/datnt/agentpet"
+let ROOT = "/Users/datnt/Project/datnt/desktoppet"
 
 let image = NSImage(size: px)
 image.lockFocus()
@@ -41,7 +41,7 @@ if let logo = NSImage(contentsOfFile: "\(ROOT)/web/public/logo.png") {
     logo.draw(in: r)
     NSGraphicsContext.current!.cgContext.resetClip()
 }
-text("AgentPet", x: 146, top: 56, font: rounded(28), color: .white)
+text("DesktopPet", x: 146, top: 56, font: rounded(28), color: .white)
 text("A desktop pet that watches your AI coding agents", x: 146, top: 90, font: sys(14), color: color(0.55, 0.62, 0.8))
 // v1.9.0 pill
 let pill = NSRect(x: 1036, y: H - 102, width: 100, height: 36)
@@ -86,11 +86,11 @@ for (i, label) in feats.enumerated() {
     fx += w + gap
 }
 
-text("agentpet.thenightwatcher.online", x: 0, top: 642, font: sys(16, .semibold),
+text("github.com/Imzl-zl/desktop-pet", x: 0, top: 642, font: sys(16, .semibold),
      color: color(0.37, 0.89, 0.81), width: W, center: true)
 
 image.unlockFocus()
 guard let tiff = image.tiffRepresentation, let rep = NSBitmapImageRep(data: tiff),
       let png = rep.representation(using: .png, properties: [:]) else { exit(1) }
-try! png.write(to: URL(fileURLWithPath: "/tmp/agentpet-190.png"))
+try! png.write(to: URL(fileURLWithPath: "/tmp/desktoppet-190.png"))
 print("done")

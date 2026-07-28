@@ -1,5 +1,5 @@
 import AppKit
-import AgentPetCore
+import DesktopPetCore
 
 /// Resolves the aggregate session mood, plays a short `celebrate` burst when
 /// work finishes, owns the selected (imported) pet, and drives the chat bubble.
@@ -27,34 +27,34 @@ final class PetController: ObservableObject {
         }
     }
     /// When enabled, spawns one pet window per active project instead of a single shared pet.
-    @Published var splitPet: Bool = UserDefaults.standard.bool(forKey: "agentpet.splitPet") {
+    @Published var splitPet: Bool = UserDefaults.standard.bool(forKey: "desktoppet.splitPet") {
         didSet {
-            UserDefaults.standard.set(splitPet, forKey: "agentpet.splitPet")
+            UserDefaults.standard.set(splitPet, forKey: "desktoppet.splitPet")
             update(sessions: latestSessions)   // re-evaluate windows when toggled
         }
     }
     /// In split mode: hide a configured project's pet while it has no active work
     /// (it reappears when the project runs again). Off = the project pet stays put.
-    @Published var hideIdleProjectPets: Bool = UserDefaults.standard.bool(forKey: "agentpet.hideIdleProjectPets") {
+    @Published var hideIdleProjectPets: Bool = UserDefaults.standard.bool(forKey: "desktoppet.hideIdleProjectPets") {
         didSet {
-            UserDefaults.standard.set(hideIdleProjectPets, forKey: "agentpet.hideIdleProjectPets")
+            UserDefaults.standard.set(hideIdleProjectPets, forKey: "desktoppet.hideIdleProjectPets")
             update(sessions: latestSessions)
         }
     }
     /// When disabled, freezes all continuous/perpetual pet and bubble animation so
     /// the SwiftUI render loop can go idle (lower CPU, reduce-motion option).
     @Published var animationsEnabled: Bool =
-        (UserDefaults.standard.object(forKey: "agentpet.animationsEnabled") as? Bool) ?? true {
-        didSet { UserDefaults.standard.set(animationsEnabled, forKey: "agentpet.animationsEnabled") }
+        (UserDefaults.standard.object(forKey: "desktoppet.animationsEnabled") as? Bool) ?? true {
+        didSet { UserDefaults.standard.set(animationsEnabled, forKey: "desktoppet.animationsEnabled") }
     }
     /// User-adjustable sprite frame rate (1–12 fps). Active moods animate at this
     /// rate; idle is capped at 2 fps regardless of the slider (idle CPU win).
     @Published var animationFPS: Double =
-        ((UserDefaults.standard.object(forKey: "agentpet.animationFPS") as? Double) ?? 8).clampedFPS {
+        ((UserDefaults.standard.object(forKey: "desktoppet.animationFPS") as? Double) ?? 8).clampedFPS {
         didSet {
             let v = animationFPS.clampedFPS
             if v != animationFPS { animationFPS = v; return }   // re-entrancy guard for clamp
-            UserDefaults.standard.set(animationFPS, forKey: "agentpet.animationFPS")
+            UserDefaults.standard.set(animationFPS, forKey: "desktoppet.animationFPS")
         }
     }
     /// Sprite point size, freely adjustable via a slider.
@@ -74,10 +74,10 @@ final class PetController: ObservableObject {
     /// Sorted active sessions for the structured desktop bubble. Empty when idle/done/celebrate.
     @Published private(set) var activeAgentSessions: [AgentSession] = []
 
-    private static let petKey = "agentpet.selectedPetID"
-    private static let chatKey = "agentpet.showChat"
-    private static let idleMsgKey = "agentpet.showIdleMessage"
-    private static let sizeKey = "agentpet.petSize"
+    private static let petKey = "desktoppet.selectedPetID"
+    private static let chatKey = "desktoppet.showChat"
+    private static let idleMsgKey = "desktoppet.showIdleMessage"
+    private static let sizeKey = "desktoppet.petSize"
     private static let celebrateDuration: TimeInterval = 3
 
     init() {

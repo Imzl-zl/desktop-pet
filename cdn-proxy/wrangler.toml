@@ -1,11 +1,11 @@
 # Standalone Cloudflare Worker: mirrors the OpenPets pet library into our own R2.
-# The AgentPet app points its manifest URL here. The worker serves /manifest and
+# The DesktopPet app points its manifest URL here. The worker serves /manifest and
 # every asset (/a/...) from R2, so the app is independent of any upstream CDN.
 # Fill R2 once with: GET /mirror/run?key=<MIRROR_KEY>&cursor=N (resumable).
-name = "agentpet-petcache"
+name = "desktoppet-petcache"
 main = "worker.js"
 compatibility_date = "2026-06-01"
 
 [[r2_buckets]]
 binding = "CACHE"
-bucket_name = "agentpet-petcache"
+bucket_name = "desktoppet-petcache"

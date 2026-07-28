@@ -14,7 +14,7 @@ const v = (n: string): string => {
 
 // The tail of the app's "Sign in with GitHub": after the OAuth round-trip the
 // session cookie is set, we mint a device token here and bounce it straight
-// into the app via the agentpet:// scheme. No code to copy.
+// into the app via the desktoppet:// scheme. No code to copy.
 const cookie = Astro.cookies.get(SESSION_COOKIE)?.value || "";
 const user = cookie ? await verifySession(cookie, v("SESSION_SECRET")) : null;
 if (!user) {
@@ -35,9 +35,9 @@ if (db) {
   const token = Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
   await db.prepare("INSERT INTO care_devices (token, user_id, created_at) VALUES (?,?,?)")
     .bind(token, user.id, Date.now()).run();
-  appUrl = `agentpet://link?token=${token}&login=${encodeURIComponent(user.login)}`;
+  appUrl = `desktoppet://link?token=${token}&login=${encodeURIComponent(user.login)}`;
 
-  // A short pairing code for platforms without the agentpet:// deep link
+  // A short pairing code for platforms without the desktoppet:// deep link
   // (Windows): the app exchanges it at /api/care/pair for its own token.
   const ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   const cbytes = new Uint8Array(6);
@@ -50,16 +50,16 @@ if (db) {
   ]);
 }
 ---
-<Base title="Link the app · AgentPet" description="Connect the AgentPet desktop app to your profile." active="">
+<Base title="Link the app · DesktopPet" description="Connect the DesktopPet desktop app to your profile." active="">
   <section class="px-4 py-24">
     <div class="card mx-auto max-w-md p-8 text-center">
       <div class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-brand-50 text-brand-600"><Icon name="paw" class="h-7 w-7" /></div>
-      <h1 class="mt-4 font-display text-2xl font-bold text-ink">Linking AgentPet…</h1>
+      <h1 class="mt-4 font-display text-2xl font-bold text-ink">Linking DesktopPet…</h1>
       <p class="mt-2 text-muted">Signed in as <b class="text-ink">{user.login}</b>. Your browser should hand off to the app now.</p>
       {appUrl ? (
         <>
-          <a href={appUrl} class="btn-primary mt-6 !px-6 !py-3">Open AgentPet</a>
-          <p class="mt-3 text-xs text-faint">Nothing happening? Click the button above, then allow the browser to open AgentPet.</p>
+          <a href={appUrl} class="btn-primary mt-6 !px-6 !py-3">Open DesktopPet</a>
+          <p class="mt-3 text-xs text-faint">Nothing happening? Click the button above, then allow the browser to open DesktopPet.</p>
           {pairCode && (
             <div class="mt-6 rounded-2xl border border-line bg-brand-50/50 p-4">
               <p class="text-sm text-muted">On <b class="text-ink">Windows</b>? Enter this code in the app's <b class="text-ink">Care</b> tab:</p>

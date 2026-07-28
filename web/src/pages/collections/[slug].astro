@@ -10,7 +10,7 @@ let col: any = null;
 if (db) { await ensureSchema(db); col = await getCollection(db, slug); }
 if (!col) return Astro.redirect("/collections");
 ---
-<Base title={`${col.title} · Collections · AgentPet`} description={col.description || `Pets in the ${col.title} collection.`} active="">
+<Base title={`${col.title} · Collections · DesktopPet`} description={col.description || `Pets in the ${col.title} collection.`} active="">
   <section class="px-4 pt-8 pb-16">
     <div class="mx-auto max-w-6xl">
       <a href="/collections" class="group inline-flex items-center gap-2 rounded-full border border-line bg-white/80 py-1.5 pl-1.5 pr-4 text-sm font-semibold text-muted shadow-soft transition hover:border-brand-300 hover:text-brand-700">

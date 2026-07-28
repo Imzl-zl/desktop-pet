@@ -2,7 +2,7 @@ import Foundation
 import ServiceManagement
 
 /// Launch-at-login toggle backed by `SMAppService` (macOS 13+). Works only for
-/// the bundled `AgentPet.app`; a no-op when run as a bare binary.
+/// the bundled `DesktopPet.app`; a no-op when run as a bare binary.
 enum LoginItem {
     /// True once registered. `.requiresApproval` counts as on: registration
     /// succeeded and macOS is just waiting for the user to approve it in

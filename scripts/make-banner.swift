@@ -48,7 +48,7 @@ func draw(_ s: String, x: CGFloat, y: CGFloat, size: CGFloat, weight: NSFont.Wei
     NSAttributedString(string: s, attributes: a).draw(at: NSPoint(x: x, y: y))
 }
 
-draw("AgentPet", x: 270, y: H/2 + 28, size: 76, weight: .bold, color: .white)
+draw("DesktopPet", x: 270, y: H/2 + 28, size: 76, weight: .bold, color: .white)
 draw("A desktop pet that watches your AI coding agents.", x: 274, y: H/2 - 14,
      size: 26, weight: .regular, color: NSColor(white: 1, alpha: 0.78))
 draw("Claude Code · Codex · Gemini CLI   —   macOS menu bar", x: 274, y: H/2 - 52,

@@ -26,7 +26,7 @@ export async function loadCatalog(): Promise<Pet[]> {
   }
 }
 
-const KEY = "agentpet.petSlug";
+const KEY = "desktoppet.petSlug";
 
 export function savedSlug(): string | null {
   try { return localStorage.getItem(KEY); } catch { return null; }
@@ -81,7 +81,7 @@ export function removeFromLibrary(slug: string) {
 // ---- Pet rename (macOS ImagePetStore.nameOverrides equivalent) --------------
 // A per-slug custom name; falls back to the library/catalog name, then the slug.
 
-const NAMES_KEY = "agentpet.petNames";
+const NAMES_KEY = "desktoppet.petNames";
 
 function nameOverrides(): Record<string, string> {
   try { return JSON.parse(localStorage.getItem(NAMES_KEY) || "{}"); } catch { return {}; }

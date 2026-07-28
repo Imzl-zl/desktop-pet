@@ -41,6 +41,6 @@ guard let tiff = image.tiffRepresentation,
     FileHandle.standardError.write(Data("failed to render icon\n".utf8))
     exit(1)
 }
-let out = CommandLine.arguments.count > 1 ? CommandLine.arguments[1] : "/tmp/agentpet-icon-1024.png"
+let out = CommandLine.arguments.count > 1 ? CommandLine.arguments[1] : "/tmp/desktoppet-icon-1024.png"
 try png.write(to: URL(fileURLWithPath: out))
 print("wrote \(out)")

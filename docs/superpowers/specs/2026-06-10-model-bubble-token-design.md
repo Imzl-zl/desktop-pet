@@ -67,7 +67,7 @@ failing the whole decode.
 
 ### 2. `AgentEvent.model: String?`
 
-New optional field on `AgentEvent` (`Sources/AgentPetCore/AgentEvent.swift`),
+New optional field on `AgentEvent` (`Sources/DesktopPetCore/AgentEvent.swift`),
 threaded through the existing memberwise init with a `nil` default.
 
 ### 3. Per-payload decode
@@ -85,7 +85,7 @@ threaded through the existing memberwise init with a `nil` default.
 ### 4. `AgentSession.model: String?`
 
 New optional field on `AgentSession`
-(`Sources/AgentPetCore/AgentSession.swift`), default `nil`.
+(`Sources/DesktopPetCore/AgentSession.swift`), default `nil`.
 
 ### 5. `SessionStore.apply` merge logic
 
@@ -139,7 +139,7 @@ case .model:
 
 ## Testing
 
-- `Tests/AgentPetCoreTests`: add cases to the existing hook-decode tests
+- `Tests/DesktopPetCoreTests`: add cases to the existing hook-decode tests
   (`MultiAgentHookTests.swift` or similar) feeding synthetic JSON with:
   - `"model": {"id": "claude-sonnet-4-6-20250514", "display_name": "Sonnet 4.6"}`
     → `AgentEvent.model == "Sonnet 4.6"`

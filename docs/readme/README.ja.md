@@ -1,12 +1,13 @@
 <div align="center">
-  <img src="../../assets/banner.png" alt="AgentPet" width="100%" />
+  <img src="../../assets/banner.png" alt="DesktopPet" width="100%" />
+  <p><em>DesktopPet は <a href="https://github.com/ntd4996/agentpet">AgentPet</a> のリネーム・改変版フォークで、MIT ライセンスの下で使用されています。</em></p>
   <p>
     <img src="https://img.shields.io/badge/platform-macOS%2013%2B%20%C2%B7%20Windows%2010%2F11-black" alt="macOS 13+ &middot; Windows 10/11" />
     <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT" />
     <img src="https://img.shields.io/badge/Swift-SwiftUI-orange" alt="Swift" />
-    <a href="https://github.com/ntd4996/agentpet"><img src="https://img.shields.io/github/stars/ntd4996/agentpet?style=social" alt="GitHub stars" /></a>
+    <a href="https://github.com/Imzl-zl/desktop-pet"><img src="https://img.shields.io/github/stars/Imzl-zl/desktop-pet?style=social" alt="GitHub stars" /></a>
   </p>
-  <p><b>AgentPet が役に立ったら、ぜひ <a href="https://github.com/ntd4996/agentpet">スター</a> をお願いします！</b></p>
+  <p><b>DesktopPet が役に立ったら、ぜひ <a href="https://github.com/Imzl-zl/desktop-pet">スター</a> をお願いします！</b></p>
   <p>
     <a href="../../README.md">English</a> ·
     <a href="README.vi.md">Tiếng Việt</a> ·
@@ -15,11 +16,11 @@
   </p>
 </div>
 
-複数のコーディングエージェント（Claude Code、Codex など）を同時に動かすと、AgentPet がどれが**作業中**で、どれが**完了**し、どれが**あなたの入力待ち**かを一目で教えてくれます。ターミナルを行き来する必要はもうありません。小さなペットがデスクトップに浮かび、すべてに反応します。
+複数のコーディングエージェント（Claude Code、Codex など）を同時に動かすと、DesktopPet がどれが**作業中**で、どれが**完了**し、どれが**あなたの入力待ち**かを一目で教えてくれます。ターミナルを行き来する必要はもうありません。小さなペットがデスクトップに浮かび、すべてに反応します。
 
 ## なぜ
 
-複数のエージェントを並行して動かすと、誰が自分を必要としているか確認するためにウィンドウを切り替え続けることになります。AgentPet はそれを 2 か所で可視化します:
+複数のエージェントを並行して動かすと、誰が自分を必要としているか確認するためにウィンドウを切り替え続けることになります。DesktopPet はそれを 2 か所で可視化します:
 
 - **メニューバーのモニター**で詳細を: 実行中の各エージェント、その状態、何をしているか、リアルタイムのタイマー。
 - **デスクトップのペット**で、作業を中断せずに把握できるさりげない合図を。
@@ -31,7 +32,7 @@
 - **デスクトップのペット**が集約状態（working / waiting / done / celebrate）に反応し、任意で**チャットバブル**（組み込み or 完全カスタムのメッセージ）を表示。
 - エージェントの完了時や入力が必要なときに**ネイティブ通知**。
 - **Claude Code・Codex・Gemini CLI** を hook で統合し、設定からワンタップでインストール（working / waiting / done / idle を正確に検出、「入力待ち」も含む）。
-- **汎用ラッパー** `agentpet run -- <コマンド>` で*任意の* CLI エージェントを監視（working/done）、個別設定は不要。
+- **汎用ラッパー** `desktoppet run -- <コマンド>` で*任意の* CLI エージェントを監視（working/done）、個別設定は不要。
 - **ペットシステム**: オンラインのペットライブラリを閲覧してワンクリックでダウンロード、各状態にアニメーションを割り当て、サイズ変更、チャット文のカスタマイズ。
 - **洗練されたネイティブ設定**（タブ・ダーク）。フォーカスを奪いません。
 
@@ -72,25 +73,25 @@
 ### Homebrew
 
 ```bash
-brew install --cask ntd4996/tap/agentpet
+brew install --cask Imzl-zl/tap/desktoppet
 ```
 
 ### 直接ダウンロード
 
-[Releases](https://github.com/ntd4996/agentpet/releases) から最新の `AgentPet.dmg` を入手し、開いて AgentPet を Applications にドラッグします。
+[Releases](https://github.com/Imzl-zl/desktop-pet/releases) から最新の `DesktopPet.dmg` を入手し、開いて DesktopPet を Applications にドラッグします。
 
 ### ソースからビルド
 
 ```bash
-git clone https://github.com/ntd4996/agentpet.git
-cd agentpet
+git clone https://github.com/Imzl-zl/desktop-pet.git
+cd desktoppet
 ./scripts/build-app.sh release
-open build/AgentPet.app
+open build/DesktopPet.app
 ```
 
 > **注意:** 現在のビルドは Developer ID 署名済みですが**まだ公証されていません**。そのため macOS が初回起動をブロックする場合があります。一度だけ隔離フラグを削除してください:
 > ```bash
-> xattr -dr com.apple.quarantine "/Applications/AgentPet.app"
+> xattr -dr com.apple.quarantine "/Applications/DesktopPet.app"
 > ```
 > 完全に公証されたビルド（警告なし）は近日公開予定です。
 
@@ -98,12 +99,12 @@ open build/AgentPet.app
 
 ## 使い方
 
-**Claude Code**（推奨）: 設定から hook をインストールします。AgentPet は各セッションの実際の状態（「入力待ち」を含む）を反映します。
+**Claude Code**（推奨）: 設定から hook をインストールします。DesktopPet は各セッションの実際の状態（「入力待ち」を含む）を反映します。
 
 **その他の CLI エージェント**: ラップして実行します。
 
 ```bash
-agentpet run -- <あなたのエージェントコマンド>     # 例: agentpet run -- aider
+desktoppet run -- <あなたのエージェントコマンド>     # 例: desktoppet run -- aider
 ```
 
 セッションは実行中に *working*、終了時に *done* と表示されます。
@@ -116,7 +117,7 @@ agentpet run -- <あなたのエージェントコマンド>     # 例: agentpet
 - **アニメーションの割り当て**: 各状態でどのアニメーションを再生するか選択。
 - 不要なペットを**削除**。
 
-初回起動時にスターターペットが自動でインストールされます。AgentPet はペット素材を同梱しません。ペットは実行時に追加されます。
+初回起動時にスターターペットが自動でインストールされます。DesktopPet はペット素材を同梱しません。ペットは実行時に追加されます。
 
 ## ロードマップ
 
@@ -130,16 +131,16 @@ Swift + SwiftUI、エージェントイベント用の Unix ソケットデー�
 
 ## 応援
 
-AgentPet がターミナル探しを減らせたなら、こんな応援ができます:
+DesktopPet がターミナル探しを減らせたなら、こんな応援ができます:
 
-- ⭐ **[リポジトリにスター](https://github.com/ntd4996/agentpet)** して、より多くの人に届けてください。
+- ⭐ **[リポジトリにスター](https://github.com/Imzl-zl/desktop-pet)** して、より多くの人に届けてください。
 - ☕ **[コーヒーをおごる](https://buymeacoffee.com/ntd4996)** と、さらなる機能開発の励みになります。
 
 開発: **[Nguyễn Thành Đạt (@ntd4996)](https://github.com/ntd4996)**
 
 ## 謝辞
 
-Codex ペットパック形式とオンラインペットライブラリは **[Petdex](https://github.com/crafter-station/petdex)**（MIT）が提供しています。AgentPet は独立した相互運用クライアントで、Petdex 形式のパックを読み込み、Petdex の公開 API からダウンロードできます。AgentPet はペット素材を同梱しません。各ペット素材は提出者が各自のライセンスで保有します。あるキャラクターの権利をお持ちの場合は、テイクダウン要請を Petdex までお願いします。
+Codex ペットパック形式とオンラインペットライブラリは **[Petdex](https://github.com/crafter-station/petdex)**（MIT）が提供しています。DesktopPet は独立した相互運用クライアントで、Petdex 形式のパックを読み込み、Petdex の公開 API からダウンロードできます。DesktopPet はペット素材を同梱しません。各ペット素材は提出者が各自のライセンスで保有します。あるキャラクターの権利をお持ちの場合は、テイクダウン要請を Petdex までお願いします。
 
 ## ライセンス
 

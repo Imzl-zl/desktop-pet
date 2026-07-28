@@ -1,28 +1,28 @@
 #!/usr/bin/env bash
-# Builds AgentPet.app and a DMG. Signs with a Developer ID and notarizes when
+# Builds DesktopPet.app and a DMG. Signs with a Developer ID and notarizes when
 # the corresponding env vars (from CI secrets) are present; otherwise produces
 # an ad-hoc-signed DMG. Used by .github/workflows/release.yml.
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
-APP="build/AgentPet.app"
+APP="build/DesktopPet.app"
 VERSION="$(/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' scripts/AppInfo.plist)"
 
 ./scripts/build-app.sh release
 
 if [ -n "${SIGN_IDENTITY:-}" ]; then
     echo "==> Signing with Developer ID"
-    codesign --force --options runtime --timestamp --sign "$SIGN_IDENTITY" "$APP/Contents/MacOS/agentpet"
+    codesign --force --options runtime --timestamp --sign "$SIGN_IDENTITY" "$APP/Contents/MacOS/desktoppet"
     codesign --force --options runtime --timestamp --sign "$SIGN_IDENTITY" "$APP"
     codesign --verify --strict "$APP"
 fi
 
-DMG="build/AgentPet-$VERSION.dmg"
+DMG="build/DesktopPet-$VERSION.dmg"
 STAGE="build/dmg"
 rm -f "$DMG"; rm -rf "$STAGE"; mkdir -p "$STAGE"
-cp -R "$APP" "$STAGE/AgentPet.app"
+cp -R "$APP" "$STAGE/DesktopPet.app"
 ln -s /Applications "$STAGE/Applications"
-hdiutil create -volname "AgentPet" -srcfolder "$STAGE" -ov -format UDZO "$DMG" >/dev/null
+hdiutil create -volname "DesktopPet" -srcfolder "$STAGE" -ov -format UDZO "$DMG" >/dev/null
 
 if [ -n "${AC_API_KEY_P8:-}" ] && [ -n "${AC_KEY_ID:-}" ] && [ -n "${AC_ISSUER_ID:-}" ]; then
     echo "==> Notarizing"

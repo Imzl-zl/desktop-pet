@@ -1,11 +1,11 @@
-//! The `agentpet hook --agent <kind>` command, run by each agent's hook. It
+//! The `desktoppet hook --agent <kind>` command, run by each agent's hook. It
 //! reads the agent's payload (explicit flags for the opencode plugin, otherwise
 //! JSON on stdin), extracts the essentials, and POSTs them to the running app's
 //! localhost listener. ALWAYS exits 0 so it never blocks an agent (Copilot
 //! PreToolUse is fail-closed). If the app isn't running, the event is queued on
 //! disk and replayed on the next launch (like the macOS app's event queue).
 //!
-//! Also hosts `agentpet run -- <cmd...>`: wraps any CLI agent, keeping the
+//! Also hosts `desktoppet run -- <cmd...>`: wraps any CLI agent, keeping the
 //! session `working` (with a heartbeat) while it runs and `done` on exit.
 
 use serde_json::Value;
@@ -152,7 +152,7 @@ fn terminal_env() -> (String, String) {
     (nonempty("TERM_PROGRAM"), nonempty("WARP_FOCUS_URL"))
 }
 
-/// `agentpet run [--session id] [--project path] [--agent kind] -- <command...>`
+/// `desktoppet run [--session id] [--project path] [--agent kind] -- <command...>`
 /// Port of the macOS RunCLI: any CLI agent gets a working session with a 60s
 /// heartbeat, and `done` when the command exits (exit code passed through).
 pub fn run_wrapper(args: &[String]) -> ! {
@@ -162,7 +162,7 @@ pub fn run_wrapper(args: &[String]) -> ! {
         None => (args, &args[args.len()..]),
     };
     if command.is_empty() {
-        eprintln!("usage: agentpet run [--session id] [--project path] [--agent kind] -- <command...>");
+        eprintln!("usage: desktoppet run [--session id] [--project path] [--agent kind] -- <command...");
         std::process::exit(2);
     }
 
@@ -212,7 +212,7 @@ pub fn run_wrapper(args: &[String]) -> ! {
     match status {
         Ok(s) => std::process::exit(s.code().unwrap_or(0)),
         Err(_) => {
-            eprintln!("agentpet run: failed to launch {}", command[0]);
+            eprintln!("desktoppet run: failed to launch {}", command[0]);
             std::process::exit(126);
         }
     }
@@ -256,10 +256,10 @@ fn post_and_exit(p: Payload) -> ! {
     std::process::exit(0);
 }
 
-/// Queue dir shared with the app: %LOCALAPPDATA%/AgentPet/queue (config_dir on
+/// Queue dir shared with the app: %LOCALAPPDATA%/DesktopPet/queue (config_dir on
 /// other platforms). One JSON line per file, name-ordered by timestamp.
 pub fn queue_dir() -> Option<std::path::PathBuf> {
-    dirs::config_dir().map(|d| d.join("AgentPet").join("queue"))
+    dirs::config_dir().map(|d| d.join("DesktopPet").join("queue"))
 }
 
 fn queue(p: &Payload) {

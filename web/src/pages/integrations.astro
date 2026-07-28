@@ -3,7 +3,7 @@ import Base from "../layouts/Base.astro";
 import Icon from "../components/Icon.astro";
 import Hero from "../components/Hero.astro";
 
-// AgentPet installs lifecycle hooks for each tool from Settings with one tap, and
+// DesktopPet installs lifecycle hooks for each tool from Settings with one tap, and
 // removes them cleanly on uninstall. All of these ship today.
 const agents = [
   { name: "Claude Code", icon: "/agent-icons/claude-code.svg", kind: "Lifecycle hooks", body: "One-tap hook install for Claude Code. Your pet reacts to thinking, editing, running, and finishing.", status: "Active" },
@@ -17,13 +17,13 @@ const agents = [
   { name: "Pi", icon: "/agent-icons/pi.svg", kind: "Extension", body: "Pi (pi.dev) reports session lifecycle through an auto-installed extension, so the pet tracks each run.", status: "Active" },
 ];
 ---
-<Base title="Integrations · AgentPet" description="Connect AgentPet to your AI coding agents." active="integrations">
+<Base title="Integrations · DesktopPet" description="Connect DesktopPet to your AI coding agents." active="integrations">
   <Hero
     eyebrow="AI assistant setup"
     icon="bolt"
-    title="Connect AgentPet to"
+    title="Connect DesktopPet to"
     accent="your agent"
-    lead="AgentPet watches your AI coding agents and shows a desktop pet that reacts. Pick your tool, connect it in one tap, and see at a glance who's working, done, or waiting for you."
+    lead="DesktopPet watches your AI coding agents and shows a desktop pet that reacts. Pick your tool, connect it in one tap, and see at a glance who's working, done, or waiting for you."
   >
     <a href="/install" class="btn-primary !px-6 !py-3"><Icon name="download" class="h-5 w-5" /> Get the app</a>
     <a href="/docs#agents" class="btn-ghost !px-6 !py-3"><Icon name="book" class="h-5 w-5" /> How it works</a>
@@ -56,7 +56,7 @@ const agents = [
           <span class="grid h-12 w-12 place-items-center rounded-2xl bg-white/20 ring-1 ring-white/30"><Icon name="sparkles" class="h-6 w-6 text-white" /></span>
           <div class="mt-5 font-pixel text-[11px] uppercase tracking-wide text-brand-100">More on the way</div>
           <h3 class="mt-1 font-display text-xl font-semibold text-white">Missing your tool?</h3>
-          <p class="mt-2 flex-1 text-sm text-brand-100">Any CLI agent works too: wrap it with <code class="rounded bg-white/15 px-1.5 py-0.5 font-mono text-xs text-white">agentpet run</code>. Ask for a first-class integration on Discord.</p>
+          <p class="mt-2 flex-1 text-sm text-brand-100">Any CLI agent works too: wrap it with <code class="rounded bg-white/15 px-1.5 py-0.5 font-mono text-xs text-white">desktoppet run</code>. Ask for a first-class integration on Discord.</p>
           <a href="https://discord.gg/kzFJKsZav" target="_blank" rel="noopener" class="mt-5 inline-flex items-center gap-1 font-semibold text-white">
             <Icon name="discord" class="h-4 w-4" /> Request on Discord
           </a>
@@ -66,7 +66,7 @@ const agents = [
       <!-- how connect works -->
       <div class="mt-10 grid gap-5 md:grid-cols-3">
         {[
-          { icon: "download", t: "Install AgentPet", b: "Grab the app for macOS or Windows (Linux soon). One command, free forever." },
+          { icon: "download", t: "Install DesktopPet", b: "Grab the app for macOS or Windows (Linux soon). One command, free forever." },
           { icon: "bolt", t: "Connect in one tap", b: "Open Settings, toggle your tools on. Hooks are written for you, no config files to edit." },
           { icon: "sparkles", t: "Watch it react", b: "Your pet thinks, works, and celebrates in step with every agent run." },
         ].map((s, i) => (
@@ -83,14 +83,14 @@ const agents = [
       <div id="setup" class="mt-12 scroll-mt-28 text-center">
         <div class="font-pixel text-[11px] uppercase tracking-wide text-brand-500">See it in action</div>
         <h2 class="mt-2 font-display text-3xl font-bold text-ink">One-tap setup, start to finish</h2>
-        <p class="mx-auto mt-3 max-w-2xl text-muted">Open Settings, toggle each agent on, and AgentPet writes the hooks for you. No config files, no terminal.</p>
+        <p class="mx-auto mt-3 max-w-2xl text-muted">Open Settings, toggle each agent on, and DesktopPet writes the hooks for you. No config files, no terminal.</p>
       </div>
       <div class="mx-auto mt-7 max-w-4xl overflow-hidden rounded-card border border-line bg-white shadow-card">
         <div class="flex items-center gap-1.5 border-b border-line bg-brand-50/60 px-4 py-3">
           <span class="h-3 w-3 rounded-full bg-red-400"></span>
           <span class="h-3 w-3 rounded-full bg-amber-400"></span>
           <span class="h-3 w-3 rounded-full bg-emerald-400"></span>
-          <span class="ml-2 font-pixel text-[10px] uppercase tracking-wide text-faint">AgentPet · Settings</span>
+          <span class="ml-2 font-pixel text-[10px] uppercase tracking-wide text-faint">DesktopPet · Settings</span>
         </div>
         <video
           autoplay

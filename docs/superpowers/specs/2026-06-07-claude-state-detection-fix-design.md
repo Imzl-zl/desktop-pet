@@ -2,7 +2,7 @@
 
 ## Problem
 
-`StateMapper` (Sources/AgentPetCore/StateMapper.swift) maps Claude Code hook
+`StateMapper` (Sources/DesktopPetCore/StateMapper.swift) maps Claude Code hook
 events to `AgentState`, which drives notifications, sounds, pet mood/animation,
 and the multi-agent bubble — for *all* users, regardless of which bubble UI
 they have enabled. Two mappings are wrong:
@@ -15,7 +15,7 @@ they have enabled. Two mappings are wrong:
 2. **`Stop → .done` always** — Claude Code fires `Stop` at the end of *every*
    assistant turn, including turns where Claude ends by asking the user a
    plain-text clarifying question ("Which approach do you want — A or B?").
-   No `Notification`/permission event accompanies that. AgentPet has no
+   No `Notification`/permission event accompanies that. DesktopPet has no
    signal to distinguish "truly done" from "done talking, waiting on your
    reply," so it shows **Done** (and fires a "finished" notification/sound)
    when Claude is actually **waiting for the user**.
@@ -39,7 +39,7 @@ resolution) and correcting the state after the fact if needed.
 
 ### New unit: `QuestionDetector`
 
-`Sources/AgentPetCore/QuestionDetector.swift`:
+`Sources/DesktopPetCore/QuestionDetector.swift`:
 
 ```swift
 public enum QuestionDetector {

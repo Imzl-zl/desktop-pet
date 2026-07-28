@@ -1,4 +1,4 @@
-//! A tiny localhost HTTP listener. The `agentpet hook` CLI (run by each agent's
+//! A tiny localhost HTTP listener. The `desktoppet hook` CLI (run by each agent's
 //! hook) POSTs an event here; we map it to a pet state and emit a Tauri event
 //! to the UI (broadcast: pet overlay + Settings both listen). Mirrors the macOS
 //! app's unix-socket daemon, but cross-platform.
@@ -35,11 +35,11 @@ pub fn resolve_approval(id: &str, decision: &str) {
     }
 }
 
-/// Opt-in whitelist: the gate stays OFF unless `~/.agentpet/approval-gate.json`
+/// Opt-in whitelist: the gate stays OFF unless `~/.desktoppet/approval-gate.json`
 /// exists with `{"tools":["Bash",...]}`. Same config path as the macOS app.
 pub fn gated_tools() -> HashSet<String> {
     let Some(home) = dirs::home_dir() else { return HashSet::new() };
-    let path = home.join(".agentpet").join("approval-gate.json");
+    let path = home.join(".desktoppet").join("approval-gate.json");
     let Ok(data) = std::fs::read_to_string(path) else { return HashSet::new() };
     let Ok(v) = serde_json::from_str::<Value>(&data) else { return HashSet::new() };
     v.get("tools")

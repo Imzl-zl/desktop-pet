@@ -1,5 +1,5 @@
 import Foundation
-import AgentPetCore
+import DesktopPetCore
 
 enum PetdexError: Error { case badStatus(Int) }
 
@@ -30,7 +30,7 @@ enum PetdexAssets {
     }
 }
 
-/// Downloads a pet pack (pet.json + spritesheet) into `~/.agentpet/pets/<slug>/`.
+/// Downloads a pet pack (pet.json + spritesheet) into `~/.desktoppet/pets/<slug>/`.
 /// Shared by the Browse gallery and first-run onboarding.
 enum PetInstaller {
     private struct PackMeta: Decodable { let id: String?; let spritesheetPath: String }
@@ -46,7 +46,7 @@ enum PetInstaller {
     @discardableResult
     static func download(slug: String, petJsonURL: URL, spritesheetURL: URL, report: Bool = true) async throws -> String {
         let fm = FileManager.default
-        let dir = URL(fileURLWithPath: AgentPetPaths.baseDir)
+        let dir = URL(fileURLWithPath: DesktopPetPaths.baseDir)
             .appendingPathComponent("pets").appendingPathComponent(slug)
         try fm.createDirectory(at: dir, withIntermediateDirectories: true)
 
@@ -92,7 +92,7 @@ enum PetInstaller {
         let sheetName = "spritesheet.\(ext.lowercased())"
 
         do {
-            let petsDir = URL(fileURLWithPath: AgentPetPaths.baseDir).appendingPathComponent("pets")
+            let petsDir = URL(fileURLWithPath: DesktopPetPaths.baseDir).appendingPathComponent("pets")
             try fm.createDirectory(at: petsDir, withIntermediateDirectories: true)
             let id = uniquePetID(base: safeFolderName(cleanName), in: petsDir)
             let staging = petsDir.appendingPathComponent(".create-\(UUID().uuidString)")
@@ -163,7 +163,7 @@ private extension String {
 /// Installs a starter pet on the very first launch so the app isn't empty.
 @MainActor
 enum DefaultPetBootstrap {
-    private static let triedKey = "agentpet.defaultPetTried"
+    private static let triedKey = "desktoppet.defaultPetTried"
     private static let manifestURL = URL(string: "https://pets.thenightwatcher.online/manifest.json")!
     /// Preferred starter (a non-franchise original); falls back to any pet.
     private static let preferredSlug = "boba"

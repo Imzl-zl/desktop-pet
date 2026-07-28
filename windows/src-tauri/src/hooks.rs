@@ -1,4 +1,4 @@
-//! Writes/removes AgentPet's hook entries in each agent's config, using Windows
+//! Writes/removes DesktopPet's hook entries in each agent's config, using Windows
 //! paths (%USERPROFILE%\.claude\settings.json, ...). Ported from the macOS app's
 //! AgentHooks + HookInstaller. Our entries are identified by their command
 //! string so install is idempotent and foreign hooks are never touched.
@@ -21,7 +21,7 @@ enum Style {
     CursorFlat,        // {"version":1,"hooks":{event:[{"command":..,"type":"command"}]}}
     WindsurfFlat,      // {"hooks":{event:[{"command":..,"show_output":false}]}}
     KiroFlat,          // agent file: {"name":..,"hooks":{event:[{"command":..}]}}
-    AntigravityNested, // {"agentpet": {Event: [..]}} (matcher events vs bare handlers)
+    AntigravityNested, // {"desktoppet": {Event: [..]}} (matcher events vs bare handlers)
     OpencodePlugin,    // a JS plugin file
     PiExtension,       // a TS extension file for Pi (~/.pi/agent/extensions)
 }
@@ -42,7 +42,7 @@ fn spec(kind: &str) -> Option<Spec> {
             events: &["SessionStart", "BeforeAgent", "BeforeTool", "AfterTool", "Notification", "AfterAgent", "SessionEnd"] },
         "cursor" => Spec { style: Style::CursorFlat, rel_path: &[".cursor", "hooks.json"],
             events: &["sessionStart", "beforeSubmitPrompt", "preToolUse", "stop", "subagentStop", "sessionEnd"] },
-        "copilot" => Spec { style: Style::CursorFlat, rel_path: &[".copilot", "hooks", "agentpet.json"],
+        "copilot" => Spec { style: Style::CursorFlat, rel_path: &[".copilot", "hooks", "desktoppet.json"],
             events: &["SessionStart", "UserPromptSubmit", "PostToolUse", "Stop"] },
         "windsurf" => Spec { style: Style::WindsurfFlat, rel_path: &[".codeium", "windsurf", "hooks.json"],
             events: &["pre_user_prompt", "post_cascade_response"] },
@@ -50,11 +50,11 @@ fn spec(kind: &str) -> Option<Spec> {
             events: &["PreInvocation", "PreToolUse", "PostToolUse", "Stop"] },
         "kiro" => Spec { style: Style::KiroFlat, rel_path: &[".kiro", "agents", "default.json"],
             events: &["agentSpawn", "userPromptSubmit", "postToolUse", "stop"] },
-        "opencode" => Spec { style: Style::OpencodePlugin, rel_path: &[".config", "opencode", "plugin", "agentpet.js"],
+        "opencode" => Spec { style: Style::OpencodePlugin, rel_path: &[".config", "opencode", "plugin", "desktoppet.js"],
             events: &[] },
         "droid" => Spec { style: Style::ClaudeNested, rel_path: &[".factory", "hooks.json"],
             events: &["SessionStart", "UserPromptSubmit", "PreToolUse", "Notification", "Stop", "SubagentStop", "SessionEnd"] },
-        "pi" => Spec { style: Style::PiExtension, rel_path: &[".pi", "agent", "extensions", "agentpet.ts"],
+        "pi" => Spec { style: Style::PiExtension, rel_path: &[".pi", "agent", "extensions", "desktoppet.ts"],
             events: &[] },
         _ => return None,
     })
@@ -63,7 +63,7 @@ fn spec(kind: &str) -> Option<Spec> {
 pub fn catalog() -> Vec<AgentInfo> {
     let entries: &[(&str, &str, Option<&str>)] = &[
         ("claude", "Claude Code", None),
-        ("codex", "Codex", Some("After enabling, run /hooks in Codex and Trust the AgentPet hook")),
+        ("codex", "Codex", Some("After enabling, run /hooks in Codex and Trust the DesktopPet hook")),
         ("gemini", "Gemini CLI", None),
         ("cursor", "Cursor", None),
         ("opencode", "opencode", None),
@@ -89,14 +89,14 @@ fn config_path(kind: &str) -> Option<PathBuf> {
 }
 
 fn hook_command() -> String {
-    let exe = std::env::current_exe().map(|p| p.to_string_lossy().into_owned()).unwrap_or_else(|_| "agentpet".into());
+    let exe = std::env::current_exe().map(|p| p.to_string_lossy().into_owned()).unwrap_or_else(|_| "desktoppet".into());
     format!("\"{}\" hook --agent", exe)
 }
 fn full_command(kind: &str) -> String { format!("{} {}", hook_command(), kind) }
 
 fn is_ours(cmd: &str) -> bool {
     let l = cmd.to_lowercase();
-    l.contains("agentpet") && l.contains("hook")
+    l.contains("desktoppet") && l.contains("hook")
 }
 
 fn read_json(path: &PathBuf) -> Value {
@@ -111,7 +111,7 @@ fn write_json(path: &PathBuf, v: &Value) -> std::io::Result<()> {
 
 // ----- per-style entry helpers --------------------------------------------
 fn container_key(style: Style) -> &'static str {
-    if style == Style::AntigravityNested { "agentpet" } else { "hooks" }
+    if style == Style::AntigravityNested { "desktoppet" } else { "hooks" }
 }
 fn antigravity_matcher(event: &str) -> bool {
     matches!(event, "PreToolUse" | "PostToolUse")
@@ -247,31 +247,31 @@ fn binary_from(cmd: &str) -> String {
 fn opencode_plugin(binary: &str) -> String {
     let bin = serde_json::to_string(binary).unwrap_or_else(|_| format!("\"{}\"", binary));
     format!(
-        "// AgentPet integration (auto-generated, safe to delete to uninstall).\n\
-         const AGENTPET_BIN = {bin}\n\
-         export const AgentPet = async ({{ directory }}) => {{\n\
+        "// DesktopPet integration (auto-generated, safe to delete to uninstall).\n\
+         const DESKTOPPET_BIN = {bin}\n\
+         export const DesktopPet = async ({{ directory }}) => {{\n\
          \x20 const sid = \"opencode:\" + (directory || \"default\")\n\
-         \x20 const send = (state) => {{ try {{ Bun.spawn([AGENTPET_BIN, \"hook\", \"--agent\", \"opencode\", \"--event\", state, \"--session\", sid, \"--project\", directory || \"\"]) }} catch (e) {{}} }}\n\
+         \x20 const send = (state) => {{ try {{ Bun.spawn([DESKTOPPET_BIN, \"hook\", \"--agent\", \"opencode\", \"--event\", state, \"--session\", sid, \"--project\", directory || \"\"]) }} catch (e) {{}} }}\n\
          \x20 return {{ \"session.created\": async () => {{ send(\"working\") }}, \"session.idle\": async () => {{ send(\"done\") }} }}\n\
          }}\n"
     )
 }
 
-/// The Pi extension: reports session lifecycle through the `agentpet hook` CLI.
+/// The Pi extension: reports session lifecycle through the `desktoppet hook` CLI.
 fn pi_extension(binary: &str) -> String {
     let bin = serde_json::to_string(binary).unwrap_or_else(|_| format!("\"{}\"", binary));
     format!(
-        "// AgentPet integration (auto-generated, safe to delete to uninstall).\n\
-         // Reports Pi session lifecycle to AgentPet's menu bar app.\n\
+        "// DesktopPet integration (auto-generated, safe to delete to uninstall).\n\
+         // Reports Pi session lifecycle to DesktopPet's menu bar app.\n\
          import {{ spawn }} from \"node:child_process\"\n\
-         const AGENTPET_BIN = {bin}\n\
+         const DESKTOPPET_BIN = {bin}\n\
          export default function (pi) {{\n\
          \x20 const send = (state, ctx) => {{\n\
          \x20   try {{\n\
          \x20     const cwd = (ctx && ctx.cwd) || process.cwd()\n\
          \x20     const file = ctx && ctx.sessionManager && ctx.sessionManager.getSessionFile ? ctx.sessionManager.getSessionFile() : null\n\
          \x20     const sid = \"pi:\" + (file || cwd)\n\
-         \x20     const p = spawn(AGENTPET_BIN, [\"hook\", \"--agent\", \"pi\", \"--event\", state, \"--session\", sid, \"--project\", cwd], {{ stdio: \"ignore\" }})\n\
+         \x20     const p = spawn(DESKTOPPET_BIN, [\"hook\", \"--agent\", \"pi\", \"--event\", state, \"--session\", sid, \"--project\", cwd], {{ stdio: \"ignore\" }})\n\
          \x20     if (p && p.unref) p.unref()\n\
          \x20   }} catch (e) {{}}\n\
          \x20 }}\n\

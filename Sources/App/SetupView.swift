@@ -1,5 +1,5 @@
 import SwiftUI
-import AgentPetCore
+import DesktopPetCore
 
 /// Native macOS-style settings: a preferences-style toolbar of tabs over
 /// grouped forms (dark).
@@ -175,7 +175,7 @@ private struct AdvancedTab: View {
                     Text(err).font(.caption).foregroundStyle(Theme.danger).textSelection(.enabled)
                 }
             } footer: {
-                Text("Install a hook so AgentPet can mirror your coding agents in the bubble.")
+                Text("Install a hook so DesktopPet can mirror your coding agents in the bubble.")
                     .foregroundStyle(Theme.textMuted)
             }
 
@@ -267,7 +267,7 @@ private struct GeneralTab: View {
                     VStack(alignment: .leading, spacing: Theme.space1) {
                         Text("Launch at login")
                             .foregroundStyle(Theme.textPrimary)
-                        Text("AgentPet starts automatically when you sign in.")
+                        Text("DesktopPet starts automatically when you sign in.")
                             .font(.caption)
                             .foregroundStyle(Theme.textMuted)
                     }
@@ -379,7 +379,7 @@ private struct GeneralTab: View {
                     .frame(width: 64, height: 64)
                     .shadow(color: Theme.accentGlow, radius: 12, y: 3)
 
-                    Text("AgentPet")
+                    Text("DesktopPet")
                         .font(.title2.bold())
                         .foregroundStyle(Theme.textPrimary)
                     Text("A desktop pet that keeps you company while you work.")
@@ -394,7 +394,7 @@ private struct GeneralTab: View {
             }
 
             Section {
-                Button("Quit AgentPet") { NSApplication.shared.terminate(nil) }
+                Button("Quit DesktopPet") { NSApplication.shared.terminate(nil) }
                     .buttonStyle(BorderedButtonStyle())
             }
         }
@@ -418,7 +418,7 @@ private struct GeneralTab: View {
 
     private var notificationDetail: String {
         switch model.notificationState {
-        case .unavailable: return NSLocalizedString("Available once installed as AgentPet.app", comment: "")
+        case .unavailable: return NSLocalizedString("Available once installed as DesktopPet.app", comment: "")
         case .denied: return NSLocalizedString("Turn on in System Settings to get alerts", comment: "")
         case .enabled: return model.notificationsEnabled
             ? NSLocalizedString("Alerts when something needs your attention.", comment: "")
@@ -1055,7 +1055,7 @@ private struct AnimationPicker: View {
 
 // MARK: - Codex connection help
 
-/// Explains the one-time `/hooks` trust step Codex requires before AgentPet's
+/// Explains the one-time `/hooks` trust step Codex requires before DesktopPet's
 /// hook runs (Codex blocks unknown command hooks for security). Other agents
 /// need no such step.
 private struct CodexHelpView: View {
@@ -1087,7 +1087,7 @@ private struct CodexHelpView: View {
                 Spacer()
             }
 
-            Text("The hook is installed. Codex blocks unknown command hooks until you trust them once, a Codex security feature, not an AgentPet bug. Do this one time:")
+            Text("The hook is installed. Codex blocks unknown command hooks until you trust them once, a Codex security feature, not an DesktopPet bug. Do this one time:")
                 .font(.callout)
                 .foregroundStyle(Theme.textMuted)
                 .fixedSize(horizontal: false, vertical: true)

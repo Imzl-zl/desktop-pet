@@ -12,8 +12,8 @@ import { getDB, ensureSchema, getOverrides, approvedCommunityPets, getNumbers, l
 export const prerender = false;
 Astro.response.headers.set("cache-control", "no-store");
 
-const RELEASE_LATEST = "https://github.com/ntd4996/agentpet/releases/latest";
-const BREW = "brew install --cask ntd4996/tap/agentpet";
+const RELEASE_LATEST = "https://github.com/Imzl-zl/desktop-pet/releases/latest";
+const BREW = "brew install --cask Imzl-zl/tap/desktoppet";
 
 const manifest = await loadManifest();
 const db = getDB();
@@ -113,7 +113,7 @@ const stats = [
   { n: "100%", l: "free & open" },
 ];
 const steps = [
-  { icon: "download", title: "Get the app", body: "Install AgentPet on macOS or Windows in seconds (Linux soon). Free forever." },
+  { icon: "download", title: "Get the app", body: "Install DesktopPet on macOS or Windows in seconds (Linux soon). Free forever." },
   { icon: "paw", title: "Adopt a pet", body: "Pick from thousands of pixel companions, or make and share your own." },
   { icon: "sparkles", title: "Watch it react", body: "Your pet thinks, works, and celebrates right alongside your AI agents." },
 ];
@@ -130,7 +130,7 @@ const bubblePos = [
   "right-1/3 bottom-4 h-12 w-12",
 ];
 ---
-<Base title="AgentPet · pixel companions for your AI agents" active="">
+<Base title="DesktopPet · pixel companions for your AI agents" active="">
   <!-- HERO: chibi floating island in the sky -->
   <section class="relative overflow-hidden px-4 pb-6 pt-6">
     <!-- drifting clouds -->
@@ -163,7 +163,7 @@ const bubblePos = [
       <img src="/island/isl-grove.png" alt="" class="bob-2 pixel-art absolute -left-3 bottom-8 z-20 w-20 sm:w-32 md:w-40" style="filter: drop-shadow(0 18px 14px rgba(30,58,130,.22)); animation-delay:-2.4s" />
       <img src="/island/isl-chest.png" alt="" class="bob-3 pixel-art absolute -right-1 top-24 z-20 w-20 sm:w-28 md:w-32" style="filter: drop-shadow(0 18px 14px rgba(30,58,130,.22)); animation-delay:-1.5s" />
       <img src="/island/sprout.png" alt="" class="bob pixel-art absolute right-16 bottom-2 z-20 hidden w-12 sm:block" style="animation-delay:-3.2s" />
-      <img src="/island/main.png" alt="AgentPet adoption island" class="bob-slow pixel-art relative z-10 mx-auto w-full max-w-4xl" style="filter: drop-shadow(0 30px 24px rgba(30,58,130,.28)); animation-delay:-1.1s" />
+      <img src="/island/main.png" alt="DesktopPet adoption island" class="bob-slow pixel-art relative z-10 mx-auto w-full max-w-4xl" style="filter: drop-shadow(0 30px 24px rgba(30,58,130,.28)); animation-delay:-1.1s" />
     </div>
   </section>
 
@@ -184,7 +184,7 @@ const bubblePos = [
     <div class="mx-auto max-w-6xl text-center">
       <div class="font-pixel text-[11px] uppercase tracking-wide text-brand-500">Works with your stack</div>
       <h2 class="mt-2 font-display text-3xl font-bold text-ink sm:text-4xl">One pet, every coding agent</h2>
-      <p class="mx-auto mt-3 max-w-xl text-muted">AgentPet reacts to whichever agent you run, not just one. Your companion thinks, works, and celebrates right alongside them all.</p>
+      <p class="mx-auto mt-3 max-w-xl text-muted">DesktopPet reacts to whichever agent you run, not just one. Your companion thinks, works, and celebrates right alongside them all.</p>
       <div class="mt-7 flex flex-wrap items-center justify-center gap-2.5">
         {["Claude Code", "Codex", "Cursor", "Gemini", "Windsurf", "Antigravity"].map((a) => (
           <span class="inline-flex items-center gap-2 rounded-full border border-line bg-white px-4 py-2 font-display text-sm font-semibold text-ink shadow-soft">
@@ -359,7 +359,7 @@ const bubblePos = [
   <!-- WORLD SHOWCASE -->
   <section class="relative px-4 pt-20">
     <div class="mx-auto max-w-6xl text-center">
-      <div class="font-pixel text-[11px] uppercase tracking-wide text-brand-500">The AgentPet world</div>
+      <div class="font-pixel text-[11px] uppercase tracking-wide text-brand-500">The DesktopPet world</div>
       <h2 class="mt-2 font-display text-3xl font-bold text-ink sm:text-4xl">One island, every companion</h2>
       <p class="mx-auto mt-3 max-w-2xl text-muted">From tiny sidekicks to mythical beasts to your own creations, the whole community lives on one cozy floating island, hanging out while your agents work.</p>
       <div class="relative mt-6">
@@ -394,7 +394,7 @@ const bubblePos = [
         <div>
           <div class="font-pixel text-[11px] uppercase tracking-wide text-brand-500">Install in seconds</div>
           <h2 class="mt-2 font-display text-3xl font-bold text-ink sm:text-4xl">Up and running with one command</h2>
-          <p class="mt-3 max-w-md text-muted">AgentPet is free and open source. Install it on macOS with Homebrew or a notarized DMG, or grab the Windows installer. Linux is on the way.</p>
+          <p class="mt-3 max-w-md text-muted">DesktopPet is free and open source. Install it on macOS with Homebrew or a notarized DMG, or grab the Windows installer. Linux is on the way.</p>
           <div class="mt-6 flex flex-wrap gap-3">
             <a href="/install" data-os-cta="macos" class="btn-primary !px-6 !py-3"><Icon name="apple" class="h-5 w-5" /> Download for macOS</a>
             <a href="/install" data-os-cta="windows" class="btn-primary hidden !px-6 !py-3"><Icon name="windows" class="h-5 w-5" /> Download for Windows</a>

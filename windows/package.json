@@ -1,9 +1,9 @@
 {
-  "name": "agentpet-windows",
+  "name": "desktoppet-windows",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "AgentPet for Windows — a desktop companion that keeps you company while you work.",
+  "description": "DesktopPet for Windows — a desktop companion that keeps you company while you work.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",

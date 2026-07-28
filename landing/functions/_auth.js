@@ -10,7 +10,7 @@ export const PROVIDERS = {
       const r = await fetch("https://api.github.com/user", {
         headers: {
           authorization: `Bearer ${token}`,
-          "user-agent": "agentpet-portal",
+          "user-agent": "desktoppet-portal",
           accept: "application/vnd.github+json",
         },
       });

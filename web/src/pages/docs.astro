@@ -3,16 +3,16 @@ import Base from "../layouts/Base.astro";
 import Icon from "../components/Icon.astro";
 import Hero from "../components/Hero.astro";
 import CodeBlock from "../components/CodeBlock.astro";
-const GITHUB = "https://github.com/ntd4996/agentpet";
-const RELEASE_LATEST = "https://github.com/ntd4996/agentpet/releases/latest";
-const BREW = "brew install --cask ntd4996/tap/agentpet";
-const UNINSTALL = `brew uninstall --cask agentpet
-rm -rf ~/.agentpet
-rm -f  ~/Library/Preferences/com.agentpet.app.plist`;
+const GITHUB = "https://github.com/Imzl-zl/desktop-pet";
+const RELEASE_LATEST = "https://github.com/Imzl-zl/desktop-pet/releases/latest";
+const BREW = "brew install --cask Imzl-zl/tap/desktoppet";
+const UNINSTALL = `brew uninstall --cask desktoppet
+rm -rf ~/.desktoppet
+rm -f  ~/Library/Preferences/com.desktoppet.app.plist`;
 // Grouped table of contents (openpets-style sections).
 const toc = [
   { group: "Get started", items: [
-    { id: "overview", label: "What AgentPet is" },
+    { id: "overview", label: "What DesktopPet is" },
     { id: "install", label: "Install the app" },
     { id: "uninstall", label: "Uninstall" },
     { id: "adopt", label: "Adopt a pet" },
@@ -44,13 +44,13 @@ const petJson = `{
   "description": "A chill little capybara."
 }`;
 ---
-<Base title="Docs · AgentPet" description="How AgentPet works, the pet format, and how to contribute." active="docs">
+<Base title="Docs · DesktopPet" description="How DesktopPet works, the pet format, and how to contribute." active="docs">
   <Hero
     eyebrow="Documentation"
     icon="book"
-    title="AgentPet"
+    title="DesktopPet"
     accent="docs"
-    lead="Everything about AgentPet: how it works, the pet pack format, and how to bring your own companions."
+    lead="Everything about DesktopPet: how it works, the pet pack format, and how to bring your own companions."
   >
     <a href="#format" class="btn-primary !px-6 !py-3"><Icon name="sparkles" class="h-5 w-5" /> Pet format</a>
     <a href={GITHUB} target="_blank" rel="noopener" class="btn-ghost !px-6 !py-3"><Icon name="github" class="h-4 w-4" /> View on GitHub</a>
@@ -72,14 +72,14 @@ const petJson = `{
 
         <div class="min-w-0 space-y-10">
           <article id="overview" class="card p-7">
-            <h2 class="font-display text-2xl font-bold text-ink">What AgentPet is</h2>
-            <p class="mt-3 text-muted">AgentPet keeps an eye on several AI coding agents at once. It lives in your macOS menu bar and shows, at a glance, which agent is <b class="text-ink">working</b>, which is <b class="text-ink">done</b>, and which is <b class="text-ink">waiting for your input</b>, with a live per-agent timer, so you stop tab-hunting across terminals.</p>
+            <h2 class="font-display text-2xl font-bold text-ink">What DesktopPet is</h2>
+            <p class="mt-3 text-muted">DesktopPet keeps an eye on several AI coding agents at once. It lives in your macOS menu bar and shows, at a glance, which agent is <b class="text-ink">working</b>, which is <b class="text-ink">done</b>, and which is <b class="text-ink">waiting for your input</b>, with a live per-agent timer, so you stop tab-hunting across terminals.</p>
             <p class="mt-3 text-muted">A desktop pet mirrors the overall state for an ambient signal you can read without breaking focus, plus optional notifications when an agent finishes or needs you. Pets come from an open community library and are fully swappable.</p>
           </article>
 
           <article id="install" class="card p-7">
             <h2 class="font-display text-2xl font-bold text-ink">Install the app</h2>
-            <p class="mt-3 text-muted">AgentPet is a native desktop app. macOS installs via Homebrew or a notarized DMG, Windows via an installer or portable zip; Linux is on the way. Builds update themselves.</p>
+            <p class="mt-3 text-muted">DesktopPet is a native desktop app. macOS installs via Homebrew or a notarized DMG, Windows via an installer or portable zip; Linux is on the way. Builds update themselves.</p>
             <div class="mt-4"><CodeBlock code={BREW} /></div>
             <div class="mt-4 flex flex-wrap gap-3">
               <a href="/install" class="btn-primary !px-6 !py-3"><Icon name="download" class="h-5 w-5" /> Full install guide</a>
@@ -91,7 +91,7 @@ const petJson = `{
             <h2 class="font-display text-2xl font-bold text-ink">Uninstall</h2>
             <p class="mt-3 text-muted">First disconnect your agents in <b class="text-ink">Settings → General</b> (click <b class="text-ink">Remove</b>) so their config stays clean. Then remove the app and its data:</p>
             <div class="mt-4"><CodeBlock code={UNINSTALL} /></div>
-            <p class="mt-3 text-sm text-muted">Not using Homebrew? Drag <code class="rounded bg-brand-50 px-1.5 py-0.5 font-mono text-xs">/Applications/AgentPet.app</code> to the Trash. See the <a href="/install#uninstall" class="font-semibold text-brand-600 hover:text-brand-700">full uninstall steps</a>.</p>
+            <p class="mt-3 text-sm text-muted">Not using Homebrew? Drag <code class="rounded bg-brand-50 px-1.5 py-0.5 font-mono text-xs">/Applications/DesktopPet.app</code> to the Trash. See the <a href="/install#uninstall" class="font-semibold text-brand-600 hover:text-brand-700">full uninstall steps</a>.</p>
           </article>
 
           <article id="adopt" class="card p-7">
@@ -105,7 +105,7 @@ const petJson = `{
             <p class="mt-3 text-muted">Your pet is a tamagotchi: it eats the <b class="text-ink">tokens your agents actually burn</b> and the sessions they finish. Feeding earns XP, and the pet levels up through five evolution stages, from Hatchling to Legend. Each pet keeps its own level, so the more you code with it, the more it grows.</p>
             <p class="mt-3 text-muted">Both Claude Code and Codex feed real token usage, counted the same way, so growth and the leaderboard are comparable across agents. Right-click the pet for a HUD with its level, XP, today's and lifetime tokens, a 7-day burn chart, your streak, and your Claude/Codex usage limits read natively.</p>
             <p class="mt-3 text-muted"><b class="text-ink">Rename your pet (v1.9):</b> give any companion a custom name in <b class="text-ink">Settings → Pet → Name</b>. The name shows on the HUD, the menu bar, and your web profile.</p>
-            <p class="mt-3 text-muted">Sign in on the <a href="/profile" class="font-semibold text-brand-600 hover:text-brand-700">web profile</a> to sync your companions and climb the <a href="/leaderboard" class="font-semibold text-brand-600 hover:text-brand-700">leaderboard</a> by XP, sessions, or tokens. AgentPet runs fully offline; connecting only adds the profile and leaderboard.</p>
+            <p class="mt-3 text-muted">Sign in on the <a href="/profile" class="font-semibold text-brand-600 hover:text-brand-700">web profile</a> to sync your companions and climb the <a href="/leaderboard" class="font-semibold text-brand-600 hover:text-brand-700">leaderboard</a> by XP, sessions, or tokens. DesktopPet runs fully offline; connecting only adds the profile and leaderboard.</p>
             <p class="mt-3 text-muted"><b class="text-ink">Restore on a new machine (v1.10):</b> sign in on a second Mac or after a fresh install and your pets come back at the level you raised them, instead of starting over. Progress merges forward only, so it never undoes work done on either machine. There's also a <b class="text-ink">Restore</b> button in <b class="text-ink">Settings → Care</b>.</p>
             <p class="mt-3 text-muted"><b class="text-ink">Usage dashboard (v1.11):</b> once connected, open the <a href="/dashboard" class="font-semibold text-brand-600 hover:text-brand-700">Usage dashboard</a> to see where your tokens go, per project and per agent, day by day and month by month. Only the last folder name of each project is sent, never the full path.</p>
           </article>
@@ -129,7 +129,7 @@ const petJson = `{
 
           <article id="format" class="card p-7">
             <h2 class="font-display text-2xl font-bold text-ink">Pet format</h2>
-            <p class="mt-3 text-muted">A pet is a small <code class="rounded bg-brand-50 px-1.5 py-0.5 font-mono text-xs">pet.json</code> manifest plus one transparent spritesheet laid out <b class="text-ink">8×9</b>: eight frames across, nine animation rows down. Each row is one animation, and AgentPet lets you map any animation to a state.</p>
+            <p class="mt-3 text-muted">A pet is a small <code class="rounded bg-brand-50 px-1.5 py-0.5 font-mono text-xs">pet.json</code> manifest plus one transparent spritesheet laid out <b class="text-ink">8×9</b>: eight frames across, nine animation rows down. Each row is one animation, and DesktopPet lets you map any animation to a state.</p>
             <pre class="mt-4 overflow-x-auto rounded-2xl bg-brand-50/70 p-4 font-mono text-sm text-ink">{petJson}</pre>
             <p class="mt-4 text-sm font-semibold text-ink">The nine animation rows</p>
             <div class="mt-2 flex flex-wrap gap-2">
@@ -140,7 +140,7 @@ const petJson = `{
 
           <article id="reactions" class="card p-7">
             <h2 class="font-display text-2xl font-bold text-ink">Pet states</h2>
-            <p class="mt-3 text-muted">AgentPet reduces everything your agents are doing into a single aggregate state, and your pet plays the matching animation:</p>
+            <p class="mt-3 text-muted">DesktopPet reduces everything your agents are doing into a single aggregate state, and your pet plays the matching animation:</p>
             <div class="mt-4 flex flex-wrap gap-2">
               {states.map((s) => <span class="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1.5 text-sm font-medium text-brand-700"><span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span>{s}</span>)}
             </div>
@@ -161,7 +161,7 @@ const petJson = `{
             <div class="mt-4 flex flex-wrap gap-2">
               {agents.map((a) => <span class="rounded-full border border-line bg-white px-4 py-2 text-sm font-medium text-ink">{a}</span>)}
             </div>
-            <p class="mt-4 text-sm text-muted">11 agents are supported. Claude Code, Codex, Gemini CLI, opencode and Factory Droid report precise working / waiting / done states (including "needs your input"). Cursor, Windsurf, Antigravity, GitHub Copilot, Kiro CLI and Pi report working / done. GLM (Z.AI) works through Claude Code. For anything else, wrap it with <code class="rounded bg-brand-50 px-1.5 py-0.5 font-mono text-xs">agentpet run -- &lt;command&gt;</code> to monitor any CLI agent.</p>
+            <p class="mt-4 text-sm text-muted">11 agents are supported. Claude Code, Codex, Gemini CLI, opencode and Factory Droid report precise working / waiting / done states (including "needs your input"). Cursor, Windsurf, Antigravity, GitHub Copilot, Kiro CLI and Pi report working / done. GLM (Z.AI) works through Claude Code. For anything else, wrap it with <code class="rounded bg-brand-50 px-1.5 py-0.5 font-mono text-xs">desktoppet run -- &lt;command&gt;</code> to monitor any CLI agent.</p>
           </article>
 
           <article id="privacy" class="card p-7">
@@ -171,7 +171,7 @@ const petJson = `{
 
           <article id="contribute" class="card p-7">
             <h2 class="font-display text-2xl font-bold text-ink">Contributing</h2>
-            <p class="mt-3 text-muted">AgentPet is open source (MIT). Pet artwork stays the property of its creators. Want to add a pet or improve the app?</p>
+            <p class="mt-3 text-muted">DesktopPet is open source (MIT). Pet artwork stays the property of its creators. Want to add a pet or improve the app?</p>
             <div class="mt-5 flex flex-wrap gap-3">
               <a href="/make" class="btn-primary !px-6 !py-3"><Icon name="wand" class="h-5 w-5" /> Make a pet</a>
               <a href={GITHUB} target="_blank" rel="noopener" class="btn-ghost !px-6 !py-3"><Icon name="github" class="h-4 w-4" /> View on GitHub</a>

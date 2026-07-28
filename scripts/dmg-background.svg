@@ -16,8 +16,8 @@
   <circle cx="480" cy="206" r="84" fill="url(#glow)"/>
 
   <!-- wordmark + instruction -->
-  <text x="330" y="84" text-anchor="middle" font-family="-apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif" font-size="34" font-weight="700" fill="#ffffff" letter-spacing="0.3">AgentPet</text>
-  <text x="330" y="116" text-anchor="middle" font-family="-apple-system, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="500" fill="#c3bcec">Drag AgentPet into your Applications folder</text>
+  <text x="330" y="84" text-anchor="middle" font-family="-apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif" font-size="34" font-weight="700" fill="#ffffff" letter-spacing="0.3">DesktopPet</text>
+  <text x="330" y="116" text-anchor="middle" font-family="-apple-system, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="500" fill="#c3bcec">Drag DesktopPet into your Applications folder</text>
 
   <!-- chevron centered between the two icons (centers x=180 and x=480 -> mid 330) -->
   <path d="M318 191 L342 206 L318 221" fill="none" stroke="#a99bff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>

@@ -1,6 +1,6 @@
-# AgentPet Arena , design notes
+# DesktopPet Arena , design notes
 
-A fair, skill-based async auto-battler inside the AgentPet universe. Everyone
+A fair, skill-based async auto-battler inside the DesktopPet universe. Everyone
 starts every run equal; pet-raising level (real coding) unlocks only titles and
 extra daily runs, never in-battle power. Care data flows one way: care → arena.
 
@@ -8,11 +8,11 @@ extra daily runs, never in-battle power. Care data flows one way: care → arena
 
 - **6 team slots** in a single line (front fights first).
 - **No merge-to-level.** Units are TRAINED by paying tokens (L2 = 3, L3 = 5),
-  mirroring how AgentPet pets eat tokens to grow. No duplicate-hunting.
+  mirroring how DesktopPet pets eat tokens to grow. No duplicate-hunting.
 - **Kind synergies** (6 kinds, wake at 2+ of a kind) add a composition axis.
 - **Carry-over economy**: up to 3 unspent tokens carry to the next round.
 - **Battery/crowns**: 5 🔋 lives, 7 👑 wins to take the crown, 14-round cap.
-- Own theme, names, procedural pixel art; currency is tokens (AgentPet lore).
+- Own theme, names, procedural pixel art; currency is tokens (DesktopPet lore).
 
 ## Roster (18 units, 6 kinds x 3 tiers + 2 battle tokens)
 

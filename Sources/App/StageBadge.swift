@@ -1,5 +1,5 @@
 import SwiftUI
-import AgentPetCore
+import DesktopPetCore
 
 /// A glossy medal for an evolution stage: a gradient disc, a soft ring, and a
 /// white stage glyph. Used wherever a pet's rank is shown.

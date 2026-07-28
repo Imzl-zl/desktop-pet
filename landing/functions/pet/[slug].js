@@ -21,14 +21,14 @@ export async function onRequestGet({ env, request, params }) {
 const html = () => ({ "content-type": "text/html; charset=utf-8" });
 
 function page({ p, sheet, creator, slug }) {
-  const title = `${escapeHtml(p.name)}, an AgentPet pet`;
-  const desc = p.description ? escapeHtml(p.description) : `A ${escapeHtml(p.kind)} pet for AgentPet.`;
+  const title = `${escapeHtml(p.name)}, an DesktopPet pet`;
+  const desc = p.description ? escapeHtml(p.description) : `A ${escapeHtml(p.kind)} pet for DesktopPet.`;
   return `<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${title}</title>
 <meta name="description" content="${desc}">
-<meta property="og:title" content="${escapeHtml(p.name)} · AgentPet">
-<meta property="og:description" content="A community desktop pet for AgentPet. ${p.downloads} downloads, ${p.likes} likes.">
+<meta property="og:title" content="${escapeHtml(p.name)} · DesktopPet">
+<meta property="og:description" content="A community desktop pet for DesktopPet. ${p.downloads} downloads, ${p.likes} likes.">
 <meta property="og:image" content="${sheet}">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,7 +37,7 @@ function page({ p, sheet, creator, slug }) {
 <script src="/app.js" defer></script>
 </head><body><div class="wrap">
   <div class="topbar">
-    <a class="brand" href="/"><img src="/icon.png" alt="">AgentPet</a>
+    <a class="brand" href="/"><img src="/icon.png" alt="">DesktopPet</a>
     <nav class="nav"><a href="/pet/">Pets</a><a href="/make/">Make</a><a href="/creators/">Creators</a></nav>
     <span class="spacer"></span><span class="auth" id="auth"></span>
   </div>
@@ -59,7 +59,7 @@ function page({ p, sheet, creator, slug }) {
         <button class="btn sec" id="report">&#9873; Report</button>
         <button class="btn danger" id="delete" hidden>Delete</button>
       </div>
-      <p class="hint" style="margin-top:16px">In AgentPet, open <b>Settings &rsaquo; Pet &rsaquo; Browse pets</b> to install this pet, or download the sheet and import it.</p>
+      <p class="hint" style="margin-top:16px">In DesktopPet, open <b>Settings &rsaquo; Pet &rsaquo; Browse pets</b> to install this pet, or download the sheet and import it.</p>
       <div class="clips" id="clips"></div>
     </div>
   </div>

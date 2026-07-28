@@ -1,9 +1,9 @@
 import Foundation
-import AgentPetCore
+import DesktopPetCore
 
 @MainActor final class ProjectPetSettings: ObservableObject {
     static let shared = ProjectPetSettings()
-    private static let key = "agentpet.projectPets"
+    private static let key = "desktoppet.projectPets"
 
     @Published private(set) var mappings: [ProjectPetMapping] = [] {
         didSet { onChange?() }

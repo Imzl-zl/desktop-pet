@@ -1,4 +1,4 @@
-/* AgentPet , Tiếng Việt */
+/* DesktopPet , Tiếng Việt */
 
 /* Tabs */
 "General" = "Chung";
@@ -11,7 +11,7 @@
 /* General / common */
 "Launch" = "Khởi động";
 "Launch at login" = "Khởi động khi đăng nhập";
-"AgentPet starts automatically when you sign in." = "AgentPet tự chạy khi bạn đăng nhập.";
+"DesktopPet starts automatically when you sign in." = "DesktopPet tự chạy khi bạn đăng nhập.";
 "Notifications" = "Thông báo";
 "Show chat bubble" = "Hiện bong bóng chat";
 "Messages" = "Tin nhắn";
@@ -26,7 +26,7 @@
 "Coming soon" = "Sắp có";
 "Enable" = "Bật";
 "Open Settings" = "Mở Cài đặt";
-"Quit AgentPet" = "Thoát AgentPet";
+"Quit DesktopPet" = "Thoát DesktopPet";
 "Upload…" = "Tải lên…";
 "Default" = "Mặc định";
 "Working" = "Đang làm";
@@ -84,7 +84,7 @@
 "Star on GitHub" = "Star trên GitHub";
 "Join the Discord" = "Tham gia Discord";
 "Buy me a coffee" = "Mời tôi ly cà phê";
-"If AgentPet helps your workflow, a star means a lot. Thank you!" = "Nếu AgentPet giúp ích cho bạn, một ngôi sao có ý nghĩa rất lớn. Cảm ơn!";
+"If DesktopPet helps your workflow, a star means a lot. Thank you!" = "Nếu DesktopPet giúp ích cho bạn, một ngôi sao có ý nghĩa rất lớn. Cảm ơn!";
 "Author" = "Tác giả";
 "Version" = "Phiên bản";
 "Choose pet" = "Chọn thú cưng";
@@ -162,7 +162,7 @@
 "Notifications denied" = "Thông báo bị từ chối";
 "Notifications unavailable" = "Thông báo không khả dụng";
 "Enable notifications" = "Bật thông báo";
-"Available once installed as AgentPet.app" = "Khả dụng sau khi cài dưới dạng AgentPet.app";
+"Available once installed as DesktopPet.app" = "Khả dụng sau khi cài dưới dạng DesktopPet.app";
 "Turn on in System Settings to get alerts" = "Bật trong Cài đặt hệ thống để nhận thông báo";
 "Alerts when something needs your attention." = "Báo khi có việc cần bạn chú ý.";
 "Alerts when an agent finishes or needs input" = "Báo khi có việc cần bạn chú ý.";
@@ -241,8 +241,8 @@
 "Get alerted when something needs your attention." = "Được báo khi có việc cần bạn chú ý.";
 "Get alerted when an agent finishes or needs input." = "Được báo khi có việc cần bạn chú ý.";
 "Get started" = "Bắt đầu";
-"Install a hook so AgentPet can mirror your coding agents in the bubble. You can always do this later in Advanced settings." = "Cài hook để AgentPet đồng bộ các agent code trong bong bóng. Bạn luôn có thể làm sau trong Cài đặt nâng cao.";
-"Install a hook so AgentPet can see when an agent works, finishes, or needs you." = "Cài hook để AgentPet đồng bộ các agent code trong bong bóng. Bạn luôn có thể làm sau trong Cài đặt nâng cao.";
+"Install a hook so DesktopPet can mirror your coding agents in the bubble. You can always do this later in Advanced settings." = "Cài hook để DesktopPet đồng bộ các agent code trong bong bóng. Bạn luôn có thể làm sau trong Cài đặt nâng cao.";
+"Install a hook so DesktopPet can see when an agent works, finishes, or needs you." = "Cài hook để DesktopPet đồng bộ các agent code trong bong bóng. Bạn luôn có thể làm sau trong Cài đặt nâng cao.";
 "Loading pets…" = "Đang tải thú cưng…";
 "Nothing running right now." = "Hiện không có gì đang chạy.";
 "Pet info" = "Thông tin thú cưng";
@@ -251,14 +251,14 @@
 "Sort by agent kind" = "Sắp xếp theo loại agent";
 "Spritesheet" = "Spritesheet";
 "Use the same 8×9 transparent spritesheet format as downloaded pets." = "Dùng cùng định dạng spritesheet 8×9 trong suốt như pet tải về.";
-"Welcome to AgentPet" = "Chào mừng đến với AgentPet";
+"Welcome to DesktopPet" = "Chào mừng đến với DesktopPet";
 "Connect coding agents" = "Kết nối agent code";
 "Pick a pet to get started." = "Chọn một pet để bắt đầu.";
 "Pick your pet" = "Chọn pet của bạn";
 
 /* Codex connection help */
 "Connect Codex" = "Kết nối Codex";
-"The hook is installed. Codex blocks unknown command hooks until you trust them once , a Codex security feature, not an AgentPet bug. Do this one time:" = "Hook đã được cài. Codex chặn các command hook lạ cho tới khi bạn duyệt một lần , đây là cơ chế bảo mật của Codex, không phải lỗi AgentPet. Chỉ cần làm một lần:";
+"The hook is installed. Codex blocks unknown command hooks until you trust them once , a Codex security feature, not an DesktopPet bug. Do this one time:" = "Hook đã được cài. Codex chặn các command hook lạ cho tới khi bạn duyệt một lần , đây là cơ chế bảo mật của Codex, không phải lỗi DesktopPet. Chỉ cần làm một lần:";
 "Open Terminal and run: codex (launches the Codex CLI)" = "Mở Terminal và chạy: codex (mở Codex CLI)";
 "Type /hooks and press Enter to list the hooks." = "Gõ /hooks rồi nhấn Enter để liệt kê các hook.";
 "Press t to Trust all hooks." = "Nhấn phím t để Trust tất cả hook.";
@@ -379,7 +379,7 @@
 "resets in %dm" = "làm mới sau %d phút";
 
 /* Coffee / donate */
-"Thanks for using AgentPet" = "Cảm ơn bạn đã dùng AgentPet";
+"Thanks for using DesktopPet" = "Cảm ơn bạn đã dùng DesktopPet";
 "It's free and open source. If it makes your day a little nicer, a coffee is always appreciated, never expected." = "App miễn phí và mã nguồn mở. Nếu nó giúp ngày của bạn dễ chịu hơn, một ly cà phê luôn được trân trọng, nhưng không bao giờ bắt buộc.";
 "Quét mã bằng app ngân hàng bất kỳ" = "Quét mã bằng app ngân hàng bất kỳ";
 "Sao chép số tài khoản" = "Sao chép số tài khoản";

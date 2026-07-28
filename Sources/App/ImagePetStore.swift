@@ -1,7 +1,7 @@
 import AppKit
-import AgentPetCore
+import DesktopPetCore
 
-/// Loads and imports spritesheet pet packs from `~/.agentpet/pets/`.
+/// Loads and imports spritesheet pet packs from `~/.desktoppet/pets/`.
 @MainActor
 final class ImagePetStore: ObservableObject {
     static let shared = ImagePetStore()
@@ -10,10 +10,10 @@ final class ImagePetStore: ObservableObject {
 
     /// User-chosen names per pet id, overriding the pack's catalog name (#31).
     @Published private(set) var nameOverrides: [String: String] =
-        (UserDefaults.standard.dictionary(forKey: "agentpet.petNames") as? [String: String]) ?? [:]
+        (UserDefaults.standard.dictionary(forKey: "desktoppet.petNames") as? [String: String]) ?? [:]
 
     private var petsDir: URL {
-        URL(fileURLWithPath: AgentPetPaths.baseDir).appendingPathComponent("pets")
+        URL(fileURLWithPath: DesktopPetPaths.baseDir).appendingPathComponent("pets")
     }
 
     func pack(id: String) -> ImagePetPack? {
@@ -36,7 +36,7 @@ final class ImagePetStore: ObservableObject {
         } else {
             nameOverrides[id] = String(trimmed.prefix(40))
         }
-        UserDefaults.standard.set(nameOverrides, forKey: "agentpet.petNames")
+        UserDefaults.standard.set(nameOverrides, forKey: "desktoppet.petNames")
         CareSyncController.shared.scheduleSync()   // push the new name to the web
     }
 

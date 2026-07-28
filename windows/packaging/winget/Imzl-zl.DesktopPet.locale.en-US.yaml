@@ -1,0 +1,20 @@
+PackageIdentifier: Imzl-zl.DesktopPet
+PackageVersion: 0.1.0
+PackageLocale: en-US
+Publisher: Imzl-zl
+PublisherUrl: https://github.com/Imzl-zl
+PackageName: DesktopPet
+PackageUrl: https://github.com/Imzl-zl/desktop-pet
+License: MIT
+LicenseUrl: https://github.com/Imzl-zl/desktop-pet/blob/main/LICENSE
+ShortDescription: A desktop pet that reacts in real time to your AI coding agents.
+Description: DesktopPet floats a pixel companion on your desktop that reacts in real time to your AI coding agents (Claude Code, Codex, Gemini CLI, Cursor, GitHub Copilot, and more) via their hook systems.
+Moniker: desktoppet
+Tags:
+  - desktop-pet
+  - ai
+  - cli
+  - claude-code
+  - developer-tools
+ManifestType: defaultLocale
+ManifestVersion: 1.6.0

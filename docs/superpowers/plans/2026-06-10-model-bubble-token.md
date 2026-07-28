@@ -13,13 +13,13 @@
 ### Task 1: `HookModelInfo` decoder + `AgentEvent.model`
 
 **Files:**
-- Modify: `Sources/AgentPetCore/HookPayloads.swift`
-- Modify: `Sources/AgentPetCore/AgentEvent.swift`
-- Test: `Tests/AgentPetCoreTests/ClaudeHookPayloadTests.swift`
+- Modify: `Sources/DesktopPetCore/HookPayloads.swift`
+- Modify: `Sources/DesktopPetCore/AgentEvent.swift`
+- Test: `Tests/DesktopPetCoreTests/ClaudeHookPayloadTests.swift`
 
 - [ ] **Step 1: Add `HookModelInfo` to `HookPayloads.swift`**
 
-Insert at the top of `Sources/AgentPetCore/HookPayloads.swift`, right after `import Foundation` (before the `CursorHookPayload` struct):
+Insert at the top of `Sources/DesktopPetCore/HookPayloads.swift`, right after `import Foundation` (before the `CursorHookPayload` struct):
 
 ```swift
 /// Decodes a hook payload's `model` field into a display name. Tolerates
@@ -52,7 +52,7 @@ public struct HookModelInfo: Decodable, Equatable {
 
 - [ ] **Step 2: Add `model` field to `AgentEvent`**
 
-In `Sources/AgentPetCore/AgentEvent.swift`, add the field and thread it through the initializer:
+In `Sources/DesktopPetCore/AgentEvent.swift`, add the field and thread it through the initializer:
 
 ```swift
 public struct AgentEvent: Codable, Sendable, Equatable {
@@ -93,7 +93,7 @@ public struct AgentEvent: Codable, Sendable, Equatable {
 
 - [ ] **Step 3: Write failing tests for `HookModelInfo` via `ClaudeHookPayload`**
 
-These tests reference `ClaudeHookPayload.model` which doesn't exist yet (added in Task 2) — write them now so Task 2 has a red test to turn green. Add to `Tests/AgentPetCoreTests/ClaudeHookPayloadTests.swift`, inside `final class ClaudeHookPayloadTests`, after `testNilWhenMissingEssentialFields`:
+These tests reference `ClaudeHookPayload.model` which doesn't exist yet (added in Task 2) — write them now so Task 2 has a red test to turn green. Add to `Tests/DesktopPetCoreTests/ClaudeHookPayloadTests.swift`, inside `final class ClaudeHookPayloadTests`, after `testNilWhenMissingEssentialFields`:
 
 ```swift
     // MARK: - model field
@@ -139,7 +139,7 @@ Expected: FAIL — `value of type 'ClaudeHookPayload' has no member 'model'` (co
 - [ ] **Step 5: Commit**
 
 ```bash
-git add Sources/AgentPetCore/HookPayloads.swift Sources/AgentPetCore/AgentEvent.swift Tests/AgentPetCoreTests/ClaudeHookPayloadTests.swift
+git add Sources/DesktopPetCore/HookPayloads.swift Sources/DesktopPetCore/AgentEvent.swift Tests/DesktopPetCoreTests/ClaudeHookPayloadTests.swift
 git commit -m "feat: add HookModelInfo decoder and AgentEvent.model field"
 ```
 
@@ -148,17 +148,17 @@ git commit -m "feat: add HookModelInfo decoder and AgentEvent.model field"
 ### Task 2: Decode `model` in `ClaudeHookPayload` (covers Claude/Codex/Gemini/opencode/Copilot/Kiro)
 
 **Files:**
-- Modify: `Sources/AgentPetCore/ClaudeHookPayload.swift`
-- Test: `Tests/AgentPetCoreTests/ClaudeHookPayloadTests.swift` (already written in Task 1)
+- Modify: `Sources/DesktopPetCore/ClaudeHookPayload.swift`
+- Test: `Tests/DesktopPetCoreTests/ClaudeHookPayloadTests.swift` (already written in Task 1)
 
 - [ ] **Step 1: Add `model` field and pass it through `makeEvent`**
 
-Replace the full contents of `Sources/AgentPetCore/ClaudeHookPayload.swift` with:
+Replace the full contents of `Sources/DesktopPetCore/ClaudeHookPayload.swift` with:
 
 ```swift
 import Foundation
 
-/// The JSON Claude Code writes to a hook's stdin. Only the fields AgentPet
+/// The JSON Claude Code writes to a hook's stdin. Only the fields DesktopPet
 /// needs are decoded; the rest are ignored.
 public struct ClaudeHookPayload: Decodable, Equatable {
     public let sessionId: String?
@@ -214,7 +214,7 @@ Expected: PASS — all 5 new tests plus the existing ones green.
 - [ ] **Step 3: Commit**
 
 ```bash
-git add Sources/AgentPetCore/ClaudeHookPayload.swift
+git add Sources/DesktopPetCore/ClaudeHookPayload.swift
 git commit -m "feat: decode model field in ClaudeHookPayload"
 ```
 
@@ -223,17 +223,17 @@ git commit -m "feat: decode model field in ClaudeHookPayload"
 ### Task 3: Decode `model` in Cursor, Windsurf, Antigravity payloads
 
 **Files:**
-- Modify: `Sources/AgentPetCore/HookPayloads.swift`
-- Modify: `Sources/AgentPetCore/AntigravityHookPayload.swift`
-- Test: `Tests/AgentPetCoreTests/MultiAgentHookTests.swift`
-- Test: `Tests/AgentPetCoreTests/AntigravityHookPayloadTests.swift`
+- Modify: `Sources/DesktopPetCore/HookPayloads.swift`
+- Modify: `Sources/DesktopPetCore/AntigravityHookPayload.swift`
+- Test: `Tests/DesktopPetCoreTests/MultiAgentHookTests.swift`
+- Test: `Tests/DesktopPetCoreTests/AntigravityHookPayloadTests.swift`
 
 - [ ] **Step 1: Add `model` to `CursorHookPayload`**
 
-In `Sources/AgentPetCore/HookPayloads.swift`, replace the `CursorHookPayload` struct (everything from `public struct CursorHookPayload` through its closing `}`) with:
+In `Sources/DesktopPetCore/HookPayloads.swift`, replace the `CursorHookPayload` struct (everything from `public struct CursorHookPayload` through its closing `}`) with:
 
 ```swift
-/// The JSON Cursor writes to a hook's stdin (only the fields AgentPet needs).
+/// The JSON Cursor writes to a hook's stdin (only the fields DesktopPet needs).
 public struct CursorHookPayload: Decodable, Equatable {
     public let conversationId: String?
     public let hookEventName: String?
@@ -303,7 +303,7 @@ public struct WindsurfHookPayload: Decodable, Equatable {
 
 - [ ] **Step 3: Add `model` to `AntigravityHookPayload`**
 
-In `Sources/AgentPetCore/AntigravityHookPayload.swift`, add the field to the struct (after `public let stepIdx: Int?`):
+In `Sources/DesktopPetCore/AntigravityHookPayload.swift`, add the field to the struct (after `public let stepIdx: Int?`):
 
 ```swift
     public let stepIdx: Int?
@@ -327,7 +327,7 @@ Then update `makeEvent` to pass it through — replace the `return AgentEvent(..
 
 - [ ] **Step 4: Write tests**
 
-Add to `Tests/AgentPetCoreTests/MultiAgentHookTests.swift`, near the other Cursor/Windsurf decode tests (e.g. after `testCursorPayloadDecode`):
+Add to `Tests/DesktopPetCoreTests/MultiAgentHookTests.swift`, near the other Cursor/Windsurf decode tests (e.g. after `testCursorPayloadDecode`):
 
 ```swift
     func testCursorPayloadDecodesModel() {
@@ -349,7 +349,7 @@ Add to `Tests/AgentPetCoreTests/MultiAgentHookTests.swift`, near the other Curso
     }
 ```
 
-Add to `Tests/AgentPetCoreTests/AntigravityHookPayloadTests.swift`, after `testPreToolUseIsWorking`:
+Add to `Tests/DesktopPetCoreTests/AntigravityHookPayloadTests.swift`, after `testPreToolUseIsWorking`:
 
 ```swift
     func testDecodesModel() {
@@ -366,7 +366,7 @@ Expected: PASS
 - [ ] **Step 6: Commit**
 
 ```bash
-git add Sources/AgentPetCore/HookPayloads.swift Sources/AgentPetCore/AntigravityHookPayload.swift Tests/AgentPetCoreTests/MultiAgentHookTests.swift Tests/AgentPetCoreTests/AntigravityHookPayloadTests.swift
+git add Sources/DesktopPetCore/HookPayloads.swift Sources/DesktopPetCore/AntigravityHookPayload.swift Tests/DesktopPetCoreTests/MultiAgentHookTests.swift Tests/DesktopPetCoreTests/AntigravityHookPayloadTests.swift
 git commit -m "feat: decode model field for Cursor, Windsurf, Antigravity payloads"
 ```
 
@@ -375,13 +375,13 @@ git commit -m "feat: decode model field for Cursor, Windsurf, Antigravity payloa
 ### Task 4: `AgentSession.model` + sticky merge in `SessionStore`
 
 **Files:**
-- Modify: `Sources/AgentPetCore/AgentSession.swift`
-- Modify: `Sources/AgentPetCore/SessionStore.swift`
-- Test: `Tests/AgentPetCoreTests/SessionStoreTests.swift`
+- Modify: `Sources/DesktopPetCore/AgentSession.swift`
+- Modify: `Sources/DesktopPetCore/SessionStore.swift`
+- Test: `Tests/DesktopPetCoreTests/SessionStoreTests.swift`
 
 - [ ] **Step 1: Add `model` to `AgentSession`**
 
-Replace the full contents of `Sources/AgentPetCore/AgentSession.swift` with:
+Replace the full contents of `Sources/DesktopPetCore/AgentSession.swift` with:
 
 ```swift
 import Foundation
@@ -433,7 +433,7 @@ public struct AgentSession: Identifiable, Sendable, Equatable {
 
 - [ ] **Step 2: Write failing test for sticky merge**
 
-Add to `Tests/AgentPetCoreTests/SessionStoreTests.swift`, inside `final class SessionStoreTests`, after `testApplyUpdatesExistingAndKeepsProjectWhenNil`:
+Add to `Tests/DesktopPetCoreTests/SessionStoreTests.swift`, inside `final class SessionStoreTests`, after `testApplyUpdatesExistingAndKeepsProjectWhenNil`:
 
 ```swift
     func testApplyKeepsModelWhenLaterEventOmitsIt() {
@@ -471,7 +471,7 @@ Expected: FAIL — both new tests fail because `AgentSession.model` is always `n
 
 - [ ] **Step 4: Update `SessionStore.apply`**
 
-In `Sources/AgentPetCore/SessionStore.swift`, replace the body of `apply(_:now:)` from `if var existing = byID[event.sessionId] {` through the end of the function (the `return session` line) with:
+In `Sources/DesktopPetCore/SessionStore.swift`, replace the body of `apply(_:now:)` from `if var existing = byID[event.sessionId] {` through the end of the function (the `return session` line) with:
 
 ```swift
         if var existing = byID[event.sessionId] {
@@ -506,7 +506,7 @@ Expected: PASS
 - [ ] **Step 6: Commit**
 
 ```bash
-git add Sources/AgentPetCore/AgentSession.swift Sources/AgentPetCore/SessionStore.swift Tests/AgentPetCoreTests/SessionStoreTests.swift
+git add Sources/DesktopPetCore/AgentSession.swift Sources/DesktopPetCore/SessionStore.swift Tests/DesktopPetCoreTests/SessionStoreTests.swift
 git commit -m "feat: add sticky AgentSession.model populated from hook events"
 ```
 
@@ -516,11 +516,11 @@ git commit -m "feat: add sticky AgentSession.model populated from hook events"
 
 **Files:**
 - Modify: `Sources/App/BubbleSettings.swift`
-- Test: `Tests/AgentPetAppTests/BubbleSettingsTests.swift`
+- Test: `Tests/DesktopPetAppTests/BubbleSettingsTests.swift`
 
 - [ ] **Step 1: Write failing tests for the new token and presets**
 
-Add to `Tests/AgentPetAppTests/BubbleSettingsTests.swift`, inside `final class BubbleSettingsTests`, after `testSessionGroupingMigratesFromLegacyCollapseOff`:
+Add to `Tests/DesktopPetAppTests/BubbleSettingsTests.swift`, inside `final class BubbleSettingsTests`, after `testSessionGroupingMigratesFromLegacyCollapseOff`:
 
 ```swift
     func testModelTokenExistsAndHasMetadata() {
@@ -661,7 +661,7 @@ Expected: PASS
 - [ ] **Step 6: Commit**
 
 ```bash
-git add Sources/App/BubbleSettings.swift Tests/AgentPetAppTests/BubbleSettingsTests.swift
+git add Sources/App/BubbleSettings.swift Tests/DesktopPetAppTests/BubbleSettingsTests.swift
 git commit -m "feat: add Model bubble token and layout presets"
 ```
 
@@ -724,7 +724,7 @@ Expected: All tests PASS, including all new tests from Tasks 1–5.
 
 - [ ] **Step 2: Manual check — enable the Model token**
 
-Run the app (`swift run agentpet` or via Xcode), open Settings → Bubble layout, switch to the "Detailed" preset (or use "+ Model" in the inactive-tokens picker on Original/Standard), and start a real Claude Code session in a hooked project.
+Run the app (`swift run desktoppet` or via Xcode), open Settings → Bubble layout, switch to the "Detailed" preset (or use "+ Model" in the inactive-tokens picker on Original/Standard), and start a real Claude Code session in a hooked project.
 
 Expected: the bubble row shows a small "Sonnet 4.6" (or whatever the current model's `display_name` is) next to the other tokens. If a Cursor/Codex/etc. session is also running, its row either shows its own model name or simply omits the token — neither should break the row layout.
 

@@ -49,7 +49,7 @@ final class AppLanguage: ObservableObject {
         }
     }
 
-    private static let key = "agentpet.appLanguage"
+    private static let key = "desktoppet.appLanguage"
 
     @Published var lang: Lang {
         didSet {

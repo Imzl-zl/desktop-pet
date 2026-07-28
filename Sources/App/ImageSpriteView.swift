@@ -1,6 +1,6 @@
 import SwiftUI
 import AppKit
-import AgentPetCore
+import DesktopPetCore
 
 /// Renders an imported spritesheet pet. The frame cycling runs in a CALayer
 /// (see `SpriteLayerNSView`), NOT a SwiftUI `TimelineView`: a SwiftUI timeline

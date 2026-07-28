@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* ---- AgentPet design tokens (friendly / light / rounded, Stitch-inspired) ---- */
+/* ---- DesktopPet design tokens (friendly / light / rounded, Stitch-inspired) ---- */
 @theme {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-display: "Fredoka", "Plus Jakarta Sans", sans-serif;

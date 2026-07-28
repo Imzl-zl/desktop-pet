@@ -5,14 +5,14 @@ import UserNotifications
 ///
 /// `UNUserNotificationCenter` requires a bundled, identified app; when run as a
 /// bare binary (`swift run`) there is no bundle id, so we no-op to avoid a
-/// crash. Notifications work once launched as `AgentPet.app`.
+/// crash. Notifications work once launched as `DesktopPet.app`.
 @MainActor
 final class NotificationManager {
     static let shared = NotificationManager()
 
     /// UserDefaults key for the in-app "show notifications" toggle (independent
     /// of the macOS permission): users who granted permission can still mute.
-    static let enabledKey = "agentpet.notificationsEnabled"
+    static let enabledKey = "desktoppet.notificationsEnabled"
 
     /// `UNUserNotificationCenter` needs a real bundle id; false under `swift run`.
     var isAvailable: Bool { Bundle.main.bundleIdentifier != nil }

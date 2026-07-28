@@ -1,4 +1,4 @@
-# AgentPet for Windows
+# DesktopPet for Windows
 
 A desktop pet that floats on your screen and reacts in real time to your AI
 coding agents (Claude Code, Codex, Gemini CLI, Cursor, opencode, Windsurf,
@@ -17,8 +17,8 @@ WebView2 is preinstalled on Windows 10/11, so there are no other prerequisites.
 ### Scoop (recommended , no SmartScreen prompt)
 
 ```powershell
-scoop bucket add agentpet https://github.com/ntd4996/agentpet
-scoop install agentpet
+scoop bucket add desktoppet https://github.com/Imzl-zl/desktop-pet
+scoop install desktoppet
 ```
 
 Scoop downloads the portable build straight from the GitHub release, so the
@@ -27,13 +27,13 @@ browser/SmartScreen download warning never appears.
 ### winget
 
 ```powershell
-winget install ntd4996.AgentPet
+winget install Imzl-zl.DesktopPet
 ```
 
 ### Manual installer
 
-Download `AgentPet_<version>_x64-setup.exe` from the
-[releases](https://github.com/ntd4996/agentpet/releases) page. It installs
+Download `DesktopPet_<version>_x64-setup.exe` from the
+[releases](https://github.com/Imzl-zl/desktop-pet/releases) page. It installs
 per-user (no admin/UAC prompt). See [SmartScreen](#smartscreen-no-code-signing-cert)
 for the one-time "Run anyway" step.
 
@@ -52,7 +52,7 @@ paths don't trigger SmartScreen.
 ## How it works
 
 ```
-agent hook  ──(stdin JSON)──►  agentpet.exe hook --agent <kind>
+agent hook  ──(stdin JSON)──►  desktoppet.exe hook --agent <kind>
                                       │  POST /event
                                       ▼
                           localhost:47628 (Rust listener in the running app)
@@ -61,7 +61,7 @@ agent hook  ──(stdin JSON)──►  agentpet.exe hook --agent <kind>
                           pet overlay window (Tauri webview, canvas sprite)
 ```
 
-- The same binary doubles as the hook CLI: `agentpet hook --agent claude` reads
+- The same binary doubles as the hook CLI: `desktoppet hook --agent claude` reads
   the agent's hook payload on stdin and POSTs it to the running app. It always
   exits 0 so it never blocks an agent (Copilot PreToolUse is fail-closed).
 - Hook configs are written to Windows paths (`%USERPROFILE%\.claude\settings.json`,
@@ -116,10 +116,10 @@ npm run tauri build    # NSIS installer + MSI in src-tauri/target/release/bundle
 | Codex          | `~/.codex/hooks.json` + `config.toml`        | run `/hooks` → `t` once to trust |
 | Gemini CLI     | `~/.gemini/settings.json`                    | |
 | Cursor         | `~/.cursor/hooks.json`                        | |
-| opencode       | `~/.config/opencode/plugin/agentpet.js`      | JS plugin |
+| opencode       | `~/.config/opencode/plugin/desktoppet.js`      | JS plugin |
 | Windsurf       | `~/.codeium/windsurf/hooks.json`             | no "needs input" alerts |
 | Antigravity    | `~/.gemini/config/hooks.json`                | no "needs input" alerts |
-| GitHub Copilot | `~/.copilot/hooks/agentpet.json`             | Copilot CLI |
+| GitHub Copilot | `~/.copilot/hooks/desktoppet.json`             | Copilot CLI |
 | Kiro CLI       | `~/.kiro/agents/default.json`                | hooks the default agent |
 
 ## Publishing the package manifests
@@ -130,11 +130,11 @@ After a `win-v*` release is published:
 node scripts/fill-package-hashes.mjs win-v0.1.0
 ```
 
-This fills the version + SHA256 into `packaging/scoop/agentpet.json` and
+This fills the version + SHA256 into `packaging/scoop/desktoppet.json` and
 `packaging/winget/*`. Then:
 
 - **Scoop**: this repo doubles as the bucket , the manifest at
-  `windows/packaging/scoop/agentpet.json`. (Point the bucket subdir or copy it to
+  `windows/packaging/scoop/desktoppet.json`. (Point the bucket subdir or copy it to
   a `bucket/` folder as Scoop expects.)
 - **winget**: submit `packaging/winget/*` as a PR to
   [microsoft/winget-pkgs](https://github.com/microsoft/winget-pkgs).

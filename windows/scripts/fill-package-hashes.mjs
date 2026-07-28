@@ -16,9 +16,9 @@ if (!tag || !tag.startsWith("win-v")) {
 }
 const version = tag.slice("win-v".length);
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const base = `https://github.com/ntd4996/agentpet/releases/download/${tag}`;
-const portable = `AgentPet-portable-x64.zip`;
-const setup = `AgentPet_${version}_x64-setup.exe`;
+const base = `https://github.com/Imzl-zl/desktop-pet/releases/download/${tag}`;
+const portable = `DesktopPet-portable-x64.zip`;
+const setup = `DesktopPet_${version}_x64-setup.exe`;
 
 async function sha256(url) {
   const res = await fetch(url);
@@ -33,7 +33,7 @@ console.log("portable:", portableHash);
 console.log("setup:", setupHash);
 
 // Scoop
-const scoopPath = resolve(root, "packaging/scoop/agentpet.json");
+const scoopPath = resolve(root, "packaging/scoop/desktoppet.json");
 const scoop = JSON.parse(readFileSync(scoopPath, "utf8"));
 scoop.version = version;
 scoop.architecture["64bit"].url = `${base}/${portable}`;
@@ -47,9 +47,9 @@ const sub = (rel, fn) => {
 };
 const wingetDir = "packaging/winget";
 const setVersion = (s) => s.replace(/^PackageVersion: .*/m, `PackageVersion: ${version}`);
-sub(`${wingetDir}/ntd4996.AgentPet.yaml`, setVersion);
-sub(`${wingetDir}/ntd4996.AgentPet.locale.en-US.yaml`, setVersion);
-sub(`${wingetDir}/ntd4996.AgentPet.installer.yaml`, (s) =>
+sub(`${wingetDir}/Imzl-zl.DesktopPet.yaml`, setVersion);
+sub(`${wingetDir}/Imzl-zl.DesktopPet.locale.en-US.yaml`, setVersion);
+sub(`${wingetDir}/Imzl-zl.DesktopPet.installer.yaml`, (s) =>
   setVersion(s)
     .replace(/InstallerUrl: .*/, `InstallerUrl: ${base}/${setup}`)
     .replace(/InstallerSha256: .*/, `InstallerSha256: ${setupHash.toUpperCase()}`)

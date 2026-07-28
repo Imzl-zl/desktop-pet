@@ -1,5 +1,5 @@
 import SwiftUI
-import AgentPetCore
+import DesktopPetCore
 
 /// The tamagotchi panel: level + evolution stage, hunger, today's feeding,
 /// lifetime totals, and where the food data comes from.
@@ -253,7 +253,7 @@ struct CareTabView: View {
                         .disabled(sync.restoring)
 
                         Button("Open profile") {
-                            openURL(URL(string: "https://agentpet.thenightwatcher.online/profile")!)
+                            openURL(URL(string: "https://github.com/Imzl-zl/desktop-pet")!)
                         }
                         .buttonStyle(BorderedButtonStyle())
 

@@ -1,5 +1,5 @@
 import SwiftUI
-import AgentPetCore
+import DesktopPetCore
 import UniformTypeIdentifiers
 
 // MARK: - BubbleSettingsView
@@ -583,7 +583,7 @@ private struct BubbleRowPreview: View {
     @ObservedObject private var settings = BubbleSettings.shared
 
     private let mockTitle    = "Fix login bug"
-    private let mockProject  = "agentpet"
+    private let mockProject  = "desktoppet"
     private let mockMessage  = "Editing SettingsModel.swift"
     private let mockElapsed  = "3m"
     private let mockModel    = "Sonnet 4.6"

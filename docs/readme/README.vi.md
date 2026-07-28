@@ -1,12 +1,13 @@
 <div align="center">
-  <img src="../../assets/banner.png" alt="AgentPet" width="100%" />
+  <img src="../../assets/banner.png" alt="DesktopPet" width="100%" />
+  <p><em>DesktopPet là fork được đổi tên và chỉnh sửa từ <a href="https://github.com/ntd4996/agentpet">AgentPet</a>, sử dụng theo giấy phép MIT.</em></p>
   <p>
     <img src="https://img.shields.io/badge/platform-macOS%2013%2B%20%C2%B7%20Windows%2010%2F11-black" alt="macOS 13+ &middot; Windows 10/11" />
     <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT" />
     <img src="https://img.shields.io/badge/Swift-SwiftUI-orange" alt="Swift" />
-    <a href="https://github.com/ntd4996/agentpet"><img src="https://img.shields.io/github/stars/ntd4996/agentpet?style=social" alt="GitHub stars" /></a>
+    <a href="https://github.com/Imzl-zl/desktop-pet"><img src="https://img.shields.io/github/stars/Imzl-zl/desktop-pet?style=social" alt="GitHub stars" /></a>
   </p>
-  <p><b>Nếu AgentPet giúp ích cho bạn, hãy <a href="https://github.com/ntd4996/agentpet">tặng một sao</a> nhé!</b></p>
+  <p><b>Nếu DesktopPet giúp ích cho bạn, hãy <a href="https://github.com/Imzl-zl/desktop-pet">tặng một sao</a> nhé!</b></p>
   <p>
     <a href="../../README.md">English</a> ·
     <b>Tiếng Việt</b> ·
@@ -15,11 +16,11 @@
   </p>
 </div>
 
-Chạy nhiều agent lập trình cùng lúc (Claude Code, Codex, ...) và AgentPet cho bạn biết ngay con nào **đang chạy**, con nào **đã xong**, con nào **đang chờ bạn nhập liệu**, để khỏi phải lật qua lại giữa các terminal. Một chú pet nhỏ nổi trên màn hình và phản ứng theo tất cả.
+Chạy nhiều agent lập trình cùng lúc (Claude Code, Codex, ...) và DesktopPet cho bạn biết ngay con nào **đang chạy**, con nào **đã xong**, con nào **đang chờ bạn nhập liệu**, để khỏi phải lật qua lại giữa các terminal. Một chú pet nhỏ nổi trên màn hình và phản ứng theo tất cả.
 
 ## Vì sao
 
-Chạy nhiều agent song song nghĩa là phải liên tục đổi cửa sổ để xem con nào cần mình. AgentPet hiển thị điều đó ở hai nơi:
+Chạy nhiều agent song song nghĩa là phải liên tục đổi cửa sổ để xem con nào cần mình. DesktopPet hiển thị điều đó ở hai nơi:
 
 - **Trình theo dõi ở menu bar** cho chi tiết: mọi agent đang chạy, trạng thái, đang làm gì, và bộ đếm thời gian trực tiếp.
 - **Pet trên desktop** cho tín hiệu nhẹ nhàng, đọc được mà không phải dứt khỏi công việc.
@@ -31,7 +32,7 @@ Chạy nhiều agent song song nghĩa là phải liên tục đổi cửa sổ �
 - **Pet trên desktop** phản ứng theo trạng thái tổng hợp (working / waiting / done / celebrate), kèm **bong bóng chat** tùy chọn (tin nhắn mặc định hoặc tự đặt).
 - **Thông báo hệ thống** khi agent xong hoặc cần nhập liệu.
 - Tích hợp **Claude Code, Codex & Gemini CLI** qua hook, cài một chạm từ Settings (nhận đúng working / waiting / done / idle, kể cả "cần bạn nhập liệu").
-- **Wrapper phổ quát** `agentpet run -- <lệnh>` để theo dõi *bất kỳ* agent CLI nào (working/done), không cần cấu hình riêng.
+- **Wrapper phổ quát** `desktoppet run -- <lệnh>` để theo dõi *bất kỳ* agent CLI nào (working/done), không cần cấu hình riêng.
 - **Hệ thống pet**: duyệt thư viện pet trực tuyến và tải về một chạm, gán animation cho từng trạng thái, đổi kích thước, tùy biến câu chat.
 - **Settings native, chỉn chu** (chia tab, nền tối) và không bao giờ cướp focus.
 
@@ -72,25 +73,25 @@ Chạy nhiều agent song song nghĩa là phải liên tục đổi cửa sổ �
 ### Homebrew
 
 ```bash
-brew install --cask ntd4996/tap/agentpet
+brew install --cask Imzl-zl/tap/desktoppet
 ```
 
 ### Tải trực tiếp
 
-Tải `AgentPet.dmg` mới nhất ở [Releases](https://github.com/ntd4996/agentpet/releases), mở ra và kéo AgentPet vào Applications.
+Tải `DesktopPet.dmg` mới nhất ở [Releases](https://github.com/Imzl-zl/desktop-pet/releases), mở ra và kéo DesktopPet vào Applications.
 
 ### Build từ mã nguồn
 
 ```bash
-git clone https://github.com/ntd4996/agentpet.git
-cd agentpet
+git clone https://github.com/Imzl-zl/desktop-pet.git
+cd desktoppet
 ./scripts/build-app.sh release
-open build/AgentPet.app
+open build/DesktopPet.app
 ```
 
 > **Lưu ý:** bản hiện tại đã ký Developer ID nhưng **chưa notarize**, nên macOS có thể chặn lần mở đầu. Gỡ cờ quarantine một lần:
 > ```bash
-> xattr -dr com.apple.quarantine "/Applications/AgentPet.app"
+> xattr -dr com.apple.quarantine "/Applications/DesktopPet.app"
 > ```
 > Bản notarize đầy đủ (không cảnh báo) sắp có.
 
@@ -98,12 +99,12 @@ Lần đầu mở, vào **Settings → General**, bấm **Install** cạnh Claud
 
 ## Cách dùng
 
-**Claude Code** (khuyến nghị): cài hook từ Settings. AgentPet sẽ phản ánh đúng trạng thái thật của từng phiên (kể cả "đang chờ nhập liệu").
+**Claude Code** (khuyến nghị): cài hook từ Settings. DesktopPet sẽ phản ánh đúng trạng thái thật của từng phiên (kể cả "đang chờ nhập liệu").
 
 **Agent CLI khác**: bọc nó lại.
 
 ```bash
-agentpet run -- <lệnh-agent-của-bạn>     # ví dụ: agentpet run -- aider
+desktoppet run -- <lệnh-agent-của-bạn>     # ví dụ: desktoppet run -- aider
 ```
 
 Phiên hiện *working* khi đang chạy và *done* khi kết thúc.
@@ -116,7 +117,7 @@ Pet dùng định dạng pet-pack mở của Codex (`pet.json` + spritesheet lư
 - **Gán animation**: chọn animation nào chạy cho từng trạng thái.
 - **Xóa** pet không dùng nữa.
 
-Một pet khởi đầu được cài tự động lần đầu chạy. AgentPet không đóng gói sẵn art pet nào; pet được thêm lúc chạy.
+Một pet khởi đầu được cài tự động lần đầu chạy. DesktopPet không đóng gói sẵn art pet nào; pet được thêm lúc chạy.
 
 ## Lộ trình
 
@@ -130,16 +131,16 @@ Swift + SwiftUI, một daemon Unix-socket cho sự kiện agent, và một CLI h
 
 ## Ủng hộ
 
-Nếu AgentPet giúp bạn đỡ phải lật terminal, đây là cách giúp lại:
+Nếu DesktopPet giúp bạn đỡ phải lật terminal, đây là cách giúp lại:
 
-- ⭐ **[Tặng sao cho repo](https://github.com/ntd4996/agentpet)** để nhiều người biết tới hơn.
+- ⭐ **[Tặng sao cho repo](https://github.com/Imzl-zl/desktop-pet)** để nhiều người biết tới hơn.
 - ☕ **[Mời mình một ly cà phê](https://buymeacoffee.com/ntd4996)** nếu bạn muốn tiếp thêm động lực.
 
 Thực hiện bởi **[Nguyễn Thành Đạt (@ntd4996)](https://github.com/ntd4996)**.
 
 ## Ghi nhận
 
-Định dạng pet-pack Codex và thư viện pet trực tuyến do **[Petdex](https://github.com/crafter-station/petdex)** (MIT) cung cấp. AgentPet là một client interop độc lập: đọc pack theo định dạng của Petdex và cho phép tải pet từ API công khai của Petdex. AgentPet không đóng gói art pet; mỗi asset pet thuộc về người đóng góp theo giấy phép riêng của họ. Nếu bạn giữ bản quyền một nhân vật, vui lòng gửi yêu cầu gỡ tới Petdex.
+Định dạng pet-pack Codex và thư viện pet trực tuyến do **[Petdex](https://github.com/crafter-station/petdex)** (MIT) cung cấp. DesktopPet là một client interop độc lập: đọc pack theo định dạng của Petdex và cho phép tải pet từ API công khai của Petdex. DesktopPet không đóng gói art pet; mỗi asset pet thuộc về người đóng góp theo giấy phép riêng của họ. Nếu bạn giữ bản quyền một nhân vật, vui lòng gửi yêu cầu gỡ tới Petdex.
 
 ## Giấy phép
 

@@ -37,7 +37,7 @@ final class SettingsWindowController: NSObject, NSWindowDelegate {
             styleMask: [.titled, .closable],
             backing: .buffered, defer: false
         )
-        window.title = "AgentPet"
+        window.title = "DesktopPet"
         window.delegate = self
         window.isReleasedWhenClosed = false
         window.contentView = host
@@ -51,7 +51,7 @@ final class SettingsWindowController: NSObject, NSWindowDelegate {
             window.makeKeyAndOrderFront(nil)
         }
 
-        // When the user cmd-tabs back to AgentPet, surface Settings again
+        // When the user cmd-tabs back to DesktopPet, surface Settings again
         // instead of leaving it buried behind other apps' windows.
         NotificationCenter.default.removeObserver(self, name: NSApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(
@@ -76,7 +76,7 @@ final class SettingsWindowController: NSObject, NSWindowDelegate {
 
     func windowWillClose(_ notification: Notification) {
         if (notification.object as? NSWindow) === onboardingWindow {
-            UserDefaults.standard.set(true, forKey: "agentpet.hasOnboarded")
+            UserDefaults.standard.set(true, forKey: "desktoppet.hasOnboarded")
             onboardingWindow = nil
         } else {
             window = nil
@@ -90,7 +90,7 @@ final class SettingsWindowController: NSObject, NSWindowDelegate {
 
     /// Shows the welcome/onboarding window the first time the app is launched.
     func showOnFirstLaunch() {
-        guard !UserDefaults.standard.bool(forKey: "agentpet.hasOnboarded") else { return }
+        guard !UserDefaults.standard.bool(forKey: "desktoppet.hasOnboarded") else { return }
         showOnboarding()
     }
 
@@ -105,7 +105,7 @@ final class SettingsWindowController: NSObject, NSWindowDelegate {
             contentRect: NSRect(x: 0, y: 0, width: 560, height: 640),
             styleMask: [.titled, .closable], backing: .buffered, defer: false
         )
-        window.title = "Welcome to AgentPet"
+        window.title = "Welcome to DesktopPet"
         window.delegate = self
         window.isReleasedWhenClosed = false
         window.contentView = host

@@ -1,12 +1,12 @@
 [package]
-name = "agentpet"
+name = "desktoppet"
 version = "0.1.5"
-description = "AgentPet for Windows"
+description = "DesktopPet for Windows"
 authors = ["ntd4996"]
 edition = "2021"
 
 [lib]
-name = "agentpet_lib"
+name = "desktoppet_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]

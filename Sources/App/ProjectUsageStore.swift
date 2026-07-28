@@ -1,5 +1,5 @@
 import Foundation
-import AgentPetCore
+import DesktopPetCore
 
 /// Logs per-project, per-agent token usage by day so the web dashboard can show
 /// where your tokens go. Persisted locally; pushed to the profile by
@@ -44,8 +44,8 @@ final class ProjectUsageStore: ObservableObject {
         }
     }
 
-    private static let storageKey = "agentpet.projectUsage"
-    private static let dirtyKey = "agentpet.projectUsage.dirty"
+    private static let storageKey = "desktoppet.projectUsage"
+    private static let dirtyKey = "desktoppet.projectUsage.dirty"
     /// Keyed by "projectId|agent|day".
     private var rows: [String: Row]
     private var dirty: Set<String>

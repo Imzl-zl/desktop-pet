@@ -1,5 +1,5 @@
 import Foundation
-import AgentPetCore
+import DesktopPetCore
 
 /// User choice of chat messages: the built-in system set, or custom lines the
 /// user types per mood. Drives the simple (single-line) chat bubble. The
@@ -18,8 +18,8 @@ final class ChatSettings: ObservableObject {
         didSet { save() }
     }
 
-    private static let sourceKey = "agentpet.chatSource"
-    private static let customKey = "agentpet.chatCustom"
+    private static let sourceKey = "desktoppet.chatSource"
+    private static let customKey = "desktoppet.chatCustom"
 
     /// Moods the user can write messages for (idle = the "doing nothing" line).
     static let editableMoods: [PetMood] = [.working, .waiting, .done, .celebrate, .idle]

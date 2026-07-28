@@ -1,6 +1,6 @@
 # macOS → Windows parity matrix
 
-Đối chiếu từng chức năng sau khi đọc toàn bộ 9.010 dòng Swift (Sources/App + AgentPetCore).
+Đối chiếu từng chức năng sau khi đọc toàn bộ 9.010 dòng Swift (Sources/App + DesktopPetCore).
 Trạng thái: ✅ có rồi · 🔧 đang port đợt này · ⏳ để đợt sau · ➖ không áp dụng trên Windows.
 
 ## Event pipeline (Core)
@@ -12,7 +12,7 @@ Trạng thái: ✅ có rồi · 🔧 đang port đợt này · ⏳ để đợt 
 | Offline queue (hook chạy khi app tắt → replay) | ✓ | ✅ queue file + drain (đã test) |
 | Claude Stop → đọc transcript → câu hỏi? → waiting (QuestionDetector) | ✓ | ✅ Rust port (đã test end-to-end) |
 | Title hội thoại từ transcript (summary/first msg) | ✓ | ✅ Rust port |
-| `agentpet run -- <cmd>` wrapper (working/heartbeat/done) | ✓ | ✅ (đã test) |
+| `desktoppet run -- <cmd>` wrapper (working/heartbeat/done) | ✓ | ✅ (đã test) |
 | Notifications (waiting: "X needs input"+msg, done: "X finished") | ✓ | ✅ cùng copy với mac |
 | Sounds: bật/tắt riêng done & waiting | ✓ | ✅ + upload file riêng (play/upload/default) |
 

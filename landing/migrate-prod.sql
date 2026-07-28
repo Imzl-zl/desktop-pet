@@ -1,6 +1,6 @@
 -- Migration for the EXISTING prod D1 (already has pets + uploads).
 -- Adds owner/counters to pets and the new portal tables. Run once:
---   wrangler d1 execute agentpet-pets --remote --file=landing/migrate-prod.sql
+--   wrangler d1 execute desktoppet-pets --remote --file=landing/migrate-prod.sql
 ALTER TABLE pets ADD COLUMN user_id INTEGER;
 ALTER TABLE pets ADD COLUMN downloads INTEGER NOT NULL DEFAULT 0;
 ALTER TABLE pets ADD COLUMN likes INTEGER NOT NULL DEFAULT 0;

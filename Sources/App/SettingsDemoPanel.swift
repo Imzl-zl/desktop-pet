@@ -1,5 +1,5 @@
 import SwiftUI
-import AgentPetCore
+import DesktopPetCore
 
 /// Live-preview side panels for the Settings window. Drives a LOCAL list of fake
 /// agent sessions (never the real pet).
@@ -354,7 +354,7 @@ struct SettingsDemoPanel: View {
 
     private func sampleProject(_ kind: AgentKind) -> String {
         switch kind {
-        case .claude: return "agentpet"
+        case .claude: return "desktoppet"
         case .codex: return "api-server"
         case .gemini: return "ml-pipeline"
         case .cursor: return "web-app"

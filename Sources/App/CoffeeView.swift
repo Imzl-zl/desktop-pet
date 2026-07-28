@@ -29,7 +29,7 @@ struct CoffeeView: View {
         VStack(spacing: 14) {
             Image(systemName: "cup.and.saucer.fill")
                 .font(.system(size: 30)).foregroundStyle(Color.systemAccent)
-            Text("Thanks for using AgentPet")
+            Text("Thanks for using DesktopPet")
                 .font(.title3.bold())
             Text("It's free and open source. If it makes your day a little nicer, a coffee is always appreciated, never expected.")
                 .font(.callout).foregroundStyle(.secondary)

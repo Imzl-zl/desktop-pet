@@ -1,7 +1,7 @@
-import AgentPetCore
+import DesktopPetCore
 import Foundation
 
-/// `agentpet run [--session id] [--project path] [--agent kind] -- <command...>`
+/// `desktoppet run [--session id] [--project path] [--agent kind] -- <command...>`
 ///
 /// Launches any CLI agent, marks the session `working` while it runs (with a
 /// heartbeat so it isn't pruned as stale) and `done` when it exits. Works with
@@ -11,7 +11,7 @@ enum RunCLI {
         let parsed = RunArguments.parse(arguments)
         guard !parsed.command.isEmpty else {
             FileHandle.standardError.write(Data(
-                "usage: agentpet run [--session id] [--project path] [--agent kind] -- <command...>\n".utf8))
+                "usage: desktoppet run [--session id] [--project path] [--agent kind] -- <command...>\n".utf8))
             exit(2)
         }
 
@@ -22,7 +22,7 @@ enum RunCLI {
         func emit(_ state: String) {
             let event = AgentEvent(sessionId: session, agentKind: kind, eventName: state,
                                    project: project, message: nil, timestamp: Date())
-            EventSender.send(event, socketPath: AgentPetPaths.socketPath, queueDir: AgentPetPaths.queueDir)
+            EventSender.send(event, socketPath: DesktopPetPaths.socketPath, queueDir: DesktopPetPaths.queueDir)
         }
 
         emit("working")
@@ -42,7 +42,7 @@ enum RunCLI {
         } catch {
             heartbeat.cancel()
             emit("done")
-            FileHandle.standardError.write(Data("agentpet run: failed to launch \(parsed.command.first ?? "")\n".utf8))
+            FileHandle.standardError.write(Data("desktoppet run: failed to launch \(parsed.command.first ?? "")\n".utf8))
             exit(126)
         }
 

@@ -1,6 +1,6 @@
 import Foundation
 import AppKit
-import AgentPetCore
+import DesktopPetCore
 
 /// Per-window pet state. One instance backs each pet window (single window for
 /// now; the registry in later tasks owns one per active project). Holds only

@@ -4,20 +4,20 @@ import Icon from "../components/Icon.astro";
 import Hero from "../components/Hero.astro";
 import CodeBlock from "../components/CodeBlock.astro";
 
-const GITHUB = "https://github.com/ntd4996/agentpet";
-const RELEASES = "https://github.com/ntd4996/agentpet/releases";
-const RELEASE_LATEST = "https://github.com/ntd4996/agentpet/releases/latest";
+const GITHUB = "https://github.com/Imzl-zl/desktop-pet";
+const RELEASES = "https://github.com/Imzl-zl/desktop-pet/releases";
+const RELEASE_LATEST = "https://github.com/Imzl-zl/desktop-pet/releases/latest";
 const DISCORD = "https://discord.gg/kzFJKsZav";
-const BREW = "brew install --cask ntd4996/tap/agentpet";
+const BREW = "brew install --cask Imzl-zl/tap/desktoppet";
 const WIN_TAG = "win-v0.1.5";
-const WIN_SETUP = `https://github.com/ntd4996/agentpet/releases/download/${WIN_TAG}/AgentPet_0.1.5_x64-setup.exe`;
-const WIN_PORTABLE = `https://github.com/ntd4996/agentpet/releases/download/${WIN_TAG}/AgentPet-portable-x64.zip`;
+const WIN_SETUP = `https://github.com/Imzl-zl/desktop-pet/releases/download/${WIN_TAG}/DesktopPet_0.1.5_x64-setup.exe`;
+const WIN_PORTABLE = `https://github.com/Imzl-zl/desktop-pet/releases/download/${WIN_TAG}/DesktopPet-portable-x64.zip`;
 
 const LINUX_TAG = "linux-v0.1.5";
-const LINUX_BASE = `https://github.com/ntd4996/agentpet/releases/download/${LINUX_TAG}`;
-const LINUX_APPIMAGE = `${LINUX_BASE}/AgentPet_0.1.5_amd64.AppImage`;
-const LINUX_DEB = `${LINUX_BASE}/AgentPet_0.1.5_amd64.deb`;
-const LINUX_RPM = `${LINUX_BASE}/AgentPet-0.1.5-1.x86_64.rpm`;
+const LINUX_BASE = `https://github.com/Imzl-zl/desktop-pet/releases/download/${LINUX_TAG}`;
+const LINUX_APPIMAGE = `${LINUX_BASE}/DesktopPet_0.1.5_amd64.AppImage`;
+const LINUX_DEB = `${LINUX_BASE}/DesktopPet_0.1.5_amd64.deb`;
+const LINUX_RPM = `${LINUX_BASE}/DesktopPet-0.1.5-1.x86_64.rpm`;
 
 const platforms = [
   { id: "macos", label: "macOS", icon: "apple", status: "Available" },
@@ -47,50 +47,50 @@ const requirements = [
 ];
 
 const firstRun = [
-  { t: "Open AgentPet", b: "Your pet lands in the menu bar. Click the icon to open Settings." },
+  { t: "Open DesktopPet", b: "Your pet lands in the menu bar. Click the icon to open Settings." },
   { t: "Connect an agent", b: "In Settings → General, click Install next to Claude Code (or your tool)." },
   { t: "Enable notifications", b: "Allow notifications so the pet can ping you when an agent needs input." },
 ];
 
 const firstRunWin = [
-  { t: "Open AgentPet", b: "Your pet lands on the desktop and an icon appears in the system tray. Click the tray icon to open Settings." },
+  { t: "Open DesktopPet", b: "Your pet lands on the desktop and an icon appears in the system tray. Click the tray icon to open Settings." },
   { t: "Connect an agent", b: "In Settings → General, click Install next to Claude Code (or your tool)." },
   { t: "Enable notifications", b: "Allow notifications so the pet can ping you when an agent needs input." },
 ];
 
 const firstRunLinux = [
-  { t: "Open AgentPet", b: "Your pet lands on the desktop and an icon appears in the system tray. Click the tray icon to open Settings." },
+  { t: "Open DesktopPet", b: "Your pet lands on the desktop and an icon appears in the system tray. Click the tray icon to open Settings." },
   { t: "Connect an agent", b: "In Settings → General, click Install next to Claude Code (or your tool)." },
   { t: "Enable notifications", b: "Allow notifications so the pet can ping you when an agent needs input." },
 ];
 
-const LINUX_ONELINE = `curl -fsSL https://agentpet.thenightwatcher.online/install.sh | sh`;
+const LINUX_ONELINE = `curl -fsSL https://github.com/Imzl-zl/desktop-pet/raw/main/web/public/install.sh | sh`;
 
 const LINUX_RUN = `# AppImage , works on any distro
-chmod +x AgentPet_0.1.5_amd64.AppImage
-./AgentPet_0.1.5_amd64.AppImage
+chmod +x DesktopPet_0.1.5_amd64.AppImage
+./DesktopPet_0.1.5_amd64.AppImage
 
 # Debian / Ubuntu
-sudo dpkg -i AgentPet_0.1.5_amd64.deb
+sudo dpkg -i DesktopPet_0.1.5_amd64.deb
 
 # Fedora / openSUSE
-sudo rpm -i AgentPet-0.1.5-1.x86_64.rpm`;
+sudo rpm -i DesktopPet-0.1.5-1.x86_64.rpm`;
 
-const UNINSTALL = `brew uninstall --cask agentpet
-rm -rf ~/.agentpet
-rm -f  ~/Library/Preferences/com.agentpet.app.plist`;
+const UNINSTALL = `brew uninstall --cask desktoppet
+rm -rf ~/.desktoppet
+rm -f  ~/Library/Preferences/com.desktoppet.app.plist`;
 
-const BUILD = `git clone https://github.com/ntd4996/agentpet.git
-cd agentpet
+const BUILD = `git clone https://github.com/Imzl-zl/desktop-pet.git
+cd desktoppet
 ./scripts/build-app.sh release
-open build/AgentPet.app`;
+open build/DesktopPet.app`;
 ---
-<Base title="Install AgentPet · download for macOS, Windows & Linux" description="Download and install AgentPet for macOS, Windows, or Linux. Homebrew, a notarized DMG, a Windows installer, or an AppImage / .deb / .rpm." active="">
+<Base title="Install DesktopPet · download for macOS, Windows & Linux" description="Download and install DesktopPet for macOS, Windows, or Linux. Homebrew, a notarized DMG, a Windows installer, or an AppImage / .deb / .rpm." active="">
   <Hero
     eyebrow="Download"
     icon="download"
     title="Install"
-    accent="AgentPet"
+    accent="DesktopPet"
     lead="Adopt a pixel companion for your AI coding agents. Free and open source, for macOS, Windows, and Linux. Pick your platform below."
   >
     <a href={RELEASE_LATEST} target="_blank" rel="noopener" data-os-cta="macos" class="btn-primary !px-6 !py-3.5 text-base"><Icon name="apple" class="h-5 w-5" /> Download for macOS</a>
@@ -131,9 +131,9 @@ open build/AgentPet.app`;
             <span class="grid h-12 w-12 place-items-center rounded-2xl bg-brand-50 text-brand-600"><Icon name="terminal" class="h-6 w-6" /></span>
             <div class="mt-4 font-pixel text-[11px] uppercase tracking-wide text-brand-500">Option 1</div>
             <h3 class="mt-0.5 font-display text-xl font-semibold text-ink">Homebrew</h3>
-            <p class="mt-2 flex-1 text-muted">The quickest install. The cask drops AgentPet into Applications and keeps it upgradable.</p>
+            <p class="mt-2 flex-1 text-muted">The quickest install. The cask drops DesktopPet into Applications and keeps it upgradable.</p>
             <CodeBlock code={BREW} class="mt-4" />
-            <p class="mt-3 text-sm text-faint">Update later with <code class="rounded bg-brand-50 px-1.5 py-0.5 font-mono text-xs text-brand-700">brew upgrade --cask agentpet</code></p>
+            <p class="mt-3 text-sm text-faint">Update later with <code class="rounded bg-brand-50 px-1.5 py-0.5 font-mono text-xs text-brand-700">brew upgrade --cask desktoppet</code></p>
           </div>
 
           <!-- either / or divider -->
@@ -147,7 +147,7 @@ open build/AgentPet.app`;
             <span class="grid h-12 w-12 place-items-center rounded-2xl bg-brand-50 text-brand-600"><Icon name="download" class="h-6 w-6" /></span>
             <div class="mt-4 font-pixel text-[11px] uppercase tracking-wide text-brand-500">Option 2</div>
             <h3 class="mt-0.5 font-display text-xl font-semibold text-ink">Direct download</h3>
-            <p class="mt-2 flex-1 text-muted">Grab the notarized AgentPet.dmg, open it, and drag AgentPet to your Applications folder.</p>
+            <p class="mt-2 flex-1 text-muted">Grab the notarized DesktopPet.dmg, open it, and drag DesktopPet to your Applications folder.</p>
             <a href={RELEASE_LATEST} target="_blank" rel="noopener" class="btn-primary mt-4 w-full"><Icon name="apple" class="h-5 w-5" /> Download .dmg</a>
             <a href={RELEASES} target="_blank" rel="noopener" class="mt-3 inline-flex items-center gap-1 self-start text-sm font-semibold text-brand-600 hover:text-brand-700">Browse all releases <Icon name="arrow" class="h-4 w-4" /></a>
           </div>
@@ -211,7 +211,7 @@ open build/AgentPet.app`;
             <span class="grid h-12 w-12 place-items-center rounded-2xl bg-brand-50 text-brand-600"><Icon name="package" class="h-6 w-6" /></span>
             <div class="mt-4 font-pixel text-[11px] uppercase tracking-wide text-brand-500">Option 2</div>
             <h3 class="mt-0.5 font-display text-xl font-semibold text-ink">Portable</h3>
-            <p class="mt-2 flex-1 text-muted">No installer, no traces. Unzip <code class="rounded bg-brand-50 px-1.5 py-0.5 font-mono text-xs text-brand-700">AgentPet-portable-x64.zip</code> anywhere and run <code class="rounded bg-brand-50 px-1.5 py-0.5 font-mono text-xs text-brand-700">AgentPet.exe</code>.</p>
+            <p class="mt-2 flex-1 text-muted">No installer, no traces. Unzip <code class="rounded bg-brand-50 px-1.5 py-0.5 font-mono text-xs text-brand-700">DesktopPet-portable-x64.zip</code> anywhere and run <code class="rounded bg-brand-50 px-1.5 py-0.5 font-mono text-xs text-brand-700">DesktopPet.exe</code>.</p>
             <a href={WIN_PORTABLE} class="btn-primary mt-4 w-full"><Icon name="windows" class="h-5 w-5" /> Download portable .zip</a>
           </div>
         </div>
@@ -324,7 +324,7 @@ open build/AgentPet.app`;
     <div class="mx-auto max-w-6xl">
       <div class="text-center">
         <div class="font-pixel text-[11px] uppercase tracking-wide text-brand-500">Clean removal</div>
-        <h2 class="mt-2 font-display text-3xl font-bold text-ink">Uninstall AgentPet</h2>
+        <h2 class="mt-2 font-display text-3xl font-bold text-ink">Uninstall DesktopPet</h2>
         <p class="mx-auto mt-3 max-w-xl text-muted">No leftovers. Disconnect your agents first so their config stays clean, then remove the app and its data.</p>
       </div>
 
@@ -334,7 +334,7 @@ open build/AgentPet.app`;
             <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand-600 font-display text-sm font-bold text-white">1</span>
             <div>
               <h3 class="font-display text-lg font-semibold text-ink">Disconnect your agents</h3>
-              <p class="mt-1 text-muted">In Settings → General, click Remove next to each agent you connected. This strips AgentPet's hooks from the agents' config so they don't error after the app is gone.</p>
+              <p class="mt-1 text-muted">In Settings → General, click Remove next to each agent you connected. This strips DesktopPet's hooks from the agents' config so they don't error after the app is gone.</p>
             </div>
           </li>
           <li class="flex gap-4">
@@ -343,7 +343,7 @@ open build/AgentPet.app`;
               <h3 class="font-display text-lg font-semibold text-ink">Remove the app and its data</h3>
               <p class="mt-1 mb-3 text-muted">Then delete the app along with downloaded pets and preferences:</p>
               <CodeBlock code={UNINSTALL} />
-              <p class="mt-3 text-sm text-faint">Not using Homebrew? Drag /Applications/AgentPet.app to the Trash instead. The ~/.agentpet folder holds your downloaded pets and state.</p>
+              <p class="mt-3 text-sm text-faint">Not using Homebrew? Drag /Applications/DesktopPet.app to the Trash instead. The ~/.desktoppet folder holds your downloaded pets and state.</p>
             </div>
           </li>
         </ol>

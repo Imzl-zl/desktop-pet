@@ -1,6 +1,6 @@
 // Sources/App/BreakReminderController.swift
 import AppKit
-import AgentPetCore
+import DesktopPetCore
 
 /// Drives the break reminder: a low-rate timer reads whether the user is present
 /// (input activity or an active agent), advances the pure `BreakClock`, and

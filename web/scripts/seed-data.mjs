@@ -1,7 +1,7 @@
 // Data seed: assigns stable dex numbers (00001..N) to every pet and auto-builds
 // themed collections from pet names + kinds (referencing the petdex/openpets
 // catalogs we mirror). Emits idempotent SQL to scripts/seed.sql, then apply with:
-//   npx wrangler d1 execute agentpet-web --remote --file=scripts/seed.sql
+//   npx wrangler d1 execute desktoppet-web --remote --file=scripts/seed.sql
 // Auto rows use fixed ids ("auto-*" collections) so re-running is safe and never
 // touches admin-made collections. Original author info (submittedBy) is preserved.
 

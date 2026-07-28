@@ -1,9 +1,9 @@
 import AppKit
-import AgentPetCore
+import DesktopPetCore
 
 /// Plays a sound when an agent finishes or needs input. Each event has its own
 /// on/off and sound choice (a built-in macOS system sound, or a custom file the
-/// user uploads). Custom files are copied into `~/.agentpet/sounds/`.
+/// user uploads). Custom files are copied into `~/.desktoppet/sounds/`.
 @MainActor
 final class SoundSettings: ObservableObject {
     static let shared = SoundSettings()
@@ -21,15 +21,15 @@ final class SoundSettings: ObservableObject {
     static let defaultDone = "Glass"
 
     private var soundsDir: URL {
-        URL(fileURLWithPath: AgentPetPaths.baseDir).appendingPathComponent("sounds")
+        URL(fileURLWithPath: DesktopPetPaths.baseDir).appendingPathComponent("sounds")
     }
 
     init() {
         let d = UserDefaults.standard
-        waitingEnabled = (d.object(forKey: "agentpet.sound.waiting.on") as? Bool) ?? true
-        doneEnabled = (d.object(forKey: "agentpet.sound.done.on") as? Bool) ?? true
-        waitingCustomPath = d.string(forKey: "agentpet.sound.waiting.path") ?? ""
-        doneCustomPath = d.string(forKey: "agentpet.sound.done.path") ?? ""
+        waitingEnabled = (d.object(forKey: "desktoppet.sound.waiting.on") as? Bool) ?? true
+        doneEnabled = (d.object(forKey: "desktoppet.sound.done.on") as? Bool) ?? true
+        waitingCustomPath = d.string(forKey: "desktoppet.sound.waiting.path") ?? ""
+        doneCustomPath = d.string(forKey: "desktoppet.sound.done.path") ?? ""
     }
 
     func isEnabled(_ event: Event) -> Bool {
@@ -86,9 +86,9 @@ final class SoundSettings: ObservableObject {
 
     private func save() {
         let d = UserDefaults.standard
-        d.set(waitingEnabled, forKey: "agentpet.sound.waiting.on")
-        d.set(doneEnabled, forKey: "agentpet.sound.done.on")
-        d.set(waitingCustomPath, forKey: "agentpet.sound.waiting.path")
-        d.set(doneCustomPath, forKey: "agentpet.sound.done.path")
+        d.set(waitingEnabled, forKey: "desktoppet.sound.waiting.on")
+        d.set(doneEnabled, forKey: "desktoppet.sound.done.on")
+        d.set(waitingCustomPath, forKey: "desktoppet.sound.waiting.path")
+        d.set(doneCustomPath, forKey: "desktoppet.sound.done.path")
     }
 }

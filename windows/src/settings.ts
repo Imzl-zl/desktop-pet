@@ -1040,7 +1040,7 @@ function initBubbleDisplay() {
           img.className = "aicon"; img.src = agentIconUrl("claude") || ""; row.appendChild(img); break;
         }
         case "title": { const s = document.createElement("span"); s.className = "pv-strong"; s.textContent = "Fix login bug"; row.appendChild(s); break; }
-        case "project": { const s = document.createElement("span"); s.className = "pv-strong"; s.textContent = "agentpet"; row.appendChild(s); break; }
+        case "project": { const s = document.createElement("span"); s.className = "pv-strong"; s.textContent = "desktoppet"; row.appendChild(s); break; }
         case "separator": { const s = document.createElement("span"); s.className = "pv-dim"; s.textContent = cfg.separator; row.appendChild(s); break; }
         case "message": { const s = document.createElement("span"); s.textContent = "Editing SettingsModel.swift"; row.appendChild(s); break; }
         case "stateLabel": { const s = document.createElement("span"); s.className = "pv-dim"; s.textContent = t("Working"); row.appendChild(s); break; }
@@ -1514,7 +1514,7 @@ function applyStatic() {
   set("t-lang2", "Language");
   set("t-startup", "Launch");
   set("t-autostart", "Launch at login");
-  set("t-autostart-sub", "AgentPet starts automatically when you sign in.");
+  set("t-autostart-sub", "DesktopPet starts automatically when you sign in.");
   set("t-notif", "Notifications");
   set("t-notify", "Notifications on");
   set("t-notify-sub", "Alerts when something needs your attention.");
@@ -1527,9 +1527,9 @@ function applyStatic() {
   set("t-df-waiting", "Default");
   set("t-app", "About");
   set("t-agents", "Agent integrations");
-  set("t-agents-foot", "Install a hook so AgentPet can mirror your coding agents in the bubble.");
+  set("t-agents-foot", "Install a hook so DesktopPet can mirror your coding agents in the bubble.");
   set("t-version", "Version");
-  set("quit-btn", "Quit AgentPet");
+  set("quit-btn", "Quit DesktopPet");
   // pet
   set("t-pet-sub", "Pick the companion that floats on your desktop.");
   set("t-show-main", "Show main pet");
@@ -1656,7 +1656,7 @@ function applyStatic() {
   set("t-cdx-title", "How to connect Codex");
   set("t-cdx-1", "Install the hook here (it also enables hooks in Codex's config.toml).");
   set("t-cdx-2", "Open Codex CLI and run /hooks.");
-  set("t-cdx-3", "Press t to Trust the AgentPet hook.");
+  set("t-cdx-3", "Press t to Trust the DesktopPet hook.");
   set("t-cdx-4", "Quit and reopen Codex (both the CLI and the desktop app).");
   const allOpt = document.querySelector<HTMLOptionElement>('#msg-agent option[value="all"]');
   if (allOpt) allOpt.textContent = t("All agents");

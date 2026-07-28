@@ -1,11 +1,11 @@
-# AgentPet, Design Spec
+# DesktopPet, Design Spec
 
 Ngày: 2026-05-29
 Trạng thái: Approved (brainstorm)
 
 ## 1. Tóm tắt
 
-AgentPet là app menu bar macOS native (Swift/SwiftUI): một con pet sống trên desktop phản ứng theo trạng thái các AI coding agent đang chạy (Claude Code, Codex, ...). App cho biết agent nào đang chạy, con nào đã xong, con nào đang chờ người dùng nhập input. Mục tiêu: vừa vui và dễ lan truyền (như Petdex), vừa là tiện ích thật cho dev chạy nhiều agent song song. Dự án open-source, định hướng kéo sao GitHub.
+DesktopPet là app menu bar macOS native (Swift/SwiftUI): một con pet sống trên desktop phản ứng theo trạng thái các AI coding agent đang chạy (Claude Code, Codex, ...). App cho biết agent nào đang chạy, con nào đã xong, con nào đang chờ người dùng nhập input. Mục tiêu: vừa vui và dễ lan truyền (như Petdex), vừa là tiện ích thật cho dev chạy nhiều agent song song. Dự án open-source, định hướng kéo sao GitHub.
 
 Quyết định nền tảng (chốt trong brainstorm):
 - macOS only, native thật (Swift/SwiftUI).
@@ -20,14 +20,14 @@ Ba khối tách bạch, giao tiếp qua interface rõ ràng:
 
 1. State daemon (trong app)
    - Giữ state tất cả agent session: `id`, `project` (đường dẫn/cwd), `agentKind` (claude/codex/...), `state`, `updatedAt`, `title/summary` (tuỳ chọn).
-   - Lắng nghe trên một Unix domain socket local (vd `~/.agentpet/agentpet.sock`).
+   - Lắng nghe trên một Unix domain socket local (vd `~/.desktoppet/desktoppet.sock`).
    - Nhận event JSON, cập nhật state, publish ra UI (Combine/`@Observable`).
    - Dọn session cũ (timeout / khi nhận event kết thúc).
 
 2. Bridge / CLI helper
-   - Binary nhỏ trong cùng repo: `agentpet hook --event <E> --session <id> [--project <path>] [--agent <kind>] [--message <m>]`.
+   - Binary nhỏ trong cùng repo: `desktoppet hook --event <E> --session <id> [--project <path>] [--agent <kind>] [--message <m>]`.
    - Được agent gọi qua cơ chế hook của agent đó; helper serialize event JSON và gửi vào socket.
-   - Không phụ thuộc app đang mở: nếu socket không có, ghi tạm vào file queue (`~/.agentpet/queue/`) để daemon đọc khi mở.
+   - Không phụ thuộc app đang mở: nếu socket không có, ghi tạm vào file queue (`~/.desktoppet/queue/`) để daemon đọc khi mở.
 
 3. UI
    - MenuBarExtra: icon menu bar + dropdown list agent.
@@ -41,7 +41,7 @@ Luồng dữ liệu: agent → hook → helper → socket (hoặc file queue) �
 
 Tập trạng thái chuẩn hoá: `registered` / `working` / `waiting` / `done` / `idle`.
 
-Claude Code (cài qua `settings.json` hooks gọi `agentpet hook ...`):
+Claude Code (cài qua `settings.json` hooks gọi `desktoppet hook ...`):
 - `SessionStart` → `registered`
 - `UserPromptSubmit` / tool đang chạy → `working`
 - `Notification` (cần quyền hoặc đợi input) → `waiting`
@@ -71,7 +71,7 @@ Với agent chưa cài hook: quét process (`claude`, `codex`, ...) để biết
 - Một bundle/folder gồm:
   - `manifest.json`: metadata (name, author, version) + map `state → animation` cho các state: `idle`, `working`, `waiting`, `done`, `celebrate`.
   - assets: sprite frames hoặc Lottie/APNG.
-- v2: load pet từ thư mục user (`~/.agentpet/pets/`), cộng đồng PR pet vào repo (dex), importer cho pet pack tương thích.
+- v2: load pet từ thư mục user (`~/.desktoppet/pets/`), cộng đồng PR pet vào repo (dex), importer cho pet pack tương thích.
 
 ## 5. UI / tương tác
 

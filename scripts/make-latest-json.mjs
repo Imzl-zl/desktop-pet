@@ -1,5 +1,5 @@
 // Builds the combined Tauri updater manifest served at
-// https://agentpet.thenightwatcher.online/latest.json , covering BOTH the
+// https://github.com/Imzl-zl/desktop-pet/releases/latest/download/latest.json , covering BOTH the
 // Windows and Linux (AppImage) desktop builds. Decoupled from GitHub's "Latest"
 // release tag (which belongs to the native macOS app), so auto-update is stable.
 //
@@ -17,14 +17,14 @@ if (!version) {
   process.exit(1);
 }
 
-const REPO = "https://github.com/ntd4996/agentpet/releases/download";
+const REPO = "https://github.com/Imzl-zl/desktop-pet/releases/download";
 const winTag = `win-v${version}`;
 const linuxTag = `linux-v${version}`;
 
 // Tauri's Windows updater ships the NSIS .exe; its Linux updater ships the
 // AppImage itself (both with a sibling .sig).
-const winExe = `AgentPet_${version}_x64-setup.exe`;
-const linuxAppImage = `AgentPet_${version}_amd64.AppImage`;
+const winExe = `DesktopPet_${version}_x64-setup.exe`;
+const linuxAppImage = `DesktopPet_${version}_amd64.AppImage`;
 
 async function sig(url) {
   const res = await fetch(url);

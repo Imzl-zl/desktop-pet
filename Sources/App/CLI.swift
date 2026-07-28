@@ -1,7 +1,7 @@
-import AgentPetCore
+import DesktopPetCore
 import Foundation
 
-/// CLI helper invoked by agent hooks: `agentpet hook --event ... --session ...`.
+/// CLI helper invoked by agent hooks: `desktoppet hook --event ... --session ...`.
 enum HookCLI {
     static func run(arguments: [String]) -> Never {
         // Explicit flags win (used by opencode's plugin and the run wrapper);
@@ -22,18 +22,18 @@ enum HookCLI {
 
         guard let event else {
             FileHandle.standardError.write(Data(
-                "usage: agentpet hook --event <name> --session <id> [--project <path>] [--agent <kind>] [--message <text>]\n         or pipe a Claude Code hook JSON payload on stdin\n".utf8
+                "usage: desktoppet hook --event <name> --session <id> [--project <path>] [--agent <kind>] [--message <text>]\n         or pipe a Claude Code hook JSON payload on stdin\n".utf8
             ))
             exit(2)
         }
         // Approval-gated events must reply with the hook's permission decision on
         // stdout so Claude Code can allow/deny the tool call synchronously.
         if event.approvalRequestId != nil {
-            let decision = EventSender.sendAndAwaitReply(event, socketPath: AgentPetPaths.socketPath)
+            let decision = EventSender.sendAndAwaitReply(event, socketPath: DesktopPetPaths.socketPath)
             print(ApprovalHookResponse.json(for: decision))
             exit(0)
         }
-        EventSender.send(event, socketPath: AgentPetPaths.socketPath, queueDir: AgentPetPaths.queueDir)
+        EventSender.send(event, socketPath: DesktopPetPaths.socketPath, queueDir: DesktopPetPaths.queueDir)
         exit(0)
     }
 }

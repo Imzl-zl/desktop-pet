@@ -1,6 +1,6 @@
 import Foundation
 import SwiftUI
-import AgentPetCore
+import DesktopPetCore
 
 // MARK: - Token types
 
@@ -212,7 +212,7 @@ enum MinStateFilter: String, CaseIterable, Codable {
     }
 
     func includes(_ state: AgentState) -> Bool {
-        // attentionPriority is internal to AgentPetCore — compare states explicitly
+        // attentionPriority is internal to DesktopPetCore — compare states explicitly
         switch self {
         case .all:               return true
         case .doneAndAbove:      return state == .working || state == .waiting || state == .done
@@ -299,7 +299,7 @@ final class BubbleSettings: ObservableObject {
         didSet { ud.set(displayMode.rawValue, forKey: Keys.displayMode) }
     }
     /// When enabled, active sessions render with the structured multi-agent
-    /// bubble. When off, AgentPet keeps the default chat bubble behavior.
+    /// bubble. When off, DesktopPet keeps the default chat bubble behavior.
     @Published var multiAgentBubbleEnabled: Bool {
         didSet {
             ud.set(multiAgentBubbleEnabled, forKey: Keys.multiAgentBubbleEnabled)
@@ -344,23 +344,23 @@ final class BubbleSettings: ObservableObject {
     private let ud = UserDefaults.standard
 
     private enum Keys {
-        static let customLayout    = "agentpet.bubble.customLayout"
-        static let separatorChar   = "agentpet.bubble.separatorChar"
-        static let fontSize        = "agentpet.bubble.fontSize"
-        static let opacity         = "agentpet.bubble.opacity"
-        static let theme           = "agentpet.bubble.theme"
-        static let dotStyle        = "agentpet.bubble.dotStyle"
-        static let maxSessions     = "agentpet.bubble.maxSessions"
-        static let minStateFilter  = "agentpet.bubble.minStateFilter"
-        static let sessionGrouping     = "agentpet.bubble.sessionGrouping"
-        static let groupByKind         = "agentpet.bubble.groupByKind"
-        static let collapseDuplicates  = "agentpet.bubble.collapseDuplicates" // legacy
-        static let displayMode         = "agentpet.bubble.displayMode"
-        static let multiAgentBubbleEnabled = "agentpet.bubble.multiAgentBubbleEnabled"
-        static let hiddenKinds         = "agentpet.bubble.hiddenKinds"
-        static let iconChoices     = "agentpet.bubble.iconChoices"
-        static let activityTheme   = "agentpet.bubble.activityTheme"
-        static let reactiveBubblesEnabled = "agentpet.bubble.reactiveBubblesEnabled"
+        static let customLayout    = "desktoppet.bubble.customLayout"
+        static let separatorChar   = "desktoppet.bubble.separatorChar"
+        static let fontSize        = "desktoppet.bubble.fontSize"
+        static let opacity         = "desktoppet.bubble.opacity"
+        static let theme           = "desktoppet.bubble.theme"
+        static let dotStyle        = "desktoppet.bubble.dotStyle"
+        static let maxSessions     = "desktoppet.bubble.maxSessions"
+        static let minStateFilter  = "desktoppet.bubble.minStateFilter"
+        static let sessionGrouping     = "desktoppet.bubble.sessionGrouping"
+        static let groupByKind         = "desktoppet.bubble.groupByKind"
+        static let collapseDuplicates  = "desktoppet.bubble.collapseDuplicates" // legacy
+        static let displayMode         = "desktoppet.bubble.displayMode"
+        static let multiAgentBubbleEnabled = "desktoppet.bubble.multiAgentBubbleEnabled"
+        static let hiddenKinds         = "desktoppet.bubble.hiddenKinds"
+        static let iconChoices     = "desktoppet.bubble.iconChoices"
+        static let activityTheme   = "desktoppet.bubble.activityTheme"
+        static let reactiveBubblesEnabled = "desktoppet.bubble.reactiveBubblesEnabled"
     }
 
     init() {

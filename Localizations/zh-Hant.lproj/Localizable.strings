@@ -1,4 +1,4 @@
-/* AgentPet , 正體中文 */
+/* DesktopPet , 正體中文 */
 
 /* Tabs */
 "General" = "通用";
@@ -11,7 +11,7 @@
 /* General / common */
 "Launch" = "啟動";
 "Launch at login" = "登入時啟動";
-"AgentPet starts automatically when you sign in." = "登入時自動啟動 AgentPet。";
+"DesktopPet starts automatically when you sign in." = "登入時自動啟動 DesktopPet。";
 "Notifications" = "通知";
 "Show chat bubble" = "顯示聊天氣泡";
 "Messages" = "訊息";
@@ -26,7 +26,7 @@
 "Coming soon" = "即將推出";
 "Enable" = "啟用";
 "Open Settings" = "開啟設定";
-"Quit AgentPet" = "退出 AgentPet";
+"Quit DesktopPet" = "退出 DesktopPet";
 "Upload…" = "上傳…";
 "Default" = "預設";
 "Working" = "工作中";
@@ -84,7 +84,7 @@
 "Star on GitHub" = "在 GitHub 上點亮 Star";
 "Join the Discord" = "加入 Discord";
 "Buy me a coffee" = "請我喝杯咖啡";
-"If AgentPet helps your workflow, a star means a lot. Thank you!" = "如果 AgentPet 幫到了你，點個 Star 意義非凡。謝謝！";
+"If DesktopPet helps your workflow, a star means a lot. Thank you!" = "如果 DesktopPet 幫到了你，點個 Star 意義非凡。謝謝！";
 "Author" = "作者";
 "Version" = "版本";
 "Choose pet" = "選擇寵物";
@@ -162,7 +162,7 @@
 "Notifications denied" = "通知被拒絕";
 "Notifications unavailable" = "通知不可用";
 "Enable notifications" = "啟用通知";
-"Available once installed as AgentPet.app" = "以 AgentPet.app 安裝後可用";
+"Available once installed as DesktopPet.app" = "以 DesktopPet.app 安裝後可用";
 "Turn on in System Settings to get alerts" = "在系統設定中開啟以接收提醒";
 "Alerts when something needs your attention." = "有事情需要關注時提醒。";
 "Alerts when an agent finishes or needs input" = "有事情需要關注時提醒。";
@@ -241,8 +241,8 @@
 "Get alerted when something needs your attention." = "有事情需要關注時收到提醒。";
 "Get alerted when an agent finishes or needs input." = "有事情需要關注時收到提醒。";
 "Get started" = "開始";
-"Install a hook so AgentPet can mirror your coding agents in the bubble. You can always do this later in Advanced settings." = "安裝 hook，讓 AgentPet 在氣泡中同步顯示你的程式設計 agent。你隨時可以在進階設定裡完成。";
-"Install a hook so AgentPet can see when an agent works, finishes, or needs you." = "安裝 hook，讓 AgentPet 在氣泡中同步顯示你的程式設計 agent。你隨時可以在進階設定裡完成。";
+"Install a hook so DesktopPet can mirror your coding agents in the bubble. You can always do this later in Advanced settings." = "安裝 hook，讓 DesktopPet 在氣泡中同步顯示你的程式設計 agent。你隨時可以在進階設定裡完成。";
+"Install a hook so DesktopPet can see when an agent works, finishes, or needs you." = "安裝 hook，讓 DesktopPet 在氣泡中同步顯示你的程式設計 agent。你隨時可以在進階設定裡完成。";
 "Loading pets…" = "正在載入寵物…";
 "Nothing running right now." = "當前沒有執行中的內容。";
 "Pet info" = "寵物資訊";
@@ -251,14 +251,14 @@
 "Sort by agent kind" = "按 Agent 型別排序";
 "Spritesheet" = "精靈圖";
 "Use the same 8×9 transparent spritesheet format as downloaded pets." = "使用與下載寵物相同的 8×9 透明精靈圖格式。";
-"Welcome to AgentPet" = "歡迎使用 AgentPet";
+"Welcome to DesktopPet" = "歡迎使用 DesktopPet";
 "Connect coding agents" = "連接程式設計 agent";
 "Pick a pet to get started." = "選隻寵物開始吧。";
 "Pick your pet" = "挑選你的寵物";
 
 /* Codex connection help */
 "Connect Codex" = "連線 Codex";
-"The hook is installed. Codex blocks unknown command hooks until you trust them once , a Codex security feature, not an AgentPet bug. Do this one time:" = "Hook 已安裝。Codex 會攔截未知的命令 hook，直到你信任一次 , 這是 Codex 的安全機制，並非 AgentPet 的問題。只需操作一次：";
+"The hook is installed. Codex blocks unknown command hooks until you trust them once , a Codex security feature, not an DesktopPet bug. Do this one time:" = "Hook 已安裝。Codex 會攔截未知的命令 hook，直到你信任一次 , 這是 Codex 的安全機制，並非 DesktopPet 的問題。只需操作一次：";
 "Open Terminal and run: codex (launches the Codex CLI)" = "開啟終端並執行：codex（啟動 Codex CLI）";
 "Type /hooks and press Enter to list the hooks." = "輸入 /hooks 並回車以列出 hook。";
 "Press t to Trust all hooks." = "按 t 鍵信任所有 hook。";
@@ -379,7 +379,7 @@
 "resets in %dm" = "%d 分鐘後重置";
 
 /* Coffee / donate */
-"Thanks for using AgentPet" = "感謝使用 AgentPet";
+"Thanks for using DesktopPet" = "感謝使用 DesktopPet";
 "It's free and open source. If it makes your day a little nicer, a coffee is always appreciated, never expected." = "本應用免費開源。如果它讓你的一天更愉快，一杯咖啡總是受歡迎的，但絕不強求。";
 "Quét mã bằng app ngân hàng bất kỳ" = "用任意銀行 App 掃碼";
 "Sao chép số tài khoản" = "複製賬號";

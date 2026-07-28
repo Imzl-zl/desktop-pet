@@ -43,10 +43,10 @@ fn is_pet_window(label: &str) -> bool {
     label == "pet" || label.starts_with("pet-")
 }
 
-/// Append a line to %APPDATA%/AgentPet/debug.log , lightweight field
+/// Append a line to %APPDATA%/DesktopPet/debug.log , lightweight field
 /// diagnostics for the Windows build (no console there).
 fn dlog(msg: &str) {
-    if let Some(p) = dirs::config_dir().map(|d| d.join("AgentPet").join("debug.log")) {
+    if let Some(p) = dirs::config_dir().map(|d| d.join("DesktopPet").join("debug.log")) {
         if let Some(dir) = p.parent() {
             let _ = std::fs::create_dir_all(dir);
         }
@@ -67,7 +67,7 @@ fn log_debug(msg: String) {
 }
 
 fn pos_file() -> Option<std::path::PathBuf> {
-    dirs::config_dir().map(|d| d.join("AgentPet").join("pos"))
+    dirs::config_dir().map(|d| d.join("DesktopPet").join("pos"))
 }
 
 fn read_pos() -> Option<(i32, i32)> {
@@ -99,7 +99,7 @@ fn set_hit_rect(app: tauri::AppHandle, label: String, x: f64, y: f64, w: f64, h:
 }
 
 fn lang_file() -> Option<std::path::PathBuf> {
-    dirs::config_dir().map(|d| d.join("AgentPet").join("lang"))
+    dirs::config_dir().map(|d| d.join("DesktopPet").join("lang"))
 }
 
 fn read_lang() -> String {
@@ -122,9 +122,9 @@ fn write_lang(code: &str) {
 /// Localised tray labels (the only app text on the Rust side).
 fn tray_labels(code: &str) -> (&'static str, &'static str, &'static str) {
     match code {
-        "vi" => ("Hiện pet", "Cài đặt", "Thoát AgentPet"),
-        "zh" => ("显示宠物", "设置", "退出 AgentPet"),
-        _ => ("Show pet", "Settings", "Quit AgentPet"),
+        "vi" => ("Hiện pet", "Cài đặt", "Thoát DesktopPet"),
+        "zh" => ("显示宠物", "设置", "退出 DesktopPet"),
+        _ => ("Show pet", "Settings", "Quit DesktopPet"),
     }
 }
 
@@ -157,7 +157,7 @@ fn open_settings_impl(app: tauri::AppHandle) {
             return;
         }
         match WebviewWindowBuilder::new(&app, "settings", WebviewUrl::App("settings.html".into()))
-            .title("AgentPet")
+            .title("DesktopPet")
             .inner_size(1000.0, 680.0)
             .min_inner_size(760.0, 560.0)
             .resizable(true)
@@ -287,7 +287,7 @@ fn sync_project_windows(app: tauri::AppHandle, projects: Vec<String>) {
         let x = (sw - 280.0 - (i as f64 + 1.0) * 60.0).max(20.0);
         let y = (sh - 380.0).max(20.0);
         let _ = WebviewWindowBuilder::new(&app, &label, WebviewUrl::App(url.into()))
-            .title("AgentPet")
+            .title("DesktopPet")
             .inner_size(260.0, 320.0)
             .position(x, y)
             .transparent(true)
@@ -315,7 +315,7 @@ const BALL_H: f64 = 80.0;
 const SNAP_MARGIN: f64 = 4.0; // gap from the screen edge after snapping
 
 fn ball_pos_file() -> Option<std::path::PathBuf> {
-    dirs::config_dir().map(|d| d.join("AgentPet").join("ball-pos"))
+    dirs::config_dir().map(|d| d.join("DesktopPet").join("ball-pos"))
 }
 fn read_ball_pos() -> Option<(f64, f64)> {
     let s = std::fs::read_to_string(ball_pos_file()?).ok()?;
@@ -329,7 +329,7 @@ fn write_ball_pos(x: f64, y: f64) {
     }
 }
 fn ball_visible_file() -> Option<std::path::PathBuf> {
-    dirs::config_dir().map(|d| d.join("AgentPet").join("ball-visible"))
+    dirs::config_dir().map(|d| d.join("DesktopPet").join("ball-visible"))
 }
 fn read_ball_visible() -> bool {
     ball_visible_file()
@@ -360,7 +360,7 @@ fn spawn_floating_ball_impl(app: tauri::AppHandle) {
         FLOATING_BALL_LABEL,
         WebviewUrl::App("floating-ball.html".into()),
     )
-    .title("AgentPet")
+    .title("DesktopPet")
     .inner_size(BALL_W, BALL_H)
     .position(x.max(0.0), y.max(0.0))
     .transparent(true)
@@ -455,7 +455,7 @@ async fn spawn_extra_pet(app: tauri::AppHandle, slug: String) -> Result<String, 
     let x = (120.0 + (n as f64) * 40.0).min(sw - 280.0).max(20.0);
     let y = (120.0 + (n as f64) * 40.0).min(sh - 360.0).max(20.0);
     WebviewWindowBuilder::new(&app, &label, WebviewUrl::App(url.into()))
-        .title("AgentPet")
+        .title("DesktopPet")
         .inner_size(260.0, 320.0)
         .position(x, y)
         .transparent(true)
@@ -526,11 +526,11 @@ fn set_tray_status(app: tauri::AppHandle, working: u32, waiting: u32) {
     if let Some(items) = app.try_state::<Mutex<TrayItems>>() {
         if let Ok(it) = items.lock() {
             let tip = if waiting > 0 {
-                format!("AgentPet , {waiting} waiting for you")
+                format!("DesktopPet , {waiting} waiting for you")
             } else if working > 0 {
-                format!("AgentPet , {working} working")
+                format!("DesktopPet , {working} working")
             } else {
-                "AgentPet".to_string()
+                "DesktopPet".to_string()
             };
             let _ = it.tray.set_tooltip(Some(tip));
         }
@@ -550,7 +550,7 @@ fn show_popover(app: &tauri::AppHandle) {
         Some(w) => w,
         None => {
             match WebviewWindowBuilder::new(app, "popover", WebviewUrl::App("popover.html".into()))
-                .title("AgentPet")
+                .title("DesktopPet")
                 .inner_size(300.0, 430.0)
                 .decorations(false)
                 .transparent(true)
@@ -618,7 +618,7 @@ fn set_pet_visible(app: tauri::AppHandle, visible: bool) {
             let _ = win.hide();
         }
     }
-    if let Some(p) = dirs::config_dir().map(|d| d.join("AgentPet").join("petvisible")) {
+    if let Some(p) = dirs::config_dir().map(|d| d.join("DesktopPet").join("petvisible")) {
         let _ = std::fs::write(p, if visible { "1" } else { "0" });
     }
     if let Some(items) = app.try_state::<Mutex<TrayItems>>() {
@@ -796,7 +796,7 @@ pub fn run() {
             // Settings switcher re-labels them live via the `set_lang` command.
             let (p_lbl, s_lbl, q_lbl) = tray_labels(&read_lang());
             let pet_visible = dirs::config_dir()
-                .map(|d| d.join("AgentPet").join("petvisible"))
+                .map(|d| d.join("DesktopPet").join("petvisible"))
                 .and_then(|p| std::fs::read_to_string(p).ok())
                 .map(|s| s.trim() != "0")
                 .unwrap_or(true);
@@ -813,7 +813,7 @@ pub fn run() {
             let quit_i = MenuItem::with_id(app, "quit", q_lbl, true, None::<&str>)?;
             let menu = Menu::with_items(app, &[&show_pet_i, &settings_i, &quit_i])?;
             let mut tray = TrayIconBuilder::new()
-                .tooltip("AgentPet")
+                .tooltip("DesktopPet")
                 .menu(&menu)
                 .show_menu_on_left_click(false)
                 .on_tray_icon_event(|tray, event| {
@@ -859,7 +859,7 @@ pub fn run() {
             dlog("setup complete, tray + loop running");
             // First run: open Settings so the user knows to pick a pet and
             // connect an agent (otherwise the pet just sits there silently).
-            let marker = dirs::config_dir().map(|d| d.join("AgentPet").join(".onboarded"));
+            let marker = dirs::config_dir().map(|d| d.join("DesktopPet").join(".onboarded"));
             if let Some(m) = marker {
                 if !m.exists() {
                     // Call the sync impl directly: open_settings is an async fn
@@ -884,5 +884,5 @@ pub fn run() {
             Ok(())
         })
         .run(tauri::generate_context!())
-        .expect("error while running AgentPet");
+        .expect("error while running DesktopPet");
 }

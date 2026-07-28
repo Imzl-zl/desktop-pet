@@ -1,6 +1,6 @@
 import AppKit
 import SwiftUI
-import AgentPetCore
+import DesktopPetCore
 
 /// Owns the menu bar status item and a native `NSPopover` (the pattern used by
 /// polished menu bar apps): smooth open/close animation, a real arrow pointing
@@ -16,14 +16,14 @@ final class StatusBarController: NSObject, ObservableObject {
     /// Whether to show the agent count next to the menu bar icon.
     @Published var showCount: Bool {
         didSet {
-            UserDefaults.standard.set(showCount, forKey: "agentpet.showCount")
+            UserDefaults.standard.set(showCount, forKey: "desktoppet.showCount")
             updateStatus(lastSessions)
         }
     }
     /// Whether to show the pet's chat line next to the menu bar icon (default off).
     @Published var showChatOnMenuBar: Bool {
         didSet {
-            UserDefaults.standard.set(showChatOnMenuBar, forKey: "agentpet.showChatMenuBar")
+            UserDefaults.standard.set(showChatOnMenuBar, forKey: "desktoppet.showChatMenuBar")
             updateStatus(lastSessions)
         }
     }
@@ -31,15 +31,15 @@ final class StatusBarController: NSObject, ObservableObject {
     /// the menu bar icon.
     @Published var showBubbleOnMenuBar: Bool {
         didSet {
-            UserDefaults.standard.set(showBubbleOnMenuBar, forKey: "agentpet.showBubbleMenuBar")
+            UserDefaults.standard.set(showBubbleOnMenuBar, forKey: "desktoppet.showBubbleMenuBar")
             refreshAgentBubble()
         }
     }
 
     override init() {
-        showCount = (UserDefaults.standard.object(forKey: "agentpet.showCount") as? Bool) ?? true
-        showChatOnMenuBar = (UserDefaults.standard.object(forKey: "agentpet.showChatMenuBar") as? Bool) ?? false
-        showBubbleOnMenuBar = (UserDefaults.standard.object(forKey: "agentpet.showBubbleMenuBar") as? Bool) ?? false
+        showCount = (UserDefaults.standard.object(forKey: "desktoppet.showCount") as? Bool) ?? true
+        showChatOnMenuBar = (UserDefaults.standard.object(forKey: "desktoppet.showChatMenuBar") as? Bool) ?? false
+        showBubbleOnMenuBar = (UserDefaults.standard.object(forKey: "desktoppet.showBubbleMenuBar") as? Bool) ?? false
         super.init()
     }
 
@@ -115,7 +115,7 @@ final class StatusBarController: NSObject, ObservableObject {
         if count == cachedMenuBarCount, waiting == cachedMenuBarWaiting,
            let cached = cachedMenuBarImage { return cached }
 
-        guard let paw = NSImage(systemSymbolName: "pawprint.fill", accessibilityDescription: "AgentPet") else { return nil }
+        guard let paw = NSImage(systemSymbolName: "pawprint.fill", accessibilityDescription: "DesktopPet") else { return nil }
 
         guard let count else {
             paw.isTemplate = true
