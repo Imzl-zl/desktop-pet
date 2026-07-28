@@ -82,16 +82,45 @@ function winOverride(key: string): string | null {
   return localStorage.getItem(`ap_win_${WIN_LABEL}_${key}`);
 }
 
+// Module-level cache: loadConfig() runs every 30ms tick; reading three keys
+// + parseInt ~100 times/sec is pure waste. Invalidated by `storage` events
+// (cross-window writes from Settings) and by invalidateRoamConfig() for
+// same-window writes.
+let cfgCache: Config | null = null;
+let cfgRaw = "";
+
+function snapshotRoamRaw(): string {
+  return `${localStorage.getItem(ROAM_KEY)}|${winOverride(ROAM_MODE_KEY) ?? ""}|${localStorage.getItem(ROAM_MODE_KEY)}|${localStorage.getItem(ROAM_SPEED_KEY)}`;
+}
+
+export function invalidateRoamConfig(): void {
+  cfgCache = null;
+  cfgRaw = "";
+}
+
 export function loadConfig(): Config {
   // Per-window roam mode override wins over the global setting, so individual
   // extra pets can wander / stay / follow cursor independently.
+  const raw = snapshotRoamRaw();
+  if (cfgCache && raw === cfgRaw) return cfgCache;
+  cfgRaw = raw;
   const stored = (winOverride(ROAM_MODE_KEY) || localStorage.getItem(ROAM_MODE_KEY)) as RoamMode | null;
   const mode: RoamMode = stored && VALID_MODES.includes(stored) ? stored : "wander";
-  return {
+  cfgCache = {
     enabled: localStorage.getItem(ROAM_KEY) !== "0",
     mode,
     speed: Math.max(1, Math.min(10, parseInt(localStorage.getItem(ROAM_SPEED_KEY) || "5", 10))),
   };
+  return cfgCache;
+}
+
+if (typeof window !== "undefined") {
+  window.addEventListener("storage", (e) => {
+    if (!e.key || e.key === ROAM_KEY || e.key === ROAM_MODE_KEY || e.key === ROAM_SPEED_KEY ||
+        e.key.startsWith("ap_win_")) {
+      invalidateRoamConfig();
+    }
+  });
 }
 
 export function clampToBounds(pos: Point, bounds: Rect): Point {

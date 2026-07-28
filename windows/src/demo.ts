@@ -171,45 +171,70 @@ export function initDemo() {
       else bubble?.hide();
     }
 
-    // Webhook list.
+    // Webhook list — diff against existing rows instead of innerHTML="" rebuild.
+    // The 700ms paint timer was destroying and recreating every row each tick,
+    // which reset any in-flight CSS transitions and wasted DOM allocation.
     countEl.textContent = sessions.length ? String(sessions.length) : "";
     empty.style.display = sessions.length ? "none" : "";
-    list.innerHTML = "";
+    const existing = new Map<string, HTMLElement>();
+    list.querySelectorAll<HTMLElement>(".dp-row[data-id]").forEach((el) => {
+      existing.set(el.dataset.id!, el);
+    });
+    const want = new Set<string>();
+    let prevRow: HTMLElement | null = null;
     for (const s of sessions) {
-      const row = document.createElement("div");
-      row.className = "dp-row";
-      const icon = agentIconUrl(s.agent);
-      const meta = document.createElement("div");
-      meta.className = "dp-meta";
-      meta.innerHTML =
-        `<span class="dp-name">${agentLabel(s.agent)}</span>` +
-        `<span class="cap">${s.project}</span>`;
-      if (icon) {
-        const img = document.createElement("img");
-        img.className = "dp-icon";
-        img.src = icon;
-        row.appendChild(img);
+      want.add(s.session);
+      let row = existing.get(s.session);
+      if (!row) {
+        row = document.createElement("div");
+        row.className = "dp-row";
+        row.dataset.id = s.session;
+        const icon = agentIconUrl(s.agent);
+        const meta = document.createElement("div");
+        meta.className = "dp-meta";
+        meta.innerHTML =
+          `<span class="dp-name">${agentLabel(s.agent)}</span>` +
+          `<span class="cap">${s.project}</span>`;
+        if (icon) {
+          const img = document.createElement("img");
+          img.className = "dp-icon";
+          img.src = icon;
+          row.appendChild(img);
+        }
+        row.appendChild(meta);
+        const sel = document.createElement("select");
+        sel.className = "dp-state";
+        for (const st of EDITABLE_STATES) {
+          const o = document.createElement("option");
+          o.value = st;
+          o.textContent = t(st.charAt(0).toUpperCase() + st.slice(1));
+          if (st === s.state) o.selected = true;
+          sel.appendChild(o);
+        }
+        sel.onchange = () => setState(s.session, sel.value);
+        row.appendChild(sel);
+        const del = document.createElement("button");
+        del.className = "dp-del ic-btn";
+        del.innerHTML = uiIcon("trash");
+        del.title = t("Delete this webhook");
+        del.onclick = () => removeSession(s.session);
+        row.appendChild(del);
+      } else {
+        // Update mutable bits: project label + select value.
+        const cap = row.querySelector<HTMLElement>(".dp-meta .cap");
+        if (cap && cap.textContent !== s.project) cap.textContent = s.project;
+        const sel = row.querySelector<HTMLSelectElement>(".dp-state");
+        if (sel && sel.value !== s.state) sel.value = s.state;
       }
-      row.appendChild(meta);
-      const sel = document.createElement("select");
-      sel.className = "dp-state";
-      sel.dataset.state = s.state;
-      for (const st of EDITABLE_STATES) {
-        const o = document.createElement("option");
-        o.value = st;
-        o.textContent = t(st.charAt(0).toUpperCase() + st.slice(1));
-        if (st === s.state) o.selected = true;
-        sel.appendChild(o);
+      // Keep DOM order matching sessions order without re-appending.
+      if (prevRow ? prevRow.nextSibling !== row : list.firstChild !== row) {
+        list.insertBefore(row, prevRow ? prevRow.nextSibling : list.firstChild);
       }
-      sel.onchange = () => setState(s.session, sel.value);
-      row.appendChild(sel);
-      const del = document.createElement("button");
-      del.className = "dp-del ic-btn";
-      del.innerHTML = uiIcon("trash");
-      del.title = t("Delete this webhook");
-      del.onclick = () => removeSession(s.session);
-      row.appendChild(del);
-      list.appendChild(row);
+      prevRow = row;
+    }
+    // Drop rows for sessions that no longer exist.
+    for (const [id, el] of existing) {
+      if (!want.has(id)) el.remove();
     }
 
     // Add column ×N badges refresh.

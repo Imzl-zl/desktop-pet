@@ -60,19 +60,39 @@ export interface BubbleConfig {
   dotStyle: "plain" | "claude";
 }
 
+// Module-level cache: readBubbleConfig() runs every 500ms render tick and on
+// every agent event. The config only changes from Settings, so we cache the
+// parsed result and invalidate via raw-string comparison + storage event.
+let bubbleCfgCache: BubbleConfig | null = null;
+let bubbleCfgRaw = "";
+
+function snapshotBubbleRaw(): string {
+  const ls = localStorage;
+  return `${ls.getItem("ap_bub_mode")}|${ls.getItem("ap_bub_grouping")}|${ls.getItem("ap_bub_sortkind")}|${ls.getItem("ap_bub_max")}|${ls.getItem("ap_bub_filter")}|${ls.getItem("ap_bub_hidden")}|${ls.getItem("ap_bub_tokens")}|${ls.getItem("ap_bub_sep")}|${ls.getItem("ap_bub_dot")}`;
+}
+
+export function invalidateBubbleConfig(): void {
+  bubbleCfgCache = null;
+  bubbleCfgRaw = "";
+}
+
 export function readBubbleConfig(): BubbleConfig {
   const ls = localStorage;
+  const raw = snapshotBubbleRaw();
+  if (bubbleCfgCache && raw === bubbleCfgRaw) return bubbleCfgCache;
+  bubbleCfgRaw = raw;
+
   let tokens: TokenItem[] = LAYOUT_PRESETS.original;
   try {
-    const raw = ls.getItem("ap_bub_tokens");
-    if (raw) {
-      const parsed = JSON.parse(raw);
+    const rawTokens = ls.getItem("ap_bub_tokens");
+    if (rawTokens) {
+      const parsed = JSON.parse(rawTokens);
       if (Array.isArray(parsed) && parsed.length) tokens = parsed;
     }
   } catch {}
   let hidden: string[] = [];
   try { hidden = JSON.parse(ls.getItem("ap_bub_hidden") || "[]"); } catch {}
-  return {
+  bubbleCfgCache = {
     mode: (ls.getItem("ap_bub_mode") as BubbleConfig["mode"]) || "carousel",
     grouping: (ls.getItem("ap_bub_grouping") as BubbleConfig["grouping"]) || "byKind",
     sortByKind: ls.getItem("ap_bub_sortkind") === "1",
@@ -83,6 +103,13 @@ export function readBubbleConfig(): BubbleConfig {
     separator: ls.getItem("ap_bub_sep") || "·",
     dotStyle: (ls.getItem("ap_bub_dot") as BubbleConfig["dotStyle"]) || "plain",
   };
+  return bubbleCfgCache;
+}
+
+if (typeof window !== "undefined") {
+  window.addEventListener("storage", (e) => {
+    if (e.key?.startsWith("ap_bub_")) invalidateBubbleConfig();
+  });
 }
 
 function filterIncludes(filter: BubbleConfig["filter"], state: string): boolean {

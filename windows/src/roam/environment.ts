@@ -48,16 +48,34 @@ async function cachedMonitor(): Promise<Monitor | null> {
   }
 }
 
+// 500ms system-windows cache: list_system_windows is an IPC call that enumerates
+// every visible window. Other apps' window positions change far less often than
+// the 30ms roam tick, so caching avoids ~33 IPC calls/sec per roaming pet. The
+// cache is keyed by the monitor scale factor so a monitor switch still refetches.
+const WIN_CACHE_MS = 500;
+let winCache: { sf: number; windows: SystemWindow[]; ts: number } | null = null;
+
 async function fetchSystemWindows(sf: number): Promise<SystemWindow[]> {
+  const now = Date.now();
+  if (winCache && winCache.sf === sf && now - winCache.ts < WIN_CACHE_MS) {
+    return winCache.windows;
+  }
   try {
     const raw = await invoke<RawSystemWindow[]>("list_system_windows");
-    if (!Array.isArray(raw)) return [];
-    return raw
+    if (!Array.isArray(raw)) return winCache?.windows ?? [];
+    const windows = raw
       .filter((w) => w.width > 40 && w.height > 40)
       .map((w) => toLogicalRect(w, sf));
+    winCache = { sf, windows, ts: now };
+    return windows;
   } catch {
-    return [];
+    return winCache?.windows ?? [];
   }
+}
+
+export function invalidateEnvironmentCache(): void {
+  winCache = null;
+  monitorCache = null;
 }
 
 export async function fetchEnvironment(): Promise<Environment | null> {

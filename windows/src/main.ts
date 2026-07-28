@@ -3,7 +3,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { Pet } from "./pet";
 import { SessionStore, aggregateMood, basename, type AgentEventPayload } from "./state";
-import { BubbleRenderer } from "./bubble";
+import { BubbleRenderer, invalidateBubbleConfig } from "./bubble";
 import { loadCatalog, savedSlug, saveSlug, getLibrary, libraryUrlForSlug } from "./catalog";
 import { t, setLang, type Lang } from "./i18n";
 import { bubbleLines, PET_CHAT } from "./activity";
@@ -256,11 +256,18 @@ function pickMoodLine(mood: string) {
   moodLine = pool.length ? pool[Math.floor(Math.random() * pool.length)] : "";
 }
 
+// Render signature: when nothing changed (sessions state, mood, text, time-based
+// flags), skip the DOM writes and IPC calls entirely. The 500ms timer keeps
+// ticking but becomes a no-op while the pet is idle, instead of doing a full
+// filter+sort+groupSessions+getBoundingClientRect+IPC pass every tick.
+let renderSig = "";
+
 function render() {
   if (IS_EXTRA) { renderExtra(); return; }
+  const now = Date.now();
   // Quick bubble overrides everything for a few seconds after the user sends
   // a message from the floating ball or clicks the pet.
-  if (Date.now() < quickBubbleUntil) {
+  if (now < quickBubbleUntil) {
     bubble.renderLine(quickBubbleText);
     snugBubble();
     reportHitRect();
@@ -270,16 +277,16 @@ function render() {
   const resolved = aggregateMood(sessions);
 
   if (resolved === "done" && lastResolved !== "done") {
-    celebrateUntil = Date.now() + 3000; // celebrate burst, like macOS
+    celebrateUntil = now + 3000; // celebrate burst, like macOS
     pickMoodLine("celebrate");
   }
-  if (resolved !== lastResolved && Date.now() >= celebrateUntil) {
+  if (resolved !== lastResolved && now >= celebrateUntil) {
     if (resolved === "idle") pickMoodLine("idle");
     else if (resolved === "done") pickMoodLine("done");
   }
   lastResolved = resolved;
 
-  const celebrating = Date.now() < celebrateUntil;
+  const celebrating = now < celebrateUntil;
   if (wasCelebrating && !celebrating) {
     // The 3s burst ended , settle into the actual mood's line (mac
     // settleAfterCelebrate re-picks on the celebrate→done transition).
@@ -293,38 +300,56 @@ function render() {
 
   // A reactive comment briefly overrides the quiet single-line moods (not the
   // multi-agent working bubble, not the celebrate burst).
-  const reactiveActive = Date.now() < reactiveUntil && !!reactiveLine;
+  const reactiveActive = now < reactiveUntil && !!reactiveLine;
 
-  const multi = localStorage.getItem("ap_multi") !== "0";
-  if ((mood === "working" || mood === "waiting") && !multi) {
-    // Simple-bubble mode (mac: multi-agent off) , one plain chat line.
-    if (resolved !== prevSimpleMood) { pickMoodLine(mood); prevSimpleMood = resolved; }
-    if (!moodLine) pickMoodLine(mood);
-    bubble.renderLine(reactiveActive ? reactiveLine : moodLine);
-  } else if (mood === "working" || mood === "waiting") {
-    bubble.render(sessions.filter((s) => s.state !== "idle" && s.state !== "registered"));
-  } else if (mood === "celebrate") {
-    bubble.renderLine(moodLine || t("Done"));
-  } else if (mood === "done") {
-    if (!moodLine) pickMoodLine("done");
-    bubble.renderLine(reactiveActive ? reactiveLine : moodLine);
-  } else {
-    // idle: a persistent quiet line (mac shows it continuously, no blinking)
-    if (reactiveActive) {
-      bubble.renderLine(reactiveLine);
-    } else if (localStorage.getItem("ap_idle") !== "0") {
-      if (!moodLine) pickMoodLine("idle");
-      bubble.renderLine(moodLine);
+  // Signature covers everything that affects the bubble content / position.
+  // While it matches the previous frame, the bubble DOM and tray IPC are
+  // skipped (the most expensive parts: groupSessions + DOM diff + IPC).
+  // snugBubble + reportHitRect still run so the bubble follows the sprite
+  // frame's headroom (they have their own cheap guards below).
+  const sig = [
+    sessions.map((s) => `${s.agent}:${s.state}:${s.updatedAt}:${s.stateSince}:${s.pendingApproval?.id ?? ""}:${s.title}:${s.live}:${s.project}:${s.terminalFocusUrl}`).join(","),
+    mood,
+    moodLine,
+    reactiveActive ? reactiveLine : "",
+    celebrating,
+    reactiveActive,
+  ].join("|");
+  const sigChanged = sig !== renderSig;
+  if (sigChanged) {
+    renderSig = sig;
+
+    const multi = localStorage.getItem("ap_multi") !== "0";
+    if ((mood === "working" || mood === "waiting") && !multi) {
+      // Simple-bubble mode (mac: multi-agent off) , one plain chat line.
+      if (resolved !== prevSimpleMood) { pickMoodLine(mood); prevSimpleMood = resolved; }
+      if (!moodLine) pickMoodLine(mood);
+      bubble.renderLine(reactiveActive ? reactiveLine : moodLine);
+    } else if (mood === "working" || mood === "waiting") {
+      bubble.render(sessions.filter((s) => s.state !== "idle" && s.state !== "registered"));
+    } else if (mood === "celebrate") {
+      bubble.renderLine(moodLine || t("Done"));
+    } else if (mood === "done") {
+      if (!moodLine) pickMoodLine("done");
+      bubble.renderLine(reactiveActive ? reactiveLine : moodLine);
     } else {
-      bubble.hide();
+      // idle: a persistent quiet line (mac shows it continuously, no blinking)
+      if (reactiveActive) {
+        bubble.renderLine(reactiveLine);
+      } else if (localStorage.getItem("ap_idle") !== "0") {
+        if (!moodLine) pickMoodLine("idle");
+        bubble.renderLine(moodLine);
+      } else {
+        bubble.hide();
+      }
     }
+    // One global tray icon , the main window reports it, counting ALL sessions
+    // (not just this window's owned subset). Only on actual state change.
+    if (IS_MAIN) reportTrayStatus(store.active());
   }
 
   snugBubble();
   reportHitRect();
-  // One global tray icon , the main window reports it, counting ALL sessions
-  // (not just this window's owned subset).
-  if (IS_MAIN) reportTrayStatus(store.active());
 }
 
 /// Pure-decoration window render: idle mood, no bubble, no tray report. The
@@ -354,8 +379,13 @@ setInterval(() => bubble.tickClocks(), 1000);
 
 // Pull the bubble down over the canvas's empty headroom so it sits right
 // above the pet's head (the sprite rarely fills the whole canvas height).
+// Snapped to an integer px so sub-pixel headroom drift between animation
+// frames doesn't trigger a transform write (and the backdrop-filter re-composite).
+let lastSnugGap = -Infinity;
 function snugBubble() {
-  const gap = Math.max(0, canvas.clientHeight * pet.headroom - 4);
+  const gap = Math.floor(Math.max(0, canvas.clientHeight * pet.headroom - 4));
+  if (gap === lastSnugGap) return;
+  lastSnugGap = gap;
   bubbleEl.style.transform = `translateY(${gap}px)`;
 }
 
@@ -510,7 +540,10 @@ listen<{ slug: string | null; url: string | null }>("set-pet", async (e) => {
 // Language changed from Settings , re-render the bubble in the new language.
 listen<Lang>("lang-changed", (e) => { setLang(e.payload); render(); });
 // Bubble theme / opacity / messages changed from Settings.
-listen("bubble-changed", () => { applyBubble(); applyPet(); moodLine = ""; render(); });
+listen("bubble-changed", () => {
+  invalidateBubbleConfig();
+  applyBubble(); applyPet(); moodLine = ""; render();
+});
 
 // Floating ball broadcast: show the same message on every matching pet window
 // for a few seconds. target=all/main/extra filters which pets respond.
