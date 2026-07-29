@@ -1750,17 +1750,17 @@ function initSliders() {
 }
 
 // -------------------------------------------------------- floating ball ----
-// Toggles whether the floating ball is visible inside the single stage window.
-// The state lives in a Rust-side file (read at launch so the ball can spawn
-// before Settings opens), so we go through commands instead of localStorage.
+// Toggles whether the floating-ball window is visible. The state lives in a
+// Rust-side file (read at launch so the ball can spawn before Settings opens),
+// so we go through commands instead of localStorage.
 function initFloatingBall() {
   const box = document.getElementById("ball-on") as HTMLInputElement | null;
   if (!box) return;
-  invoke<boolean>("get_stage_ball_visible")
+  invoke<boolean>("get_floating_ball_visible")
     .then((v) => { box.checked = v; })
     .catch(() => { box.checked = true; });
   box.addEventListener("change", () => {
-    invoke("set_stage_ball_visible", { visible: box.checked }).catch(() => {});
+    invoke("set_floating_ball_visible", { visible: box.checked }).catch(() => {});
   });
 }
 

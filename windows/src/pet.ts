@@ -126,14 +126,6 @@ export class Pet {
   private idleClips: number[] = [];
   private idleIndex = 0;
   private lastDrawnRow = 0;
-  /// Signature of the last frame actually painted (row + frame index + canvas
-  /// size). A single-frame idle clip repeats forever, so skipping the redraw
-  /// when this is unchanged drops idle repaint (and the full-screen
-  /// transparent-overlay recomposite it forces) to zero.
-  private lastDrawSig = "";
-  /// Frozen by the stage when the overlay is hidden — the loop then wakes only
-  /// twice a second and never draws.
-  private visible = true;
   private fps = 3;
   /// Unused space above the sprite, as a fraction of canvas height. The bubble
   /// uses it to sit right above the pet's head instead of the canvas top.
@@ -179,7 +171,6 @@ export class Pet {
       this.clips = slice(img);
       this.clipMaxW = this.clips.map((clip) => Math.max(...clip.map((r) => r.w)));
       this.frame = 0;
-      this.lastDrawSig = ""; // new sheet — force the next frame to paint
       this.loaded = true;
     };
     // A pre-CORS cached copy makes the crossOrigin load fail , retry plain
@@ -195,7 +186,6 @@ export class Pet {
         this.img = plain;
         this.clips = [];
         this.frame = 0;
-        this.lastDrawSig = ""; // new sheet — force the next frame to paint
         this.loaded = true;
       };
       plain.src = spritesheetUrl;
@@ -277,19 +267,10 @@ export class Pet {
   /// only needs 3-8 fps, so rAF's 60Hz wakeups were pure waste — each tick
   /// rescheduled the next one ~16ms later even when 300ms of idle time was
   /// available. setTimeout lets the event loop sleep between frames.
-  /// Pause/resume the frame loop from the stage when the overlay is hidden
-  /// (tray toggle / occluded). While hidden the loop wakes only twice a second
-  /// and never draws, so a hidden overlay costs ~nothing.
-  setVisible(v: boolean) {
-    if (this.visible === v) return;
-    this.visible = v;
-    if (v) this.lastDrawSig = ""; // force one repaint on resume
-  }
-
   private scheduleFrame() {
-    const delay = this.visible ? Math.max(80, 1000 / this.fps) : 500;
+    const delay = Math.max(80, 1000 / this.fps);
     setTimeout(() => {
-      if (this.visible && this.loaded) {
+      if (this.loaded) {
         this.frame++;
         this.draw();
       }
@@ -299,37 +280,26 @@ export class Pet {
 
   private draw() {
     const { width: W, height: H } = this.canvas;
+    this.ctx.clearRect(0, 0, W, H);
 
     const activeRow = this.overrideRow ?? this.idleRow ?? this.row;
     if (activeRow !== this.lastDrawnRow) { this.lastDrawnRow = activeRow; this.frame = 0; }
 
     let r: Rect;
     let scaleW: number; // width used for the scale , per CLIP, not per frame
-    let frameIndex: number;
     const clip = this.currentClip(activeRow);
     if (clip) {
-      frameIndex = this.frame % clip.length;
-      r = clip[frameIndex];
+      r = clip[this.frame % clip.length];
       scaleW = this.clipMaxW[Math.min(activeRow, this.clips.length - 1)] || r.w;
     } else {
       // Fallback: fixed 8x9 grid (pixels unreadable , e.g. no CORS).
       const fw = this.img.naturalWidth / COLS;
       const fh = this.img.naturalHeight / ROWS;
       if (!fw || !fh) return;
-      frameIndex = this.frame % COLS;
-      r = { x: frameIndex * fw, y: Math.min(activeRow, ROWS - 1) * fh, w: fw, h: fh };
+      r = { x: (this.frame % COLS) * fw, y: Math.min(activeRow, ROWS - 1) * fh, w: fw, h: fh };
       scaleW = fw;
     }
 
-    // Skip the full-canvas clear+redraw when the visible pixels are identical to
-    // the last paint. Idle clips are frequently a single frame, so this makes a
-    // resting pet cost zero canvas work (and zero overlay recomposite) instead
-    // of clearing+blitting the same image 2-3×/s.
-    const sig = `${activeRow}:${frameIndex}:${W}x${H}`;
-    if (sig === this.lastDrawSig) return;
-    this.lastDrawSig = sig;
-
-    this.ctx.clearRect(0, 0, W, H);
     // Fit into the canvas, anchored bottom-center; snap to an integer scale so
     // pixel-art stays crisp. The scale comes from the clip's widest frame so
     // every frame of an animation renders at the SAME size (no pulsing, and a

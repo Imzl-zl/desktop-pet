@@ -14,11 +14,11 @@
     "macOSPrivateApi": true,
     "windows": [
       {
-        "label": "stage",
+        "label": "pet",
         "title": "DesktopPet",
-        "url": "stage.html",
-        "width": 1920,
-        "height": 1080,
+        "url": "index.html",
+        "width": 260,
+        "height": 320,
         "transparent": true,
         "decorations": false,
         "alwaysOnTop": true,
@@ -26,9 +26,8 @@
         "resizable": false,
         "shadow": false,
         "focus": false,
-        "visible": false,
-        "x": 0,
-        "y": 0
+        "x": 1200,
+        "y": 600
       }
     ],
     "security": {

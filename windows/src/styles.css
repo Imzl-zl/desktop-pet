@@ -15,48 +15,25 @@ body.overlay, body.overlay * {
   -webkit-user-select: none;
 }
 
-/* Stage window: one transparent overlay that hosts all pets + floating ball.
-   The window itself is sized to the monitor work area; only the content areas
-   catch mouse events. */
-html, body.stage-body {
-  background: transparent !important;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  font-family: "Segoe UI", system-ui, sans-serif;
-  cursor: default;
-}
-body.stage-body, body.stage-body * {
-  user-select: none;
-  -webkit-user-select: none;
-}
-#stage-root {
+#pet-root {
   position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-#stage-root > * { pointer-events: none; }
-#stage-root .pet-entity,
-#stage-root #ball,
-#stage-root .pop-card,
-#stage-root .ctx-menu { pointer-events: auto; }
-
-.pet-entity {
-  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
 }
 
-.pet-entity canvas {
+#pet {
   image-rendering: pixelated;
+  /* The whole window is draggable via the pet (set in main.ts). */
   cursor: grab;
 }
-/* `display:flex` below would override the HTML `hidden` attribute's default
-   `display:none`, so a hidden bubble kept showing as an empty padded/bordered
-   box (the "air bubble" when idle chatter is off). Restore hidden = gone. */
-.bubble[hidden] { display: none; }
+@keyframes bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -3px; } }
+#pet.bob { animation: bob 2.4s ease-in-out infinite; }
+
 .bubble {
   position: relative;
   display: flex;
@@ -242,11 +219,15 @@ body.stage-body, body.stage-body * {
   opacity: 0.5;
 }
 
-/* ---- stage-hosted floating ball --------------------------------------------
-   The single stage window now owns the ball; these selectors apply inside
-   #stage-root instead of the old dedicated floating-ball window.
+/* ---------------------------------------------------------------------------
+   Floating ball: the visible orb is 56×56 but lives inside an 80×80 window so
+   shadows/hover scale are not clipped. The window grows to 300×420 when the
+   bubble menu opens; the orb stays at the top-left so its screen position
+   never shifts during the resize.
 ---------------------------------------------------------------------------- */
-#stage-root {
+body.floating-ball-body { overflow: hidden; }
+
+.floating-ball-body {
   --ball-size: 56px;
   --ball-margin: 12px;
   --menu-width: 300px;
@@ -259,12 +240,13 @@ body.stage-body, body.stage-body * {
   --menu-border: rgba(255, 255, 255, 0.12);
 }
 
-#stage-root #ball {
+.floating-ball-body #ball {
   position: absolute;
-  left: 0;
-  top: 0;
+  top: var(--ball-margin);
+  left: var(--ball-margin);
   width: var(--ball-size);
   height: var(--ball-size);
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -272,6 +254,7 @@ body.stage-body, body.stage-body * {
   cursor: grab;
   user-select: none;
   -webkit-user-select: none;
+
   background:
     radial-gradient(circle at 38% 28%, var(--ball-bg-top) 0%, transparent 42%),
     radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0.35) 0%, transparent 55%),
@@ -283,12 +266,31 @@ body.stage-body, body.stage-body * {
     inset 0 1.5px 1.5px rgba(255, 255, 255, 0.18),
     inset 0 -2px 4px rgba(0, 0, 0, 0.35),
     0 0 0 1px rgba(0, 0, 0, 0.12);
+
+  animation: ball-breathe 3.6s ease-in-out infinite;
   transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
               box-shadow 0.18s ease,
               filter 0.18s ease;
 }
-#stage-root #ball.pressed { transform: scale(0.96); }
-#stage-root #ball.dragging {
+
+@keyframes ball-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.025); }
+}
+
+.floating-ball-body #ball:hover {
+  animation: none;
+  transform: scale(1.05);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.5),
+    0 0 4px var(--ball-glow),
+    inset 0 1.5px 1.5px rgba(255, 255, 255, 0.22),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+.floating-ball-body #ball.pressed { transform: scale(0.96); }
+.floating-ball-body #ball.dragging {
   cursor: grabbing;
   animation: none;
   transform: scale(1.01);
@@ -296,10 +298,23 @@ body.stage-body, body.stage-body * {
   transition: transform 0.08s ease;
 }
 
-#stage-root .ball-menu {
+.floating-ball-body #ball img {
+  width: 58%;
+  height: 58%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  object-fit: cover;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.12);
+}
+
+/* ---- bubble menu --------------------------------------------------------- */
+.floating-ball-body .ball-menu {
   position: absolute;
-  left: 0;
-  top: 0;
+  top: calc(var(--ball-size) + var(--ball-margin) + var(--ball-margin));
+  left: var(--ball-margin);
   width: var(--menu-width);
   padding: 14px;
   border-radius: 16px;
@@ -312,7 +327,8 @@ body.stage-body, body.stage-body * {
   user-select: none;
   z-index: 10;
 }
-#stage-root .ball-menu .bm-target {
+
+.floating-ball-body .ball-menu .bm-target {
   display: flex;
   gap: 3px;
   margin-bottom: 10px;
@@ -320,7 +336,7 @@ body.stage-body, body.stage-body * {
   border-radius: 9px;
   padding: 3px;
 }
-#stage-root .ball-menu .bm-target button {
+.floating-ball-body .ball-menu .bm-target button {
   flex: 1;
   padding: 6px 10px;
   border: none;
@@ -332,13 +348,14 @@ body.stage-body, body.stage-body * {
   cursor: pointer;
   transition: background 0.12s, color 0.12s;
 }
-#stage-root .ball-menu .bm-target button:hover { color: #fff; }
-#stage-root .ball-menu .bm-target button.sel {
+.floating-ball-body .ball-menu .bm-target button:hover { color: #fff; }
+.floating-ball-body .ball-menu .bm-target button.sel {
   background: rgba(108, 182, 255, 0.2);
   color: #6cb6ff;
   font-weight: 600;
 }
-#stage-root .ball-menu #bm-input {
+
+.floating-ball-body .ball-menu #bm-input {
   width: 100%;
   padding: 9px 12px;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -350,9 +367,10 @@ body.stage-body, body.stage-body * {
   outline: none;
   box-sizing: border-box;
 }
-#stage-root .ball-menu #bm-input:focus { border-color: rgba(108, 182, 255, 0.55); }
-#stage-root .ball-menu #bm-input::placeholder { color: rgba(255, 255, 255, 0.35); }
-#stage-root .ball-menu .bm-presets {
+.floating-ball-body .ball-menu #bm-input:focus { border-color: rgba(108, 182, 255, 0.55); }
+.floating-ball-body .ball-menu #bm-input::placeholder { color: rgba(255, 255, 255, 0.35); }
+
+.floating-ball-body .ball-menu .bm-presets {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -360,7 +378,7 @@ body.stage-body, body.stage-body * {
   max-height: 180px;
   overflow-y: auto;
 }
-#stage-root .ball-menu .bm-preset {
+.floating-ball-body .ball-menu .bm-preset {
   text-align: left;
   padding: 7px 11px;
   border: none;
@@ -375,15 +393,16 @@ body.stage-body, body.stage-body * {
   text-overflow: ellipsis;
   transition: background 0.1s;
 }
-#stage-root .ball-menu .bm-preset:hover { background: rgba(127, 127, 255, 0.22); }
-#stage-root .ball-menu .bm-preset.sel { background: rgba(108, 182, 255, 0.18); color: #6cb6ff; }
-#stage-root .ball-menu .bm-actions {
+.floating-ball-body .ball-menu .bm-preset:hover { background: rgba(127, 127, 127, 0.22); }
+.floating-ball-body .ball-menu .bm-preset.sel { background: rgba(108, 182, 255, 0.18); color: #6cb6ff; }
+
+.floating-ball-body .ball-menu .bm-foot {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
   margin-top: 12px;
 }
-#stage-root .ball-menu .bm-actions button {
+.floating-ball-body .ball-menu .bm-foot .linklike {
   background: none;
   border: none;
   color: rgba(255, 255, 255, 0.55);
@@ -392,167 +411,32 @@ body.stage-body, body.stage-body * {
   padding: 6px 10px;
   border-radius: 7px;
 }
-#stage-root .ball-menu .bm-actions button:hover { color: #fff; background: rgba(127, 127, 127, 0.18); }
-#stage-root .ball-menu .bm-actions button:last-child {
+.floating-ball-body .ball-menu .bm-foot .linklike:hover { color: #fff; background: rgba(127, 127, 127, 0.18); }
+.floating-ball-body .ball-menu .bm-foot .prominent {
   background: #0a84ff;
   color: #fff;
+  border: none;
   border-radius: 8px;
+  padding: 6px 15px;
+  font: inherit;
   font-weight: 600;
+  cursor: pointer;
   transition: opacity 0.12s;
 }
-#stage-root .ball-menu .bm-actions button:last-child:hover { opacity: 0.88; }
-#stage-root .ball-menu .bm-actions button:last-child:disabled { opacity: 0.4; cursor: not-allowed; }
+.floating-ball-body .ball-menu .bm-foot .prominent:hover { opacity: 0.88; }
+.floating-ball-body .ball-menu .bm-foot .prominent:disabled { opacity: 0.4; cursor: not-allowed; }
 
-/* ---- stage-hosted popover (replaces the old popover.html window) ------------
-   The popover card is positioned by the stage frontend and reports itself as
-   an opaque hit region so mouse events reach its buttons.
----------------------------------------------------------------------------- */
-#popover-layer {
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 20;
-  pointer-events: auto;
+/* When the ball is near the bottom of the screen, the menu opens UPWARD
+   instead of moving the whole window (and ball) up. The ball sticks to the
+   bottom of the window; the menu sits above it. The window's top-left moves
+   up by (MENU_H - WIN_SIZE) so the ball's screen position is preserved. */
+.floating-ball-body.menu-above #ball {
+  top: auto;
+  bottom: var(--ball-margin);
 }
-#popover-layer[hidden] { display: none; }
-#popover-layer .pop-card {
-  display: flex;
-  flex-direction: column;
-  min-width: 260px;
-  max-width: 340px;
-  background: rgba(40, 40, 44, 0.97);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
-  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.5);
-  overflow: hidden;
-  color: #e8e8ec;
-  font-family: "Segoe UI", system-ui, sans-serif;
-  font-size: 13px;
+.floating-ball-body.menu-above .ball-menu {
+  top: var(--ball-margin);
 }
-#popover-layer .pop-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 12px 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 0.5px;
-  color: rgba(255, 255, 255, 0.55);
-  text-transform: uppercase;
-}
-#popover-layer .pop-header button {
-  background: none;
-  border: none;
-  color: #ff6b6b;
-  font: inherit;
-  font-size: 12px;
-  cursor: pointer;
-  padding: 2px 6px;
-}
-#popover-layer .pop-header button:hover { color: #fff; }
-#popover-layer .pop-sub {
-  padding: 8px 14px 4px;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.55);
-}
-#popover-layer .pop-empty {
-  padding: 12px 14px 16px;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.5);
-  text-align: center;
-}
-#popover-layer .pop-list {
-  max-height: 220px;
-  overflow-y: auto;
-  padding: 4px 0;
-}
-#popover-layer .pop-agent {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 6px 14px;
-}
-#popover-layer .pop-agent .sess-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #8a93a6;
-  flex: 0 0 auto;
-}
-#popover-layer .pop-agent[data-state="working"] .sess-dot { background: #3b82f6; }
-#popover-layer .pop-agent[data-state="waiting"] .sess-dot { background: #f59e0b; }
-#popover-layer .pop-agent[data-state="done"] .sess-dot { background: #22c55e; }
-#popover-layer .pop-ameta {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  flex: 1;
-}
-#popover-layer .pop-ameta b {
-  font-size: 13px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-#popover-layer .pop-ameta .cap {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.55);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-#popover-layer .pop-agent .dp-icon {
-  width: 16px;
-  height: 16px;
-  object-fit: contain;
-  flex: 0 0 auto;
-}
-#popover-layer .pop-agent .sess-time {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.45);
-  font-variant-numeric: tabular-nums;
-  flex: 0 0 auto;
-}
-#popover-layer .pop-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 10px 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-#popover-layer .pop-controls label {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  cursor: pointer;
-}
-#popover-layer .pop-controls input[type="checkbox"] { width: 36px; height: 20px; }
-#popover-layer .pop-controls input[type="checkbox"]::before { width: 16px; height: 16px; }
-#popover-layer .pop-controls input[type="checkbox"]:checked::before { left: 18px; }
-#popover-layer .pop-controls input[type="range"] { width: 80px; }
-#popover-layer .pop-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  padding: 10px 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-#popover-layer .pop-footer button {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 7px;
-  color: #e8e8ec;
-  font: inherit;
-  font-size: 12px;
-  padding: 5px 12px;
-  cursor: pointer;
-}
-#popover-layer .pop-footer button:hover { background: rgba(255, 255, 255, 0.18); }
 
 /* Settings textarea for quick bubbles. */
 body.settings textarea#quick-bubbles {
@@ -1276,6 +1160,67 @@ body.settings {
 .dp-add .ui-ic svg { width: 11px; height: 11px; }
 .lp-btn .ui-ic svg { width: 13px; height: 13px; }
 .demo-title { display: inline-flex; align-items: center; }
+
+/* ---- popover (mac MenuContentView) ---- */
+html:has(body.pop) { background: transparent !important; }
+body.pop { padding: 8px; }
+body.pop {
+  --bg: #212125;
+  --card: #2b2b30;
+  --hair: rgba(255, 255, 255, 0.07);
+  --txt: #e8e8ec;
+  --sec: rgba(235, 235, 245, 0.55);
+  --accent: #0a84ff;
+  --green: #30d158;
+  --orange: #ff9f0a;
+  --red: #ff453a;
+  background: transparent !important;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  user-select: none; -webkit-user-select: none;
+  height: 100vh; overflow: hidden; cursor: default;
+  color: #e8e8ec; font-size: 13px;
+}
+.pop-card {
+  display: flex; flex-direction: column;
+  background: rgba(40, 40, 44, 0.97);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  box-shadow: 0 14px 44px rgba(0,0,0,0.5);
+  overflow: hidden;
+}
+.pop-head { display: flex; align-items: center; gap: 10px; padding: 13px 14px; }
+.pop-appicon-img { width: 32px; height: 32px; flex: 0 0 auto; }
+.pop-meta b { font-size: 14px; }
+.pop-meta .cap { font-size: 11px; }
+.pop-divider { height: 1px; background: rgba(255,255,255,0.08); flex: 0 0 auto; }
+.pop-sec { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px 4px; }
+.pop-sec-label { font-size: 10px; font-weight: 600; letter-spacing: 1.4px; color: rgba(255,255,255,0.35); }
+.pop-agent { display: flex; align-items: center; gap: 9px; padding: 5px 14px; }
+.pop-agent .sess-dot { background: #8a93a6; }
+.pop-agent[data-state="working"] .sess-dot { background: #3b82f6; }
+.pop-agent[data-state="waiting"] .sess-dot { background: #f59e0b; }
+.pop-agent[data-state="done"] .sess-dot { background: #22c55e; }
+.pop-ameta { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.pop-ameta b { font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pop-ameta .cap { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pop-agent .sess-x { visibility: hidden; }
+.pop-agent:hover .sess-x { visibility: visible; }
+.pop-empty { padding: 4px 14px 10px; }
+#pop-list { overflow-y: auto; max-height: 150px; flex: 0 1 auto; padding-bottom: 6px; }
+.pop-row { display: flex; align-items: center; gap: 9px; padding: 8px 14px; font-size: 13px; cursor: pointer; }
+.pop-row .ui-ic { margin-right: 0; color: rgba(255,255,255,0.8); }
+.pop-row .ui-ic svg { width: 15px; height: 15px; }
+.pop-label { flex: 1; }
+.pop-row input[type="range"] { flex: 1; }
+.pop-foot { display: flex; align-items: center; gap: 14px; padding: 10px 14px; }
+.pop-foot .spacer { flex: 1; }
+.pop-fbtn {
+  background: none; border: 0; color: rgba(255,255,255,0.8);
+  font-size: 12.5px; font-weight: 500; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 5px; padding: 0;
+}
+.pop-fbtn:hover { color: #fff; }
+.pop-fbtn .ui-ic { margin-right: 0; }
 
 /* ---- slim mac-like scrollbars (WebView2 default is the chunky gray one) ---- */
 ::-webkit-scrollbar { width: 9px; height: 9px; }
