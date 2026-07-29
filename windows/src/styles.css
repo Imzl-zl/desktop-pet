@@ -1110,9 +1110,9 @@ body.settings {
 .gcard .row.center { justify-content: flex-start; }
 .quit { background: rgba(255,255,255,0.12); color: var(--txt); border-radius: 7px; padding: 5px 13px; font-size: 12.5px; }
 .quit:hover { background: rgba(255,255,255,0.2); text-decoration: none; }
-/* pet cells fixed-width centered in 4 columns (mac PetThumb) */
-.pet-results { grid-template-columns: repeat(4, 1fr); justify-items: center; }
-.pet-item { width: 92px; }
+/* pet cells fixed-width left-aligned in 4 columns (mac PetThumb) */
+.pet-results { grid-template-columns: repeat(4, 92px); justify-content: start; }
+.pet-item { width: 92px; box-sizing: border-box; }
 /* search with magnifier */
 .search-wrap { position: relative; }
 .search-wrap .mag { position: absolute; left: 9px; top: 50%; transform: translateY(-54%); color: var(--sec); font-size: 15px; }

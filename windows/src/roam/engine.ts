@@ -26,6 +26,14 @@ import {
 } from "./types";
 import { currentLogicalPos, setLogical } from "./window";
 
+/// Tick delay when the pet is resting / sleeping / stationary. The active
+/// TICK_MS (30ms) is only needed while the pet is actually moving — resting
+/// states (restUntil, sleep, stay mode) only need to check periodically whether
+/// to wake up. 200ms cuts IPC calls from 33/sec to 5/sec while idle, with no
+/// visible change (the pet resumes walking within one idle-tick of restUntil
+/// expiring, imperceptible for a desktop companion).
+const IDLE_TICK_MS = 200;
+
 let petRef: Pet | null = null;
 let dragging = false;
 let releasePending = false;
@@ -63,12 +71,15 @@ function enterSleep(): void {
 }
 
 /// One engine tick. Priority: throw > drag-sample > drag-release > mood-pause > sleep > mode.
-async function tick(): Promise<void> {
-  if (isThrowing()) return;
+/// Returns true when the pet is actively moving/interacting and needs the fast
+/// (30ms) tick; false when resting/sleeping/stationary so the loop can use the
+/// idle (200ms) tick and skip most IPC calls.
+async function tick(): Promise<boolean> {
+  if (isThrowing()) return true;
   if (dragging) {
     const pos = await currentLogicalPos();
     if (pos) recordSample(pos);
-    return;
+    return true;
   }
   if (releasePending) {
     releasePending = false;
@@ -77,7 +88,7 @@ async function tick(): Promise<void> {
     if (vel && Math.hypot(vel.vx, vel.vy) > THROW_MIN_SPEED) {
       wake();
       await handleDragRelease(vel);
-      return;
+      return true;
     }
   }
 
@@ -86,13 +97,13 @@ async function tick(): Promise<void> {
   if (MOOD_PAUSES_ROAM.has(mood)) {
     wake();
     petRef?.clearRow();
-    return;
+    return false;
   }
 
   const cfg = loadConfig();
   if (!cfg.enabled || cfg.mode === "stay") {
     handleStationary();
-    return;
+    return false;
   }
 
   wake();
@@ -100,6 +111,7 @@ async function tick(): Promise<void> {
   if (!moved && mood === "idle" && Date.now() - lastMoveTs > SLEEP_AFTER_MS) {
     enterSleep();
   }
+  return moved;
 }
 
 /// Run one mode step and apply it. Returns true if the pet actually moved.
@@ -145,8 +157,8 @@ async function handleDragRelease(vel: { vx: number; vy: number }): Promise<void>
 
 async function loop(): Promise<void> {
   while (!stopRequested) {
-    await tick();
-    await sleep(TICK_MS);
+    const active = await tick();
+    await sleep(active ? TICK_MS : IDLE_TICK_MS);
   }
   petRef?.clearRow();
 }
