@@ -31,8 +31,9 @@ body.overlay, body.overlay * {
   /* The whole window is draggable via the pet (set in main.ts). */
   cursor: grab;
 }
-@keyframes bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -3px; } }
-#pet.bob { animation: bob 2.4s ease-in-out infinite; }
+/* bob animation removed: a continuous infinite animation on a transparent
+   always-on-top window forces the WebView2 compositor to recomposite every
+   frame even when the pet is idle. The reduce-motion switch also covers this. */
 
 .bubble {
   position: relative;
@@ -267,19 +268,14 @@ body.floating-ball-body { overflow: hidden; }
     inset 0 -2px 4px rgba(0, 0, 0, 0.35),
     0 0 0 1px rgba(0, 0, 0, 0.12);
 
-  animation: ball-breathe 3.6s ease-in-out infinite;
   transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
               box-shadow 0.18s ease,
               filter 0.18s ease;
 }
 
-@keyframes ball-breathe {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.025); }
-}
-
+/* ball-breathe animation removed: same compositor cost as bob. The ball is a
+   small static orb — it doesn't need a breathing animation to look alive. */
 .floating-ball-body #ball:hover {
-  animation: none;
   transform: scale(1.05);
   box-shadow:
     0 2px 8px rgba(0, 0, 0, 0.5),
